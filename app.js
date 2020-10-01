@@ -5,7 +5,7 @@ var io = require('socket.io')(http);
 var fs = require('fs');
 var Tail = require('tail').Tail;
 
-tail = new Tail("data.csv");
+tail = new Tail("./public/data.csv");
 
 var readbytes = 0;
 var bite_size = 256;

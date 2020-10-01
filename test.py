@@ -5,7 +5,7 @@ import datetime
 
 while(True):
 
-	f =  open("data.csv", "a")
+	f =  open("./public/data.csv", "a")
 	csv_writer = writer(f)
 	num1 = random.randrange(50,120)
 	num2 = random.randrange(50,120)
