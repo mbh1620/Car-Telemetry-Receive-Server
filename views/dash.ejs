@@ -11,9 +11,13 @@
 </head>
 
 <body style="background-color:gray;">
-    <div style="height:100vh;">
-        <h1 style="font-family: helvetica; font-weight:100">Car Telemetry
+    <div style="height:100vh;overflow: hidden;">
+        <div style="width:95%;height:auto;margin-bottom:20px;">
+        <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
+        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white">Telemetry
         </h1>
+        </div>
+        
         <h4 style="color:white;font-family: arial;">Page View: <select onchange="changeview()" id="pageSelector"
                 name="Page View">
                 <option value="default">Default</option>
@@ -69,7 +73,7 @@
             </div>
         </div>
     </div>
-
+<div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="/socket.io/socket.io.js"></script>
