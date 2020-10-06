@@ -16,21 +16,20 @@ The test.py file is used to create random data and save to the data.csv file for
 data.
 
 # To Run
--
 
-To run this server you must have nodejs installed on the Raspberry Pi you wish to run this server on.
+To run this server you must have nodejs installed on the Raspberry Pi you would like to run on.
 
 [Click here to see how to install node.js](https://www.w3schools.com/nodejs/nodejs_raspberrypi.asp)
 
 clone this repository into a directory 
-'''
+```
 git clone 
-'''
+```
 Then cd into the repository
-'''
+```
 cd 
-'''
+```
 Then do node or nodejs app.js
-'''
+```
 node app.js
-''' 
+``` 
