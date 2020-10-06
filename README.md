@@ -33,5 +33,18 @@ Then do node or nodejs app.js
 ```
 node app.js
 ```
+Then open a browser and type "localhost:8080"
+
+or if you are on another device to the Raspberry Pi you must connect to the same network as the pi 
+and then type the raspberry pi's ip number followed by ":8080"
+
+```
+localhost:8080
+```
+or
+```
+[raspberrypi ip number]:8080
+
+```
 
 The python script which updates the .csv file must update the file which is in the /public directory.
