@@ -14,3 +14,23 @@ clients using socket.io and updates their graphs to the latest data.
 
 The test.py file is used to create random data and save to the data.csv file for testing the server against some randomly continuously updating 
 data.
+
+# To Run
+-
+
+To run this server you must have nodejs installed on the Raspberry Pi you wish to run this server on.
+
+[Click here to see how to install node.js](https://www.w3schools.com/nodejs/nodejs_raspberrypi.asp)
+
+clone this repository into a directory 
+'''
+git clone 
+'''
+Then cd into the repository
+'''
+cd 
+'''
+Then do node or nodejs app.js
+'''
+node app.js
+''' 
