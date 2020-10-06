@@ -23,13 +23,15 @@ To run this server you must have nodejs installed on the Raspberry Pi you would 
 
 clone this repository into a directory 
 ```
-git clone 
+git clone https://github.com/mbh1620/Car-Telemetry-Receive-Server.git
 ```
 Then cd into the repository
 ```
-cd 
+cd ./Car-Telemetry-Receive-Server
 ```
 Then do node or nodejs app.js
 ```
 node app.js
-``` 
+```
+
+The python script which updates the .csv file must update the file which is in the /public directory.
