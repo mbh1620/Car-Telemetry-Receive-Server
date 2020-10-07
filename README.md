@@ -56,21 +56,21 @@ The table below shows what data will be shown on the graphs
 
 |   Sensors                     |   datatype    |   graph added  |
 |-------------------------------|---------------|----------------|
-|   accelerator pedal           |     int16     |<ul><li>- [x] </li></ul>|
-|   front brake pedal           |               |<ul><li>- [ ] </li></ul>|       
-|   rear brake pedal            |               |<ul><li>- [ ] </li></ul>|
-|   steering                    |               |<ul><li>- [ ] </li></ul>|       
-|                               |               |<ul><li>- [ ] </li></ul>|       
-|   left torque demand          |               |<ul><li>- [ ] </li></ul>|       
-|   right torque demand         |               |       
-|   accelerometer x             |               |
-|   accelerometer y             |               |
-|   accelerometer z             |               |
-|                               |               |
-|   gyro yaw                    |               |
-|   gyro pitch                  |               |
-|   gyro roll                   |               |
-|                               |               |
-|   ECU state                   |               |
-|   vehicle dynamics duration   |               |
-|   fault code                  |               |
+|   accelerator pedal           |     int16     |<ul><li>   - [x] </li></ul>|
+|   front brake pedal           |               |<ul><li>   - [ ] </li></ul>|       
+|   rear brake pedal            |               |<ul><li>   - [ ] </li></ul>|
+|   steering                    |               |<ul><li>   - [ ] </li></ul>|       
+|                               |               |<ul><li>   - [ ] </li></ul>|       
+|   left torque demand          |               |<ul><li>   - [ ] </li></ul>|       
+|   right torque demand         |               |<ul><li>   - [ ] </li></ul>|
+|   accelerometer x             |               |<ul><li>   - [ ] </li></ul>|
+|   accelerometer y             |               |<ul><li>   - [ ] </li></ul>|
+|   accelerometer z             |               |<ul><li>   - [ ] </li></ul>|
+|                               |               |<ul><li>   - [ ] </li></ul>|
+|   gyro yaw                    |               |<ul><li>   - [ ] </li></ul>|
+|   gyro pitch                  |               |<ul><li>   - [ ] </li></ul>|
+|   gyro roll                   |               |<ul><li>   - [ ] </li></ul>|
+|                               |               |<ul><li>   - [ ] </li></ul>|
+|   ECU state                   |               |<ul><li>   - [ ] </li></ul>|
+|   vehicle dynamics duration   |               |<ul><li>   - [ ] </li></ul>|
+|   fault code                  |               |<ul><li>   - [ ] </li></ul>|
