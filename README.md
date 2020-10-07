@@ -54,15 +54,15 @@ The python script which updates the .csv file must update the file which is in t
 The table below shows what data will be shown on the graphs
 
 
-|   Sensors                     |   datatype    |   graph added   |
-|-------------------------------|---------------|-----------------|
-|   accelerator pedal           |     int16     |       - []      |
-|   front brake pedal           |               |       - []      |
-|   rear brake pedal            |               |       - []      |
-|   steering                    |               |       - []      |
-|                               |               |                 |
-|   left torque demand          |               |       - []      |
-|   right torque demand         |               |       - []      |
+|   Sensors                     |   datatype    |   graph added  |
+|-------------------------------|---------------|----------------|
+|   accelerator pedal           |     int16     |       - [ ]    |
+|   front brake pedal           |               |       - [ ]    |
+|   rear brake pedal            |               |       - [ ]    |
+|   steering                    |               |       - [ ]    |
+|                               |               |                |
+|   left torque demand          |               |       - [ ]    |
+|   right torque demand         |               |       - [ ]    |
 |   accelerometer x             |               |
 |   accelerometer y             |               |
 |   accelerometer z             |               |
