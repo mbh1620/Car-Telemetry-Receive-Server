@@ -53,10 +53,9 @@
             <canvas style="height:100%px;width:100%;display:inline-block;background-color: black;display:none;"
                 id="battery-large-chart"></canvas>
             <div>
-                <input type="range" id="slider4"
-                    style="display: inline-block;width:30%;margin-right: 3%;margin-left:1%">
-                <input type="range" id="slider5" style="display: inline-block;width:30%;margin-right:3%;">
-                <input type="range" id="slider6" style="display: inline-block;width:30%">
+                <input type="range" id="slider4" onchange="updateTimeBase(myLineChart1, '#slider4')" style="display: inline-block;width:30%;margin-right: 3%;margin-left:1%">
+                <input type="range" id="slider5" onchange="updateTimeBase(myLineChart2, '#slider5')" style="display: inline-block;width:30%;margin-right:3%;">
+                <input type="range" id="slider6" onchange="updateTimeBase(myLineChart3, '#slider6')" style="display: inline-block;width:30%">
             </div>
             <canvas style="height:20%px;width:30%;display:inline-block;background-color: black;" id="myChart4"></canvas>
             <!-- <div style="height:500px;width:50%;display:inline-block" id="mapid"></div> -->
@@ -73,149 +72,17 @@
             </div>
         </div>
     </div>
-<div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
+<div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/scripts/charts.js" ></script>
+<script src="/scripts/functions.js" ></script>
 <script>
-    var ctx = document.getElementById('myChart1').getContext('2d');
-    var myLineChart1 = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
 
-        // The data for our dataset
-        data: {
-            labels: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-            datasets: [{
-                label: 'Speed m/s',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-
-            }]
-        },
-
-        // Configuration options go here
-        options: {
-            responsive: false,
-            elements: {
-                line: {
-                    tension: 0
-                },
-                point: {
-                    radius: 0
-                }
-            },
-            animation: {
-                duration: 0
-            }
-        }
-    });
-    var ctx = document.getElementById('myChart2').getContext('2d');
-    var myLineChart2 = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-            labels: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-            datasets: [{
-                label: 'Acceleration m/s^2',
-                borderColor: 'rgb(20, 255, 132)',
-                data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-                linetension: 1
-            }]
-        },
-
-        // Configuration options go here
-        options: {
-            responsive: false,
-            elements: {
-                line: {
-                    tension: 0
-                },
-                point: {
-                    radius: 0
-                }
-            },
-            animation: {
-                duration: 0
-            }
-        }
-    });
-    var ctx = document.getElementById('myChart3').getContext('2d');
-    var myLineChart3 = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-            labels: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-            datasets: [{
-                label: 'Battery V',
-                borderColor: 'rgb(20, 135, 255)',
-                data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-                linetension: 1
-            }]
-        },
-
-        // Configuration options go here
-        options: {
-            responsive: false,
-            elements: {
-                line: {
-                    tension: 0
-                },
-                point: {
-                    radius: 0
-                },
-
-            },
-            animation: {
-                duration: 0
-            }
-        }
-    });
-    var ctx = document.getElementById('myChart4').getContext('2d');
-    var myLineChart4 = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-            labels: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-            datasets: [{
-                label: 'Acceleration M/s^2',
-                borderColor: 'rgb(255, 255, 132)',
-                data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-                linetension: 1
-            }]
-        },
-
-        // Configuration options go here
-        options: {
-            responsive: false,
-            elements: {
-                line: {
-                    tension: 0
-                },
-                point: {
-                    radius: 0
-                }
-            },
-            animation: {
-                duration: 0
-            }
-        }
-    });
+    
+    
     var ctx = document.getElementById('speed-large-chart').getContext('2d');
     var myLineChartSpeed = new Chart(ctx, {
         // The type of chart we want to create
@@ -330,19 +197,6 @@
         chart.data.labels.push(label);
         chart.data.labels.shift();
         chart.update();
-    }
-
-
-    var i = 1;
-
-    function myLoop() {         //  create a loop function
-        setTimeout(function () {   //  call a 3s setTimeout when the loop is called
-            update(10, "14:0" + i);   //  your code here
-            i++;                    //  increment the counter
-            if (i < 20) {           //  if the counter < 10, call the loop function
-                myLoop();             //  ..  again which will trigger another 
-            }                       //  ..  setTimeout()
-        }, 1000)
     }
 
     var socket = io();

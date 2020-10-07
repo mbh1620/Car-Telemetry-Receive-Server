@@ -17,6 +17,6 @@ while(True):
 	csv_writer.writerow([num1,num2,num3,num4])
 	
 	f.close()
-	time.sleep(0.05)
+	time.sleep(0.03)
 	
 

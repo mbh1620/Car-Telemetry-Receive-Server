@@ -13,6 +13,7 @@ var file;
 
 app.use('/public', express.static('public'));
 app.use('/modules', express.static('/node/modules'));
+app.use('/scripts', express.static('./views/scripts'));
 
 app.get("/", function(req, res){
     res.render("dash.ejs");
