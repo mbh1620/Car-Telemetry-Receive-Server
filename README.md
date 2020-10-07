@@ -48,3 +48,29 @@ or
 ```
 
 The python script which updates the .csv file must update the file which is in the /public directory.
+
+#Data
+
+The table below shows what data will be shown on the graphs
+
+
+|   Sensors                     |   datatype    |
+|-------------------------------|---------------|
+|   accelerator pedal           |     int16     |
+|   front brake pedal           |               |
+|   rear brake pedal            |               |
+|   steering                    |               |
+|                               |               |
+|   left torque demand          |               |
+|   right torque demand         |               |
+|   accelerometer x             |               |
+|   accelerometer y             |               |
+|   accelerometer z             |               |
+|                               |               |
+|   gyro yaw                    |               |
+|   gyro pitch                  |               |
+|   gyro roll                   |               |
+|                               |               |
+|   ECU state                   |               |
+|   vehicle dynamics duration   |               |
+|   fault code                  |               |
