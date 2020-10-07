@@ -74,7 +74,7 @@ The table below shows what data will be shown on the graphs
 |   ECU state                   |               |<ul><li>   - [ ] </li></ul>|
 |   vehicle dynamics duration   |               |<ul><li>   - [ ] </li></ul>|
 |   fault code                  |               |<ul><li>   - [ ] </li></ul>|
-
+|                               |               |                           |   
 | Acumulator Management System  |    datatype   |       graph added         |
 |-------------------------------|---------------|---------------------------|
 |   Brick Average Voltage       |               |                           |        
@@ -82,7 +82,7 @@ The table below shows what data will be shown on the graphs
 |   Brick Average Temperature   |               |                           |
 |   Brick Temperature Range     |               |                           |
 |   Accumulator Current         |               |                           |
-
+|                               |               |                           |
 |   Inverter Data               |     datatype  |       graph added         |
 |-------------------------------|---------------|---------------------------|
 |   mode of operation           |
