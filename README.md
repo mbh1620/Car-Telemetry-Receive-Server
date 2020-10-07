@@ -49,7 +49,7 @@ or
 
 The python script which updates the .csv file must update the file which is in the /public directory.
 
-#Data
+# Data
 
 The table below shows what data will be shown on the graphs
 
