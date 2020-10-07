@@ -56,13 +56,13 @@ The table below shows what data will be shown on the graphs
 
 |   Sensors                     |   datatype    |   graph added  |
 |-------------------------------|---------------|----------------|
-|   accelerator pedal           |     int16     |       - [ ]    |
-|   front brake pedal           |               |       - [ ]    |
-|   rear brake pedal            |               |       - [ ]    |
-|   steering                    |               |       - [ ]    |
-|                               |               |                |
-|   left torque demand          |               |       - [ ]    |
-|   right torque demand         |               |       - [ ]    |
+|   accelerator pedal           |     int16     |<ul><li>- [ ] item1</li></ul>|
+|   front brake pedal           |               |<ul><li>- [ ] item1</li></ul>|       
+|   rear brake pedal            |               |<ul><li>- [ ] item1</li></ul>|
+|   steering                    |               |<ul><li>- [ ] item1</li></ul>|       
+|                               |               |<ul><li>- [ ] item1</li></ul>|       
+|   left torque demand          |               |<ul><li>- [ ] item1</li></ul>|       
+|   right torque demand         |               |       
 |   accelerometer x             |               |
 |   accelerometer y             |               |
 |   accelerometer z             |               |
