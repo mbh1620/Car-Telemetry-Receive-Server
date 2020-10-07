@@ -56,7 +56,7 @@ The table below shows what data will be shown on the graphs
 
 |   Sensors                     |   datatype    |   graph added  |
 |-------------------------------|---------------|----------------|
-|   accelerator pedal           |     int16     |<ul><li>- [ ] </li></ul>|
+|   accelerator pedal           |     int16     |<ul><li>- [x] </li></ul>|
 |   front brake pedal           |               |<ul><li>- [ ] </li></ul>|       
 |   rear brake pedal            |               |<ul><li>- [ ] </li></ul>|
 |   steering                    |               |<ul><li>- [ ] </li></ul>|       
