@@ -19,6 +19,22 @@ app.get("/", function(req, res){
     res.render("dash.ejs");
 })
 
+/* 
+
+    Make a route for each of the main sections such as:
+
+    Accumulator management system
+
+    Inverter Data 
+
+    ECU 
+
+    Kistner data
+
+    Then only emit the relevant data to the people on those routes.
+
+*/
+
 tail.on("line", function(data){
     console.log(data);
     //substring data to split into all the different metrics
@@ -32,15 +48,5 @@ tail.on("line", function(data){
 tail.on("error", function(error) {
     console.log('ERROR: ', error);
 });
-
-// fs.watchFile('./data.csv',{persistent:true,interval:100},function(data){
     
-//     
-//     // console.log("update " + data);
-// }); 
-    
-
-
-
-
 http.listen("8080");
