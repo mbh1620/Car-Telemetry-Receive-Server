@@ -1,6 +1,8 @@
 <html>
 
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+    <script src="scripts/sketch.js" type="text/javascript"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin="" />
@@ -11,7 +13,7 @@
 </head>
 
 <body style="background-color:gray;">
-    <div style="height:100vh;overflow: hidden;">
+    <div style="height:120vh;overflow: hidden;">
         <div style="width:95%;height:auto;margin-bottom:20px;">
         <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
         <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white">Telemetry
@@ -57,9 +59,9 @@
                 <input type="range" id="slider5" onchange="updateTimeBase(myLineChart2, '#slider5')" style="display: inline-block;width:30%;margin-right:3%;">
                 <input type="range" id="slider6" onchange="updateTimeBase(myLineChart3, '#slider6')" style="display: inline-block;width:30%">
             </div>
-            <canvas style="height:20%px;width:30%;display:inline-block;background-color: black;" id="myChart4"></canvas>
+            <canvas style="height:20%px;width:30%;display:inline-block;background-color: black;margin-bottom:26%" id="myChart4"></canvas>
             <!-- <div style="height:500px;width:50%;display:inline-block" id="mapid"></div> -->
-            <img id="image" style="height:30%;width:25%;display:inline-block;margin-left:3%;margin-top:20px;"
+            <img id="image" style="height:auto;width:65%;display:inline-block;margin-left:3%;margin-top:20px;"
                 src="/public/image.png">
         </div>
         <a href="/public/data.csv" download="data.csv">
@@ -79,6 +81,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/scripts/charts.js" ></script>
 <script src="/scripts/functions.js" ></script>
+
 <script>
 
     
