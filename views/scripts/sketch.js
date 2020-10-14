@@ -1,3 +1,6 @@
+//Functions and sketches for the image map data
+
+
 function setup() {
     createCanvas(400,400)
 }

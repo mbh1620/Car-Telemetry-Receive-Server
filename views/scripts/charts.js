@@ -1,9 +1,12 @@
 //These are the initial setups for the Graphs
 
 /*
+
 This might be changed into a dynamically initialising function to allow user to create as
 many graphs as they need or delete them if needed. These graphs will then by allocated to an 
-array so that they can be accessed through that.
+array so that they can be accessed through that. This should mean that graphs are only created 
+as they are needed.
+
 */
 
 //--------------------------------------------

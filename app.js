@@ -19,6 +19,10 @@ app.get("/", function(req, res){
     res.render("dash.ejs");
 })
 
+io.on("connection", function(socket){
+    io.emit('new-data', {data:20})
+})
+
 /* 
 
     Make a route for each of the main sections such as:
