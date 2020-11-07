@@ -49,16 +49,17 @@ or
 
 The python script which updates the .csv file must update the file which is in the /public directory.
 
-# Data
-
-The table below shows what data will be shown on the graphs
-
 # Desktop Application
 
 To install the Desktop Application go to releases and download 'Telemetry.app'. Move to desktop and right click and open. To allow data to be seen on graphs make sure that the server is running on the Raspberry pi. 
 
 # IOS Application
 
+To install the IOS application, you will only be able to do this on an apple computer with Xcode. Install the 'TelemetryApp' folder, and open the xcode project. You then might have to change the developer signings. You can then plug in the Ipad using lighting cable and then configure the settings at the top to use the Ipad that is plugged in. 
+
+# Data
+
+The table below shows what data will be shown on the graphs.
 
 
 
