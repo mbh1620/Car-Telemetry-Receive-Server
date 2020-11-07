@@ -53,6 +53,14 @@ The python script which updates the .csv file must update the file which is in t
 
 The table below shows what data will be shown on the graphs
 
+# Desktop Application
+
+To install the Desktop Application go to releases and download 'Telemetry.app'. Move to desktop and right click and open. To allow data to be seen on graphs make sure that the server is running on the Raspberry pi. 
+
+# IOS Application
+
+
+
 
 |   Sensors                     |   datatype    |   graph added  |
 |-------------------------------|---------------|----------------|
@@ -108,3 +116,11 @@ The table below shows what data will be shown on the graphs
 |   DCB Temp 3                  |
 |   Heat Sink Temp              |
 |   Hall Sector                 |
+
+
+# Desktop Application
+
+To install the Desktop Application go to releases and download 'Telemetry.app'. Move to desktop and right click and open.
+
+
+
