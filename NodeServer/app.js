@@ -19,6 +19,12 @@ app.get("/", function(req, res){
     res.render("dash.ejs");
 })
 
+/*
+    Socket.io connector, 
+
+    Starts sending data to new connections
+*/
+
 io.on("connection", function(socket){
     io.emit('new-data', {data:20})
 })
