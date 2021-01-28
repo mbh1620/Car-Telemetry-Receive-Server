@@ -18,5 +18,4 @@ while(True):
 	
 	f.close()
 	time.sleep(0.05)
-	
 
