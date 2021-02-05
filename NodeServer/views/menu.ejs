@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+
+    <link rel="stylesheet" href="./stylesheets/menu-style.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+</head>
+
+<body style="background-color:gray;">
+    <div style="height:100vh;overflow: hidden;">
+        <div style="width:95%;height:auto;margin-bottom:20px;">
+        <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
+        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white">Menu
+        </h1>
+        </div>
+        <div id="menu-box">
+            <!-- 
+                The menu will consist of:
+
+                Primary view - for displaying the vitals of the car for a very temporary view just to see if the car is working as it should.
+
+                Config view - for displaying the configuration of the server and for the receive module. This view will enable connection to the receiver.
+
+                Battery Management - For displaying barcharts and graphs of the current voltages of the batteries.
+
+                GPS/MAP - This will be used to display the current position of the car in realtime using the GPS coordinates supplied by the RF module.
+
+                ECU data - This will be used to display the ECU data.
+                
+                Inverter data - View page for all the inverter data.
+
+                Accumulator data - View page for the inverter data.
+
+             -->
+             <div class="item-box"><a href="/primary">Primary View</a></div>
+             <div class="item-box"><a href="#">GPS Map</a></div>
+             <div class="item-box"><a href="#">ECU Data</a></div>
+             <div class="item-box"><a href="#">Inverter Data</a></div>
+             <div class="item-box"><a href="#">Accumulator Data</a></div>
+             <div class="item-box"><a href="/config">Configuration</a></div>
+             <div class="item-box"><a href="/instructions">Instructions</a></div>
+        </div>    
+        
+    </div>
+<div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
+</body>
+</html>

@@ -15,11 +15,12 @@
 </head>
 
 <body style="background-color:gray;">
-    <div style="height:120vh;overflow: hidden;">
+    <div style="height:92.5vh;overflow: hidden;">
         <div style="width:95%;height:auto;margin-bottom:20px;">
         <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
-        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white">Telemetry
-        </h1>
+        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white">Primary Telemetry
+        </h1></br>
+        <a href="/">Menu</a>
         </div>
         
         <h4 style="color:white;font-family: arial;">Page View: <select onchange="changeview()" id="pageSelector"
@@ -33,8 +34,8 @@
                 <option value="Battery Large">Battery Large</option>
 
             </select></h4>
-            
-        <div style="height:60%">
+        <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
+        <div style="height:72.5%">
             <!-- <input type="range" id="slider1" orient="vertical"
                 style="display:inline-block;-webkit-appearance: slider-vertical;width:10px;height:25%"> -->
                 <div style="height:40%;width:80%;margin: 0 auto;">
@@ -59,11 +60,11 @@
                 id="acc-large-chart"></canvas>
             <canvas style="height:100%px;width:100%;background-color: black;display:none;"
                 id="battery-large-chart"></canvas>
-            <div>
+            <!-- <div>
                 <input type="range" id="slider4" onchange="updateTimeBase(myLineChart1, '#slider4')" style="display: inline-block;width:30%;margin-right: 3%;margin-left:1%">
                 <input type="range" id="slider5" onchange="updateTimeBase(myLineChart2, '#slider5')" style="display: inline-block;width:30%;margin-right:3%;">
                 <input type="range" id="slider6" onchange="updateTimeBase(myLineChart3, '#slider6')" style="display: inline-block;width:30%">
-            </div>
+            </div> -->
             <!-- <canvas style="height:60%px;width:20%;display:inline-block;background-color: black;margin-bottom:26%" id="myChart4"></canvas> -->
             <!-- <div style="height:500px;width:50%;display:inline-block" id="mapid"></div> -->
             <!-- <img id="image" style="height:auto;width:58%;display:inline-block;margin-left:0%;margin-top:20px;" src="/public/image.png"> -->
@@ -73,12 +74,12 @@
         <a href="/public/data.csv" download="data.csv">
         Download data file here
         </a>
-        <div id="log" style="font-size: 15; font-family: Helvetica;">
+        <!-- <div id="log" style="font-size: 15; font-family: Helvetica;">
             <p>Console Log</p>
             <div style="width:100%;height:20%;background-color: white;">
                 <p><em>14:20:52</em> startup</p>
             </div>
-        </div>
+        </div> -->
     </div>
 <div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
 </body>

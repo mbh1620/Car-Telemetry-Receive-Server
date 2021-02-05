@@ -1,0 +1,27 @@
+#menu-box {
+    height:auto;
+    width:90%;
+    background-color:#5c5c5c;
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+#menu-box .item-box{
+    height:100px;
+    width:60%;
+    background-color: #a1a1a1;
+    margin: 0 auto;
+    margin-top:20px;
+    text-decoration: none;
+}
+
+#menu-box .item-box a{
+   text-decoration: none;
+   display:block;
+   text-align: center;
+   font-size: 24;
+   font-family: Helvetica;
+   padding-top:35px;
+   color:white;
+}

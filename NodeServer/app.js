@@ -11,13 +11,31 @@ var readbytes = 0;
 var bite_size = 256;
 var file;
 
+// would be nice to have a user interface similar to this https://www.pinterest.com.au/pin/395402042262052760/?d=t&mt=login
+
 app.use('/public', express.static('public'));
+app.use('/stylesheets', express.static('./views/stylesheets'));
 app.use('/modules', express.static('/node/modules'));
 app.use('/scripts', express.static('./views/scripts'));
 
 app.get("/", function(req, res){
-    res.render("dash.ejs");
+    res.render("menu.ejs");
 })
+
+app.get("/primary", function(req, res){
+    res.render("primary-dash.ejs");
+})
+
+app.get("/config", function(req,res){
+    res.render("config-page.ejs");
+})
+
+app.get("/instructions", function(req,res){
+    res.render("instructions.ejs");
+})
+
+
+
 
 /*
     Socket.io connector, 
