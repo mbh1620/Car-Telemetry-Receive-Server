@@ -94,6 +94,7 @@
     var myLineChartSpeed = new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
+        
 
         // The data for our dataset
         data: {
@@ -102,6 +103,7 @@
             datasets: [{
                 label: 'Speed m/s',
                 borderColor: 'rgb(255, 99, 132)',
+                borderWidth: 1,
                 data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
                     , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
 
@@ -113,7 +115,7 @@
             responsive: false,
             elements: {
                 line: {
-                    tension: 0
+                    tension: 0,
                 },
                 point: {
                     radius: 0
@@ -207,14 +209,11 @@
     }
 
     var socket = io();
-    socket.on('new-data', function (msg) {
+    socket.on('primary-data', function (msg) {
         console.log(msg);
         update(msg.data[0], msg.data[3], myLineChart1);
         update(msg.data[1], msg.data[3], myLineChart2);
         update(msg.data[2], msg.data[3], myLineChart3);
-        update(msg.data[0], msg.data[3], myLineChartSpeed);
-        update(msg.data[1], msg.data[3], myLineChartAcceleration);
-        update(msg.data[2], msg.data[3], myLineChartBattery);
         // update(msg.data[0], '14:05', myLineChart4);
     })
 

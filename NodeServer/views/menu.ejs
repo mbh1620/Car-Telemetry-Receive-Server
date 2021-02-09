@@ -41,9 +41,9 @@
 
              -->
              <div class="item-box"><a href="/primary">Primary View</a></div>
-             <div class="item-box"><a href="#">GPS Map</a></div>
-             <div class="item-box"><a href="#">ECU Data</a></div>
-             <div class="item-box"><a href="#">Inverter Data</a></div>
+             <div class="item-box"><a href="/gps_map_1">Live Position</a></div>
+             <div class="item-box"><a href="/ecu">ECU Data</a></div>
+             <div class="item-box"><a href="/inverter">Inverter Data</a></div>
              <div class="item-box"><a href="#">Accumulator Data</a></div>
              <div class="item-box"><a href="/config">Configuration</a></div>
              <div class="item-box"><a href="/instructions">Instructions</a></div>
@@ -53,3 +53,9 @@
 <div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
 </body>
 </html>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+var socket = io();
+
+</script>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<Pane fx:id="rootpane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="891.0" prefWidth="1253.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TelemetryDesktopViewerFXMLController">
+   <children>
+      <VBox prefHeight="891.0" prefWidth="1253.0">
+         <children>
+            <MenuBar prefHeight="25.0" prefWidth="1253.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <TabPane prefHeight="867.0" prefWidth="1253.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Configuration">
+                  <content>
+                    <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="722.0" prefWidth="1253.0">
+                           <children>
+                              <Label layoutX="373.0" layoutY="101.0" prefHeight="65.0" prefWidth="308.0" text="Database connection and secondary data viewing" wrapText="true">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="14.0" layoutY="14.0" prefHeight="65.0" prefWidth="230.0" text="Configuration Panel">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="356.0" layoutY="187.0" prefHeight="25.0" prefWidth="108.0" text="Database URI" />
+                              <TextField layoutX="453.0" layoutY="187.0" prefHeight="25.0" prefWidth="125.0" />
+                              <Label layoutX="356.0" layoutY="225.0" prefHeight="25.0" prefWidth="59.0" text="Status:" />
+                              <Label layoutX="454.0" layoutY="225.0" prefHeight="25.0" prefWidth="118.0" text="Not Connected" textFill="RED" />
+                              <Button layoutX="453.0" layoutY="278.0" mnemonicParsing="false" text="Connect to DataBase" />
+                              <Label layoutX="101.0" layoutY="78.0" prefHeight="65.0" prefWidth="230.0" text="Live Telemetry Set up ">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="85.0" layoutY="202.0" prefHeight="25.0" prefWidth="46.0" text="Port" />
+                              <Label layoutX="85.0" layoutY="164.0" prefHeight="25.0" prefWidth="108.0" text="Host IP address" />
+                              <TextField fx:id="host_port_input" layoutX="182.0" layoutY="202.0" prefHeight="25.0" prefWidth="125.0" />
+                              <TextField fx:id="host_ip_input" layoutX="182.0" layoutY="164.0" prefHeight="25.0" prefWidth="125.0" />
+                              <Button fx:id="connect_to_server_button" layoutX="183.0" layoutY="290.0" mnemonicParsing="false" onAction="#on_connect_pressed" text="Connect to Server" />
+                              <Label layoutX="85.0" layoutY="242.0" prefHeight="25.0" prefWidth="59.0" text="Status:" />
+                              <Label fx:id="status_label_server" layoutX="182.0" layoutY="242.0" prefHeight="25.0" prefWidth="161.0" text="Not Connected" textFill="RED" />
+                              <Label layoutX="101.0" layoutY="408.0" prefHeight="65.0" prefWidth="230.0" text="Data Session">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="start_session" layoutX="162.0" layoutY="546.0" mnemonicParsing="false" onAction="#on_connect_pressed" text="Start new session" />
+                              <Button fx:id="stop_session" layoutX="162.0" layoutY="597.0" mnemonicParsing="false" onAction="#on_connect_pressed" text="Stop Session" />
+                              <Label layoutX="162.0" layoutY="473.0" prefHeight="55.0" prefWidth="229.0" text="Start a new data session to start a new data file and to create a new session in the database" wrapText="true" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Primary View">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <LineChart fx:id="speed_chart" animated="false" prefHeight="279.0" prefWidth="1253.0" title=" Speed m/s">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                              <LineChart layoutY="265.0" prefHeight="322.0" prefWidth="1253.0" title="Acceleration">
+                                 <xAxis>
+                                    <CategoryAxis side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis side="LEFT" />
+                                 </yAxis>
+                              </LineChart>
+                              <LineChart layoutY="572.0" prefHeight="266.0" prefWidth="1253.0" title="Battery Voltage V">
+                                 <xAxis>
+                                    <CategoryAxis side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                    <NumberAxis side="LEFT" />
+                                 </yAxis>
+                              </LineChart>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab text="ECU">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab text="Accumulator">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab text="Inverter">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab text="Position">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <WebView fx:id="mapView" layoutX="166.0" layoutY="89.0" prefHeight="661.0" prefWidth="922.0" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="166.0" AnchorPane.rightAnchor="165.0" AnchorPane.topAnchor="89.0" />
+                           </children></AnchorPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </VBox>
+   </children>
+</Pane>

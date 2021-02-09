@@ -7,7 +7,7 @@
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin="" />
 
-    <link rel="stylesheet" href="./stylesheets/menu-style.css">
+    <link rel="stylesheet" href="./stylesheets/config-style.css">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
@@ -22,24 +22,30 @@
         </h1></br>
         <a href="/">menu</a>
         </div>
-        <div style="height:auto; width:80%; margin:0 auto;">
-        <div style="font-family:Helvetica, sans-serif; color:white;font-weight:100">
+        <div style="height:auto; width:67.5%; margin:0 auto;">
+        <div class="headings" style="font-family:Helvetica, sans-serif; color:white;font-weight:100;float:left;display:inline-block;margin-right:20px">
             <h2>Network Settings</h2>
             <h4>SSID:</h4><input type="text" value="telemetry-network">
             <h4>Password:</h4>
             <input type="text" value="pass123">
             <h4>Reset Network</h4><button>Reset</button>
         </div>
-        <div style="font-family:Helvetica, sans-serif; color:white;font-weight:100">
+        <div class="headings" style="font-family:Helvetica, sans-serif; color:white;font-weight:100;float:right;display:block;margin-right:20px">
             <h2>Server Settings</h2>
             <h4>Ip Address:</h4><input type="text" value="192.168.0.1">
             <h4>Port</h4><input type="text" value="8080">
             <h4>Reset Server</h4><button>Reset</button>
         </div>
-        <div style="font-family:Helvetica, sans-serif; color:white;font-weight:100">
+        <div class="headings" style="font-family:Helvetica, sans-serif; color:white;font-weight:100;float:left;display:inline-block;margin-right:20px">
             <h2>Receiver Module Settings</h2>
             <h4>Connection:</h4>
             <h4>Signal Strength: </h4>
+        </div>
+        <div class="headings" style="font-family:Helvetica, sans-serif; color:white;font-weight:100;float:right;display:inline-block;margin-right:20px">
+            <h2>Data storage and Database settings</h2>
+            <h4>Database uri connection: </h4><input type="text" value="">
+            <h4>Start Data Session</h4> <button>Start</button>
+            <h4>Stop Data Session:</h4> <button>Stop</button>
         </div>
     </div>
 

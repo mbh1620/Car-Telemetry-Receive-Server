@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="TelemetryDesktopViewer.jnlp">
+  <information>
+    <title>TelemetryDesktopViewer</title>
+    <vendor>Matt</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="TelemetryDesktopViewer.jar" size="11644" download="eager" />
+    <jar href="lib\engine.io-client-1.0.0.jar" size="106072" download="eager" />
+    <jar href="lib\json-20090211.jar" size="45944" download="eager" />
+    <jar href="lib\okhttp-3.8.1.jar" size="398122" download="eager" />
+    <jar href="lib\okio-1.13.0.jar" size="81811" download="eager" />
+    <jar href="lib\socket.io-client-1.0.0.jar" size="63004" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="TelemetryDesktopViewer" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="telemetrydesktopviewer.TelemetryDesktopViewerMain"  name="TelemetryDesktopViewer" />
+  <update check="always"/>
+</jnlp>
