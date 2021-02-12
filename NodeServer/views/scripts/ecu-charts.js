@@ -29,7 +29,7 @@ var ctx = document.getElementById('myChart1').getContext('2d');
                 , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
                 , , , ,],
             datasets: [{
-                label: 'Speed m/s',
+                label: '',
                 borderColor: 'rgb(255, 99, 132)',
                 borderWidth: 0.8,
                 data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
