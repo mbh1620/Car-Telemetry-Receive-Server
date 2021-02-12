@@ -51,6 +51,8 @@ The python script which updates the .csv file must update the file which is in t
 
 # Desktop Application
 
+![desktopgif]()
+
 To install the Desktop Application go to releases and download 'Telemetry.app'. Move to desktop and right click and open. To allow data to be seen on graphs make sure that the server is running on the Raspberry pi. 
 
 # IOS Application
