@@ -6,6 +6,7 @@ var fs = require('fs');
 var Tail = require('tail').Tail;
 var mongoose = require('mongoose');
 
+
 tail = new Tail("./public/data.csv");
 tail_ECU = new Tail("./public/ECU_data.csv");
 tail_Accum = new Tail("./public/Accum_data.csv");
@@ -29,7 +30,8 @@ app.get("/", function(req, res){
 
 app.get("/start-data-session", function(req,res){
     //Code in here will start and prepare the file and data model for creating a data session to add to the database
-    //Will clear existing files 
+    //Will clear existing files
+    reset_files();
 })
 
 app.get("/stop-data-session", function(req,res){
@@ -61,7 +63,14 @@ app.get("/gps_map_1", function(req,res){
     res.render("gps-map-page1.ejs");
 })
 
-
+function reset_files(){
+    fs.writeFileSync("./public/data.csv", " ");
+    fs.writeFileSync("./public/ECU_data.csv", " ");
+    fs.writeFileSync("./public/Accum_data.csv", " ");
+    fs.writeFileSync("./public/Inverter_data.csv", " ");
+    fs.writeFileSync("./public/Position_data.csv", " ");
+    console.log("started new data session");
+}
 
 /*
     Socket.io connector, 
@@ -100,6 +109,10 @@ io.on("connection", function(socket){
         socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room");
         socket.join("Inverter Room");
         console.log(socket.id + " joined Inverter room");
+    })
+
+    socket.on("Start_data_session", function(){
+        reset_files();
     })
 
 })
@@ -141,15 +154,15 @@ tail.on("error", function(error) {
 //-------------------------------------------------
 
 //ECU Room //On tail of ECU file emit to ECU room 
-tail_ECU.on("line", function(data){
-    console.log(data);
+tail_ECU.on("line", function(data2){
+    console.log(data2);
     //substring data to split into all the different metrics
-    data = data.split(',');
-    data[0] = parseFloat(data[0]);
-    data[1] = parseFloat(data[1]);
-    data[2] = parseFloat(data[2]);
+    data2 = data2.split(',');
+    data2[0] = parseFloat(data2[0]);
+    data2[1] = parseFloat(data2[1]);
+    data2[2] = parseFloat(data2[2]);
     console.log("file has updated");
-    io.to('ECU_Room').emit('primary-data', {data:data});
+    io.to('ECU Room').emit('ecu-data', {data:data2});
 });
 tail_ECU.on("error", function(error) {
     console.log('ERROR: ', error);
@@ -164,7 +177,7 @@ tail_Accum.on("line", function(data){
     data[1] = parseFloat(data[1]);
     data[2] = parseFloat(data[2]);
     console.log("file has updated");
-    io.to('ECU_Room').emit('primary-data', {data:data});
+    io.to('Accumulator Room').emit('primary-data', {data:data});
 });
 tail_Accum.on("error", function(error) {
     console.log('ERROR: ', error);
@@ -180,7 +193,7 @@ tail_Accum.on("line", function(data){
     data[1] = parseFloat(data[1]);
     data[2] = parseFloat(data[2]);
     console.log("file has updated");
-    io.to('Inverter_Room').emit('primary-data', {data:data});
+    io.to('Inverter Room').emit('primary-data', {data:data});
 });
 tail_Accum.on("error", function(error) {
     console.log('ERROR: ', error);

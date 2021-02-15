@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin="" />
+    <link rel="stylesheet" href="./stylesheets/standard-style.css">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
 
 </head>
 
-<body style="background-color:gray;">
+<body>
     <div style="height:92.5vh;overflow: hidden;">
         <div style="width:95%;height:auto;margin-bottom:20px;">
         <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
@@ -209,6 +210,7 @@
     }
 
     var socket = io();
+    socket.emit("ECU");
     socket.on('ecu-data', function (msg) {
         console.log(msg);
         update(msg.data[0], msg.data[3], myLineChart1);
