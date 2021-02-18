@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: app.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var express = require('express');
+var app = express();
+var http = require('http').createServer(app)
+var io = require('socket.io')(http);
+var fs = require('fs');
+var Tail = require('tail').Tail;
+var mongoose = require('mongoose');
+
+
+//Import custom routes 
+
+var testingroutes = require("./routes/testing_routes");
+var dataroutes = require("./routes/data_routes");
+
+/**
+ * @file app.js - Used to start the server.
+ */
+
+
+tail = new Tail("./public/data.csv");
+tail_ECU = new Tail("./public/ECU_data.csv");
+tail_Accum = new Tail("./public/Accum_data.csv");
+tail_Inverter = new Tail("./public/Inverter_data.csv");
+tail_Position = new Tail("./public/Position_data.csv");
+
+var readbytes = 0;
+var bite_size = 256;
+var file;
+var python;
+
+// would be nice to have a user interface similar to this https://www.pinterest.com.au/pin/395402042262052760/?d=t&amp;mt=login
+
+app.use('/public', express.static('public'));
+app.use('/stylesheets', express.static('./views/stylesheets'));
+app.use('/modules', express.static('/node/modules'));
+app.use('/scripts', express.static('./views/scripts'));
+app.use('/docs', express.static('./out'));
+
+app.use("/", testingroutes);
+app.use("/", dataroutes);
+
+//Index route
+app.get("/", function(req, res){
+    res.render("menu.ejs");
+})
+
+/**
+ * Route allowing to start a new data session. This route deletes the contents of the data.csv files to prepare
+ * them for a new data session.
+ * 
+ * @memberof Routes
+ * @name get/start-data-session
+ * @function
+
+ * @see reset_files function. 
+ */
+
+app.get("/start-data-session", function(req,res){
+    //Code in here will start and prepare the file and data model for creating a data session to add to the database
+    //Will clear existing files
+    reset_files();
+})
+
+/**
+ * Route allowing to stop a data session. This route saves the contents of the data files to mongoDB object and then pushes them 
+ * to the DB. 
+ * 
+ * @memberof Routes
+ * @name get/stop-data-session
+ * @function 
+ */
+
+app.get("/stop-data-session", function(req,res){
+    //Code in here will be called after a session has taken place so that it packages all the current data into a 'dataSession' Schema 
+    //and then push it to the mongoDB Atlas database.
+})
+
+app.get("/config", function(req,res){
+    res.render("config-page.ejs");
+})
+
+app.get("/instructions", function(req,res){
+    res.render("instructions.ejs");
+})
+
+app.get("/session", function(req,res){
+    res.render("session.ejs");
+})
+
+/**
+ * Used to clear the contents of the data.csv files
+ * 
+ * @function reset_files
+ */
+
+function reset_files(){
+    fs.writeFileSync("./public/data.csv", " ");
+    fs.writeFileSync("./public/ECU_data.csv", " ");
+    fs.writeFileSync("./public/Accum_data.csv", " ");
+    fs.writeFileSync("./public/Inverter_data.csv", " ");
+    fs.writeFileSync("./public/Position_data.csv", " ");
+    console.log("started new data session");
+}
+
+io.on("connection", function(socket){
+    console.log("User connected");
+    socket.on("disconnect", function(socket){
+        console.log("User disconnected");
+    })
+
+    socket.on("primary", function(){
+        socket.leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
+        socket.join('Primary Room');
+        console.log(socket.id + " joined Primary Room");
+    })
+
+    socket.on("ECU", function(){
+        socket.leave("Primary Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
+        socket.join("ECU Room");
+        console.log(socket.id + " joined ECU Room");
+    })
+
+    socket.on("Accum", function(){
+        socket.leave("Primary Room").leave("ECU Room").leave("Inverter Room").leave("Map Room");
+        socket.join("Accumulator Room");
+        console.log(socket.id + " joined Accumulator room");
+    })
+
+    socket.on("Inverter", function(){
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Map Room");
+        socket.join("Inverter Room");
+        console.log(socket.id + " joined Inverter room");
+    })
+
+    socket.on("map", function(){
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room");
+        socket.join("Map Room");
+        console.log(socket.id + " joined Map Room");
+    })
+
+    socket.on("Start_data_session", function(){
+        reset_files();
+    })
+
+})
+
+
+
+/* 
+
+    Make a route for each of the main sections such as:
+
+    Accumulator management system
+
+    Inverter Data 
+
+    ECU 
+
+    Kistner data
+
+    Then only emit the relevant data to the people on those routes.
+
+*/
+
+tail.on("line", function(data){
+    console.log(data);
+    //substring data to split into all the different metrics
+    data = data.split(',');
+    data[0] = parseFloat(data[0]);
+    data[1] = parseFloat(data[1]);
+    data[2] = parseFloat(data[2]);
+    console.log("file has updated");
+    io.to('Primary Room').emit('primary-data', {data:data});
+});
+tail.on("error", function(error) {
+    console.log('ERROR: ', error);
+});
+
+//-------------------------------------------------
+//                 Room emit events
+//-------------------------------------------------
+
+//ECU Room //On tail of ECU file emit to ECU room 
+tail_ECU.on("line", function(data2){
+    console.log(data2);
+    //substring data to split into all the different metrics
+    data2 = data2.split(',');
+    data2[0] = parseFloat(data2[0]);
+    data2[1] = parseFloat(data2[1]);
+    data2[2] = parseFloat(data2[2]);
+    console.log("file has updated");
+    io.to('ECU Room').emit('ecu-data', {data:data2});
+});
+tail_ECU.on("error", function(error) {
+    console.log('ERROR: ', error);
+});
+
+//Accumulator Room //On tail of Accumulator File emit to th 
+tail_Accum.on("line", function(data){
+    console.log(data);
+    //substring data to split into all the different metrics
+    data = data.split(',');
+    data[0] = parseFloat(data[0]);
+    data[1] = parseFloat(data[1]);
+    data[2] = parseFloat(data[2]);
+    console.log("file has updated");
+    io.to('Accumulator Room').emit('primary-data', {data:data});
+});
+tail_Accum.on("error", function(error) {
+    console.log('ERROR: ', error);
+});
+
+//Inverter Room
+
+tail_Accum.on("line", function(data){
+    console.log(data);
+    //substring data to split into all the different metrics
+    data = data.split(',');
+    data[0] = parseFloat(data[0]);
+    data[1] = parseFloat(data[1]);
+    data[2] = parseFloat(data[2]);
+    console.log("file has updated");
+    io.to('Inverter Room').emit('primary-data', {data:data});
+});
+tail_Accum.on("error", function(error) {
+    console.log('ERROR: ', error);
+});
+
+//Position Room
+
+tail_Position.on("line", function(data){
+    console.log(data);
+    //substring data to split into all the different metrics
+    data = data.split(',');
+    data[0] = parseFloat(data[0]);
+    data[1] = parseFloat(data[1]);
+    data[2] = parseFloat(data[2]);
+    console.log("file has updated");
+    io.to('Map Room').emit('position-data', {data:data});
+});
+tail_Position.on("error", function(error) {
+    console.log('ERROR: ', error);
+});
+
+
+
+    
+http.listen("8080", function(){
+    console.log("listening on port 8080");
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="DataRoutes.html">DataRoutes</a></li><li><a href="DataRoutes.Accumulator.html">Accumulator</a></li><li><a href="DataRoutes.ECU.html">ECU</a></li><li><a href="DataRoutes.Inverter.html">Inverter</a></li><li><a href="DataRoutes.Position.html">Position</a></li><li><a href="DataRoutes.Primary.html">Primary</a></li><li><a href="TestingRoutes.html">TestingRoutes</a></li><li><a href="TestingRoutes.PythonScripts.html">PythonScripts</a></li></ul><h3>Global</h3><ul><li><a href="global.html#reset_files">reset_files</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Feb 18 2021 18:35:55 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

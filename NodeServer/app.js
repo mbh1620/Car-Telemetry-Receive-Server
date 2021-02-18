@@ -7,6 +7,16 @@ var Tail = require('tail').Tail;
 var mongoose = require('mongoose');
 
 
+//Import custom routes 
+
+var testingroutes = require("./routes/testing_routes");
+var dataroutes = require("./routes/data_routes");
+
+/**
+ * @file app.js - Used to start the server.
+ */
+
+
 tail = new Tail("./public/data.csv");
 tail_ECU = new Tail("./public/ECU_data.csv");
 tail_Accum = new Tail("./public/Accum_data.csv");
@@ -16,6 +26,7 @@ tail_Position = new Tail("./public/Position_data.csv");
 var readbytes = 0;
 var bite_size = 256;
 var file;
+var python;
 
 // would be nice to have a user interface similar to this https://www.pinterest.com.au/pin/395402042262052760/?d=t&mt=login
 
@@ -23,10 +34,26 @@ app.use('/public', express.static('public'));
 app.use('/stylesheets', express.static('./views/stylesheets'));
 app.use('/modules', express.static('/node/modules'));
 app.use('/scripts', express.static('./views/scripts'));
+app.use('/docs', express.static('./out'));
 
+app.use("/", testingroutes);
+app.use("/", dataroutes);
+
+//Index route
 app.get("/", function(req, res){
     res.render("menu.ejs");
 })
+
+/**
+ * Route allowing to start a new data session. This route deletes the contents of the data.csv files to prepare
+ * them for a new data session.
+ * 
+ * @memberof Routes
+ * @name get/start-data-session
+ * @function
+
+ * @see reset_files function. 
+ */
 
 app.get("/start-data-session", function(req,res){
     //Code in here will start and prepare the file and data model for creating a data session to add to the database
@@ -34,21 +61,18 @@ app.get("/start-data-session", function(req,res){
     reset_files();
 })
 
+/**
+ * Route allowing to stop a data session. This route saves the contents of the data files to mongoDB object and then pushes them 
+ * to the DB. 
+ * 
+ * @memberof Routes
+ * @name get/stop-data-session
+ * @function 
+ */
+
 app.get("/stop-data-session", function(req,res){
     //Code in here will be called after a session has taken place so that it packages all the current data into a 'dataSession' Schema 
     //and then push it to the mongoDB Atlas database.
-})
-
-app.get("/primary", function(req, res){
-    res.render("primary-dash.ejs");
-})
-
-app.get("/ecu", function(req, res){
-    res.render("ecu-data-1.ejs");
-})
-
-app.get("/inverter", function(req, res){
-    res.render("inverter-data.ejs");
 })
 
 app.get("/config", function(req,res){
@@ -59,9 +83,15 @@ app.get("/instructions", function(req,res){
     res.render("instructions.ejs");
 })
 
-app.get("/gps_map_1", function(req,res){
-    res.render("gps-map-page1.ejs");
+app.get("/session", function(req,res){
+    res.render("session.ejs");
 })
+
+/**
+ * Used to clear the contents of the data.csv files
+ * 
+ * @function reset_files
+ */
 
 function reset_files(){
     fs.writeFileSync("./public/data.csv", " ");
@@ -72,43 +102,40 @@ function reset_files(){
     console.log("started new data session");
 }
 
-/*
-    Socket.io connector, 
-
-    Starts sending data to new connections
-*/
-
 io.on("connection", function(socket){
-    //When a user connects we need to store the socketid into a connected users array.
     console.log("User connected");
     socket.on("disconnect", function(socket){
         console.log("User disconnected");
     })
 
-    //Room handling 
-
     socket.on("primary", function(){
-        socket.leave("ECU Room").leave("Accumulator Room").leave("Inverter Room");
+        socket.leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
         socket.join('Primary Room');
         console.log(socket.id + " joined Primary Room");
     })
 
     socket.on("ECU", function(){
-        socket.leave("Primary Room").leave("Accumulator Room").leave("Inverter Room");
+        socket.leave("Primary Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
         socket.join("ECU Room");
         console.log(socket.id + " joined ECU Room");
     })
 
     socket.on("Accum", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Inverter Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Inverter Room").leave("Map Room");
         socket.join("Accumulator Room");
         console.log(socket.id + " joined Accumulator room");
     })
 
     socket.on("Inverter", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Map Room");
         socket.join("Inverter Room");
         console.log(socket.id + " joined Inverter room");
+    })
+
+    socket.on("map", function(){
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room");
+        socket.join("Map Room");
+        console.log(socket.id + " joined Map Room");
     })
 
     socket.on("Start_data_session", function(){
@@ -201,7 +228,23 @@ tail_Accum.on("error", function(error) {
 
 //Position Room
 
+tail_Position.on("line", function(data){
+    console.log(data);
+    //substring data to split into all the different metrics
+    data = data.split(',');
+    data[0] = parseFloat(data[0]);
+    data[1] = parseFloat(data[1]);
+    data[2] = parseFloat(data[2]);
+    console.log("file has updated");
+    io.to('Map Room').emit('position-data', {data:data});
+});
+tail_Position.on("error", function(error) {
+    console.log('ERROR: ', error);
+});
+
 
 
     
-http.listen("8080");
+http.listen("8080", function(){
+    console.log("listening on port 8080");
+});

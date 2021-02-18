@@ -1,0 +1,51 @@
+<%- include('./partials/dashboard') %>
+
+<html>
+
+<head>
+</head>
+
+<body>
+    <div style="height:92.5vh;overflow: hidden;">
+        <div style="width:95%;height:auto;margin-bottom:20px;">
+            <div style="height:auto;width:80%;margin:0 auto;margin-top:30px">
+        <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;float:right;">
+        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;">Testing
+        </h1>
+        <p style="color:white;font-size: 17;">To run the python testing script, press start and to stop it press the stop button.</p>
+        
+        <button onclick="start()">Start</button>
+        <button onclick="stop()">Stop</button>
+        <h4 style="margin-top:40px">Testing: </h4>
+        <% if (testing_status == true){ %>
+            <h4 id="status" style="color:green">Active</h4>
+        <% } else { %>
+            <h4 id="status" style="color:red">Not Active</h4>
+        <% } %> 
+
+    </div>
+    </div>
+    </div>
+    </body>
+</html>
+<script>
+    function start(){
+        $.ajax({
+            method: 'POST',
+            url: "./testing/start"
+        })
+
+        $('#status').html('Active').attr('style', 'color:green');
+
+
+    }
+
+    function stop(){
+        $.ajax({
+            method: 'POST',
+            url: "./testing/stop"
+        })
+        $('#status').html('Not Active').attr('style', 'color:red');
+    }
+
+</script>

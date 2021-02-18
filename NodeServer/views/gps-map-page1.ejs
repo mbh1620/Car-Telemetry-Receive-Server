@@ -1,4 +1,5 @@
 <!-- This file is the main window for viewing the graphs -->
+<%- include('./partials/dashboard') %>
 
 <html>
 
@@ -11,25 +12,25 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
-
+    <link rel="stylesheet" href="./stylesheets/standard-style.css">
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.0/mapbox-gl.css' rel='stylesheet' />
 
 </head>
 
-<body style="background-color:gray;">
+<body>
     <div style="height:92.5vh;overflow: hidden;">
         <div style="width:95%;height:auto;margin-bottom:20px;">
             <img src="/public/uon.png"
                 style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
-            <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white">Live Position
+            <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;margin-left:50px;margin-top:30px">Live Position
             </h1></br>
-            <a href="/">Menu</a>
         </div>
     
-        <div style="height:72.5%">
+        <div style="height:85%">
             <div style="height:100%;width:80%;margin: 0 auto;">
                 <div id='map' style='width: 100%; height: 100%;'></div>
+<script src="/socket.io/socket.io.js"></script>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJoMTYyMC14IiwiYSI6ImNra3U3YXNuZzB1Y2YzMHA2YXpoazNlZGcifQ.uYQJGBrYHVXhQUBjWVIl9g';
 var map = new mapboxgl.Map({
@@ -40,6 +41,27 @@ var map = new mapboxgl.Map({
     center: [-1.0130, 52.072097],
     style: 'mapbox://styles/mapbox/satellite-v9'
 });
+
+//Join the map room
+var marker = new mapboxgl.Marker();
+var socket = io();
+    socket.emit("map");
+
+    socket.on('position-data', function (msg) {
+        console.log(msg);
+        console.log(msg.data[0], msg.data[1])
+        marker.setLngLat([
+            msg.data[0],msg.data[1]
+        ])
+        
+    })
+
+marker.addTo(map)
+
+function animateMarker(timestamp){
+    //When data is fed in, call this function
+}
+
 </script>
             </div>
             
