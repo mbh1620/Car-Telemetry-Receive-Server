@@ -11,9 +11,11 @@ var dataSessionSchema = new mongoose.Schema({
     name: String, 
     dateCreated: Date,
     //Object for the data 
-    data: [{
-        time: Number,
-        speed: Number,
-        battery_voltage: Number
-    }]
+    PRIData: Array,             //PRI --> primary data
+    ECUData: Array,             //ECU --> ecu data
+    ACCData: Array,             //ACC --> accumulator data
+    POSData: Array,             //POS --> position data
+    size: Number
 })
+
+module.exports = mongoose.model("DataSession", dataSessionSchema);

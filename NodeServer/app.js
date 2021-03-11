@@ -1,12 +1,16 @@
 var express = require('express');
+const path = require('path');
 var app = express();
 var http = require('http').createServer(app)
 var io = require('socket.io')(http);
 var fs = require('fs');
 var Tail = require('tail').Tail;
 var mongoose = require('mongoose');
+var csv = require('csvtojson');
 
 
+//DataSession Model import
+var DataSession = require("./models/dataSession");
 //Import custom routes 
 
 var testingroutes = require("./routes/testing_routes");
@@ -15,6 +19,21 @@ var dataroutes = require("./routes/data_routes");
 /**
  * @file app.js - Used to start the server.
  */
+
+app.set('views', path.join(__dirname, './views/'));
+
+app.use(express.static(__dirname + '../views'));
+app.use('/public', express.static(path.join(__dirname,'./public')));
+app.use('/stylesheets', express.static(path.join(__dirname, './views/stylesheets')));
+app.use('/modules', express.static(path.join(__dirname, '/node/modules')));
+app.use('/scripts', express.static(path.join(__dirname, './views/scripts')));
+app.use('/docs', express.static(path.join(__dirname, './out')));
+
+fs.appendFileSync("./public/data.csv", " ")
+fs.appendFileSync("./public/ECU_data.csv", " ")
+fs.appendFileSync("./public/Accum_data.csv", " ")
+fs.appendFileSync("./public/Inverter_data.csv", " ")
+fs.appendFileSync("./public/Position_data.csv", " ")
 
 
 tail = new Tail("./public/data.csv");
@@ -30,18 +49,17 @@ var python;
 
 // would be nice to have a user interface similar to this https://www.pinterest.com.au/pin/395402042262052760/?d=t&mt=login
 
-app.use('/public', express.static('public'));
-app.use('/stylesheets', express.static('./views/stylesheets'));
-app.use('/modules', express.static('/node/modules'));
-app.use('/scripts', express.static('./views/scripts'));
-app.use('/docs', express.static('./out'));
-
 app.use("/", testingroutes);
 app.use("/", dataroutes);
 
+//DB connection 
+
+mongoose.connect("mongodb+srv://matthew01:haywood@cluster0.drwm0.mongodb.net/Electric-Car-Telemetry-DB?retryWrites=true&w=majority", { useUnifiedTopology:true, useNewUrlParser: true, useFindAndModify: false });
+
 //Index route
 app.get("/", function(req, res){
-    res.render("menu.ejs");
+    res.redirect("/primary");
+    // res.render("menu.ejs");
 })
 
 /**
@@ -59,6 +77,7 @@ app.get("/start-data-session", function(req,res){
     //Code in here will start and prepare the file and data model for creating a data session to add to the database
     //Will clear existing files
     reset_files();
+    console.log("reset files");
 })
 
 /**
@@ -70,10 +89,52 @@ app.get("/start-data-session", function(req,res){
  * @function 
  */
 
-app.get("/stop-data-session", function(req,res){
+app.get("/stop-data-session/:name", function(req,res){
     //Code in here will be called after a session has taken place so that it packages all the current data into a 'dataSession' Schema 
     //and then push it to the mongoDB Atlas database.
+
+    //First of all we will just create a basic schema for speed, acceleration and battery level, session name, date and also time label
+    var name = req.params.name;
+    var date = new Date()
+    var size = fs.statSync("./public/data.csv").size/10e6;
+    size = size.toFixed(3);
+    var data = fs.readFileSync("./public/data.csv", 'utf8');
+    var returnOBJ = [];
+    var NewDataSession;
+    csv({
+        noheader:true,
+        output:"csv",
+    })
+    .fromString(data)
+    .then((csvRow)=>{
+        returnOBJ.push(csvRow);
+        returnOBJ[0].pop();
+        
+        NewDataSession = {
+            name: name,
+            dateCreated: date,
+            PRIData: returnOBJ[0],
+            size: size
+        }
+        console.log(NewDataSession);
+        DataSession.create(NewDataSession, function(err, newSession){
+            if(err){
+                console.log(err);
+            } else {
+                res.end();
+            }
+        })
+    })
 })
+
+//Delete route for a session
+
+app.post("/session/delete/:id", function(req, res){
+    DataSession.findByIdAndDelete(req.params.id, function(err){
+        res.end();
+    })
+})
+
 
 app.get("/config", function(req,res){
     res.render("config-page.ejs");
@@ -84,7 +145,10 @@ app.get("/instructions", function(req,res){
 })
 
 app.get("/session", function(req,res){
-    res.render("session.ejs");
+    DataSession.find({}, function(err, allSessions){
+        res.render("session.ejs", {sessions: allSessions});
+    }
+)
 })
 
 /**
@@ -143,8 +207,6 @@ io.on("connection", function(socket){
     })
 
 })
-
-
 
 /* 
 
@@ -242,9 +304,6 @@ tail_Position.on("error", function(error) {
     console.log('ERROR: ', error);
 });
 
-
-
-    
 http.listen("8080", function(){
     console.log("listening on port 8080");
 });

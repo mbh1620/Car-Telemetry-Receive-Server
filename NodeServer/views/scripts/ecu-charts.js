@@ -56,6 +56,29 @@ var ctx = document.getElementById('myChart1').getContext('2d');
             },
             animation: {
                 duration: 0
+            }, 
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        display:false,
+                    },
+                    
+                    
+                }],
+                yAxes: [{
+                    gridLines: { 
+                        display: true,
+                        color: "white",
+                        borderDash: [2,5]
+                    },
+                    scaleLabel: {
+                        display: true, 
+                        labelString: 'Acceleration m/s^2'
+                    }
+                }]
+            },
+            legend: {
+                display: false
             }
         }
     });
@@ -110,7 +133,30 @@ var myLineChart2 = new Chart(ctx, {
         },
         animation: {
             duration: 0
-        }
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    display:false,
+                },
+                
+                
+            }],
+            yAxes: [{
+                gridLines: { 
+                    display: true,
+                    color: "white",
+                    borderDash: [2,5]
+                },
+                scaleLabel: {
+                    display: true, 
+                    labelString: 'Acceleration m/s^2'
+                }
+            }]
+        },
     }
 });
 
@@ -165,7 +211,23 @@ var ctx = document.getElementById('myChart3').getContext('2d');
             },
             animation: {
                 duration: 0
-            }
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: { 
+                        display: true,
+                        color: "white",
+                        borderDash: [2,5]
+                    },
+                    scaleLabel: {
+                        display: true, 
+                        labelString: 'Acceleration m/s^2'
+                    }
+                }]
+            },
         }
     });
 
@@ -217,6 +279,9 @@ var ctx = document.getElementById('myChart4').getContext('2d');
             },
             animation: {
                 duration: 0
+            },
+            legend: {
+                display: false
             }
         }
     });

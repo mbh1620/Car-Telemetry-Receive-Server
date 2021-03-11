@@ -3,7 +3,13 @@ import random
 import time
 import datetime
 import math
+import sys
 
+cwd = ""
+
+if len(sys.argv) == 2:
+	cwd = sys.argv[1]
+	print(cwd)
 
 x = 0
 y = 0

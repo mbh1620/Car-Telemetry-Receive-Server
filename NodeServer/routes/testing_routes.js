@@ -5,6 +5,7 @@
 var express = require('express');
 var router = require('express').Router();
 var {spawn} = require('child_process');
+var path = require('path');
 
 var testing_status = false;
 
@@ -51,7 +52,7 @@ router.post("/testing/start", function (req, res) {
     * @param '/testing/start' The url
     * @instance
     */
-    python = spawn('python', ['./test.py']);
+    python = spawn('python', ['./test.py', process.cwd()]);
     testing_status = true;
     res.send("success");
 })

@@ -11,6 +11,9 @@ var router = require('express').Router();
 
 /**
  * File contains the routes for the data dashboards for primary, ecu, inverter, acumulator and position.
+ * 
+ * Each get route is used to view a different channel of data from the car.
+ * 
  * @namespace
  * @name DataRoutes
  * @author Matthew Haywood
@@ -21,7 +24,7 @@ var router = require('express').Router();
 //================================================
 
 /**
- * Primary route is for the primary data to look at a glance to see whether the various components of the car are working. 
+ * Primary get route is for the primary data to look at a glance to see whether the various components of the car are working. 
  * @namespace
  * @name DataRoutes.Primary
  */
@@ -41,7 +44,7 @@ router.get("/primary", function(req, res){
 //              ECU Route
 //================================================
 /**
- * ECU route is for the ECU data dashboard. 
+ * ECU get route is for the ECU data dashboard. 
  * @namespace
  * @name DataRoutes.ECU
  */
@@ -61,7 +64,7 @@ router.get("/ecu", function(req, res){
 //              Inverter Route
 //================================================
 /**
- * Inverter route is for the Inverter data dashboard. 
+ * Inverter get route is for the Inverter data dashboard. 
  * @namespace
  * @name DataRoutes.Inverter
  */
@@ -81,7 +84,7 @@ router.get("/inverter", function(req, res){
 //              Accumulator Route
 //================================================
 /**
- * Accumulator route is for the Accumulator data dashboard. 
+ * Accumulator get route is for the Accumulator data dashboard. 
  * @namespace
  * @name DataRoutes.Accumulator
  */
@@ -101,7 +104,7 @@ router.get("/accum", function(req,res){
 //              Position Route
 //================================================
 /**
- * Position route is for the Position data dashboard. 
+ * Position get route is for the Position data dashboard. 
  * @namespace
  * @name DataRoutes.Position
  */

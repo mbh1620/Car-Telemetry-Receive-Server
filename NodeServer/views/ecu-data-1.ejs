@@ -22,19 +22,17 @@
     <div style="height:92.5vh;overflow: hidden;">
         <div style="width:95%;height:auto;margin-bottom:20px;">
         <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
-        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;">ECU Data
+        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;margin-left:50px;margin-top:30px">ECU Data
         </h1>
         </div>
         
         <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
         <div style="height:72.5%">
-            <!-- <input type="range" id="slider1" orient="vertical"
-                style="display:inline-block;-webkit-appearance: slider-vertical;width:10px;height:25%"> -->
-                <div style="height:40%;width:80%;margin: 0 auto;">
+            <div style="height:40%;width:100%;margin: 0 auto;">
             <canvas style="background-color: black;height:100%;width:100%"
                 id="myChart1"></canvas>
             </div>
-            <div style="height:40%;width:80%;margin: 0 auto">
+            <div style="height:40%;width:100%;margin: 0 auto">
             <!-- <input type="range" id="slider2" orient="vertical"
                 style="display:inline-block;-webkit-appearance: slider-vertical;width:10px;height:25%"> -->
             <canvas style="background-color: black;height:100%;width:100%"
@@ -42,16 +40,10 @@
             </div>
             <!-- <input type="range" id="slider3" orient="vertical"
                 style="display:inline-block;-webkit-appearance: slider-vertical;width:10px;height:25%"> -->
-            <div style="height:40%;width:80%;margin: 0 auto;">
+            <div style="height:40%;width:100%;margin: 0 auto;">
             <canvas style="background-color: black;height:100%;width:100%"
                 id="myChart3"></canvas>
             </div>
-            <canvas style="height:100%px;width:100%;background-color: black;display:none;"
-                id="speed-large-chart"></canvas>
-            <canvas style="height:100%px;width:100%;background-color: black;display:none;"
-                id="acc-large-chart"></canvas>
-            <canvas style="height:100%px;width:100%;background-color: black;display:none;"
-                id="battery-large-chart"></canvas>
         </div>
     </div>
 <div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
@@ -63,111 +55,6 @@
 <script src="/scripts/functions.js" ></script>
 
 <script>
-    var ctx = document.getElementById('speed-large-chart').getContext('2d');
-    var myLineChartSpeed = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-        
-
-        // The data for our dataset
-        data: {
-            labels: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-            datasets: [{
-                label: 'Speed m/s',
-                borderColor: 'rgb(255, 99, 132)',
-                borderWidth: 1,
-                data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-
-            }]
-        },
-
-        // Configuration options go here
-        options: {
-            responsive: false,
-            elements: {
-                line: {
-                    tension: 0,
-                },
-                point: {
-                    radius: 0
-                }
-            },
-            animation: {
-                duration: 0
-            }
-        }
-    });
-
-    var ctx = document.getElementById('acc-large-chart').getContext('2d');
-    var myLineChartAcceleration = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-            labels: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-            datasets: [{
-                label: 'Acceleration m/s^2',
-                borderColor: 'rgb(20, 255, 132)',
-                data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-
-            }]
-        },
-
-        // Configuration options go here
-        options: {
-            responsive: false,
-            elements: {
-                line: {
-                    tension: 0
-                },
-                point: {
-                    radius: 0
-                }
-            },
-            animation: {
-                duration: 0
-            }
-        }
-    });
-    var ctx = document.getElementById('battery-large-chart').getContext('2d');
-    var myLineChartBattery = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-            labels: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-            datasets: [{
-                label: 'Battery m/s',
-                borderColor: 'rgb(20, 135, 255)',
-                data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,],
-
-            }]
-        },
-
-        // Configuration options go here
-        options: {
-            responsive: false,
-            elements: {
-                line: {
-                    tension: 0
-                },
-                point: {
-                    radius: 0
-                }
-            },
-            animation: {
-                duration: 0
-            }
-        }
-    });
 
     function buttonPressed() {
         update(10, '14:00');

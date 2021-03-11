@@ -56,6 +56,29 @@ var ctx = document.getElementById('myChart1').getContext('2d');
             },
             animation: {
                 duration: 0
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        display:false,
+                    },
+                    
+                    
+                }],
+                yAxes: [{
+                    gridLines: { 
+                        display: true,
+                        color: "white",
+                        borderDash: [2,5]
+                    },
+                    scaleLabel: {
+                        display: true, 
+                        labelString: 'Acceleration m/s^2'
+                    }
+                }]
+            },
+            legend: {
+                display: false
             }
         }
     });
@@ -110,6 +133,29 @@ var myLineChart2 = new Chart(ctx, {
         },
         animation: {
             duration: 0
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    display:false,
+                },
+                
+                
+            }],
+            yAxes: [{
+                gridLines: { 
+                    display: true,
+                    color: "white",
+                    borderDash: [2,5]
+                },
+                scaleLabel: {
+                    display: true, 
+                    labelString: 'Speed m/s'
+                }
+            }]
+        },
+        legend: {
+            display: false
         }
     }
 });
@@ -165,6 +211,22 @@ var ctx = document.getElementById('myChart3').getContext('2d');
             },
             animation: {
                 duration: 0
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: { 
+                        display: true,
+                        color: "white",
+                        borderDash: [2,5],
+                    },
+                    scaleLabel: {
+                        display: true, 
+                        labelString: 'Battery m/s'
+                    }
+                }]
+            },
+            legend: {
+                display: false
             }
         }
     });
