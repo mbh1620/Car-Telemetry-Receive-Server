@@ -145,10 +145,17 @@ app.get("/instructions", function(req,res){
 })
 
 app.get("/session", function(req,res){
-    DataSession.find({}, function(err, allSessions){
+    DataSession.find({}, "name dateCreated size",function(err, allSessions){ //Finds all dataSession records without returning data which slows down the program
         res.render("session.ejs", {sessions: allSessions});
     }
 )
+})
+
+//Route for displaying historical data
+app.get("/session/:data/:id", function(req,res){
+    //Data can be PRI, ACC, ECU or POS
+    //id is the id of the data session
+    res.render("session-load.ejs");
 })
 
 /**
