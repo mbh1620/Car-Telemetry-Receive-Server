@@ -155,7 +155,11 @@ app.get("/session", function(req,res){
 app.get("/session/:data/:id", function(req,res){
     //Data can be PRI, ACC, ECU or POS
     //id is the id of the data session
-    res.render("session-load.ejs");
+    DataSession.findById(req.params.id, function(err, foundSession){
+        res.render("session-load.ejs", {session: foundSession});
+    })
+
+    
 })
 
 /**

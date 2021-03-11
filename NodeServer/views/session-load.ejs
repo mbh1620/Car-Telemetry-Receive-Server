@@ -26,8 +26,8 @@
         <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;margin-left:50px;margin-top:30px">Loaded Primary Data
         </h1>
         </br>
-        <em style="color:white;margin-left:50px">Session Name: </em>
-        <em style="color:white;margin-left:50px">Date:</em>
+        <em style="color:white;margin-left:50px">Session Name: <%= session.name %></em>
+        <em style="color:white;margin-left:50px">Date Created: <%= session.dateCreated %></em>
         </div>
         
         <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
@@ -71,16 +71,13 @@
         chart.update();
     }
 
-    var socket = io();
-    socket.emit("ECU");
-    socket.on('ecu-data', function (msg) {
-        console.log(msg);
-        update(msg.data[0], msg.data[3], myLineChart1);
-        update(msg.data[1], msg.data[3], myLineChart2);
-        update(msg.data[2], msg.data[3], myLineChart3);
-        // update(msg.data[0], '14:05', myLineChart4);
-    })
+    <% for(var i = 0; i < 250; i++){ %>
+        update('<%=session.PRIData[i][0]%>','<%=session.PRIData[i][3]%>', myLineChart1)
+        update('<%=session.PRIData[i][1]%>','<%=session.PRIData[i][3]%>', myLineChart2)
+        update('<%=session.PRIData[i][2]%>','<%=session.PRIData[i][3]%>', myLineChart3)
+    <% } %>
 
+    //We need a function to scroll through data and to zoom in or out of data
 
 
 </script>
@@ -95,60 +92,4 @@
         accessToken: 'pk.eyJ1IjoibWJoMTYyMCIsImEiOiJjankwb244aWgwNHd1M2dsYWtkd2h2NWdwIn0.74tfwmTddrE7BpzyAA-0hw'
     }).addTo(mymap);
 </script>
-<script>
-    function changeview() {
-        //grab the value of the select box and then change the onscreen elements
-        var page = $('#pageSelector').val();
-        console.log(page);
-        var default_view_elements = [$('#myChart1'), $('#myChart2'), $('#myChart3'), $('#myChart4'), $('#image'), $('#slider1'), $('#slider2'),
-        $('#slider3'), $('#slider4'), $('#slider5'), $('#slider6')];
-        var speed_large = [$('#speed-large-chart')];
-        var acceleration_large = [$('#acc-large-chart')];
-        var battery_large = [$('#battery-large-chart')];
-
-
-        if (page == "default") {
-            for (var i = 0; i < default_view_elements.length; i++) {
-                default_view_elements[i].show();
-                console.log("hidden");
-            }
-                speed_large[0].hide();
-                acceleration_large[0].hide();
-                battery_large[0].hide();
-        } else if (page == "Speed Large") {
-            for (var i = 0; i < default_view_elements.length; i++) {
-                default_view_elements[i].hide();
-                console.log("hidden");
-            }
-            acceleration_large[0].hide();
-            battery_large[0].hide();
-            speed_large[0].show();
-            myLineChartSpeed.resize();
-        } else if (page == "Acceleration Large") {
-            for (var i = 0; i < default_view_elements.length; i++) {
-                default_view_elements[i].hide();
-                console.log("hidden");
-            }
-            battery_large[0].hide();
-            acceleration_large[0].show();
-            myLineChartAcceleration.resize();
-        } else if (page == "Battery Large") {
-            for (var i = 0; i < default_view_elements.length; i++) {
-                default_view_elements[i].hide();
-                console.log("hidden");
-            }
-            speed_large[0].hide();
-            acceleration_large[0].hide();
-            battery_large[0].show()
-            myLineChartBattery.resize();
-        } else {
-            for (var i = 0; i < default_view_elements.length; i++) {
-                default_view_elements[i].hide();
-                console.log("hidden");
-            }
-        }
-    }
-
-</script>
-
 </html>
