@@ -19,6 +19,13 @@ data.
 
 ![photo3](https://github.com/mbh1620/Car-Telemetry-Receive-Server/blob/master/NodeServer/public/track.png)
 
+Data Can be uploaded to a db and then loaded back in to be viewed.
+
+## Things to add:
+
+- A data scroller to show where the car was at a certain point in time.
+- A scroller for the graphs
+
 # To Run
 
 To run this server you must have nodejs installed on the Raspberry Pi you would like to run on.
