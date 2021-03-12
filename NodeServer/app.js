@@ -155,10 +155,16 @@ app.get("/session", function(req,res){
 app.get("/session/:data/:id", function(req,res){
     //Data can be PRI, ACC, ECU or POS
     //id is the id of the data session
-    DataSession.findById(req.params.id, function(err, foundSession){
-        res.render("session-load.ejs", {session: foundSession});
-    })
-
+    if(req.params.data == 'PRI'){
+        DataSession.findById(req.params.id, function(err, foundSession){
+            res.render("session-load.ejs", {session: foundSession});
+        })
+    }
+    if(req.params.data == 'POS'){
+        DataSession.findById(req.params.id, function(err, foundSession){
+            res.render("session-load-map.ejs", {session: foundSession});
+        })
+    }
     
 })
 
