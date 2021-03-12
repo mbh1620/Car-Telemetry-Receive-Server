@@ -99,7 +99,9 @@ app.get("/stop-data-session/:name", function(req,res){
     var size = fs.statSync("./public/data.csv").size/10e6;
     size = size.toFixed(3);
     var data = fs.readFileSync("./public/data.csv", 'utf8');
+    var POSData = fs.readFileSync("./public/Position_data.csv", 'utf8');
     var returnOBJ = [];
+    var POSreturnOBJ = [];
     var NewDataSession;
     csv({
         noheader:true,
@@ -109,20 +111,29 @@ app.get("/stop-data-session/:name", function(req,res){
     .then((csvRow)=>{
         returnOBJ.push(csvRow);
         returnOBJ[0].pop();
-        
-        NewDataSession = {
-            name: name,
-            dateCreated: date,
-            PRIData: returnOBJ[0],
-            size: size
-        }
-        console.log(NewDataSession);
-        DataSession.create(NewDataSession, function(err, newSession){
-            if(err){
-                console.log(err);
-            } else {
-                res.end();
+        csv({
+            noheader:true,
+            output:"csv",
+        })
+        .fromString(POSData)
+        .then((POScsvRow)=>{
+            POSreturnOBJ.push(POScsvRow);
+            POSreturnOBJ[0].pop();
+            NewDataSession = {
+                name: name,
+                dateCreated: date,
+                PRIData: returnOBJ[0],
+                POSData: POSreturnOBJ[0],
+                size: size
             }
+            console.log(NewDataSession);
+            DataSession.create(NewDataSession, function(err, newSession){
+                if(err){
+                    console.log(err);
+                } else {
+                    res.end();
+                }
+            })
         })
     })
 })
