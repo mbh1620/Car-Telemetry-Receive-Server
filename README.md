@@ -15,6 +15,10 @@ clients using socket.io and updates their graphs to the latest data.
 The test.py file is used to create random data and save to the data.csv file for testing the server against some randomly continuously updating 
 data.
 
+# Update: DB and Historical Data viewing
+
+![photo3](https://github.com/mbh1620/Car-Telemetry-Receive-Server/blob/master/NodeServer/public/track.png)
+
 # To Run
 
 To run this server you must have nodejs installed on the Raspberry Pi you would like to run on.
