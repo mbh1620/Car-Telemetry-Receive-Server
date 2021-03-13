@@ -28,8 +28,14 @@
         
         <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
         <div style="height:90%">
-            <div class="jumbotron" style="height:50%;width:100%">Graph goes here of max available torque</div>
-            <div class="jumbotron" style="width:49%;height:50%;display:inline-block;margin-right:2%"><h3>Left Inverter</h3>
+            <div class="jumbotron" style="height:50%;width:100%;padding-top:10px;">
+                <h3>Max Available Torque</h3>
+                <div style="height:100%;width:100%;margin: 0 auto;">
+                    <canvas style="background-color: black;height:100%;width:100%"
+                        id="myChart1"></canvas>
+                    </div>
+            </div>
+            <div class="jumbotron" style="width:49%;height:50%;display:inline-block;margin-right:2%;padding-top:20px"><h3>Left Inverter</h3>
                 <p>Mode of operation:</p>
                 <p>Power Module Error:</p>
                 <p>System Error 1:</p>
@@ -38,7 +44,7 @@
                 <p>Status:</p>
                 <p>Max available torque:</p>
             </div>
-            <div class="jumbotron" style="width:49%;height:50%;float:right"><h3>Right Inverter</h3>
+            <div class="jumbotron" style="width:49%;height:50%;float:right;padding-top:20px"><h3>Right Inverter</h3>
                 <p>Mode of operation:</p>
                 <p>Power Module Error:</p>
                 <p>System Error 1:</p>
@@ -53,7 +59,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="/scripts/ecu-charts.js" ></script>
+<script src="/scripts/inverter-charts.js" ></script>
 <script src="/scripts/functions.js" ></script>
 
 <script>
