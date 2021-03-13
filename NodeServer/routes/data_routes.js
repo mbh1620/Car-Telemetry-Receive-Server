@@ -77,7 +77,7 @@ router.get("/inverter", function(req, res){
      * @param {String} "/inverter" using the '/inverter' url 
      * @instance
      */
-    res.render("inverter-data.ejs");
+    res.render("inverter-page.ejs");
 })
 
 //================================================
@@ -97,7 +97,7 @@ router.get("/accum", function(req,res){
      * @param {String} "/accum" using the '/accum' url 
      * @instance
      */
-    res.render("accum.ejs");
+    res.render("accu-page.ejs");
 })
 
 //================================================

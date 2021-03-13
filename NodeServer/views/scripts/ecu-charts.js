@@ -45,6 +45,7 @@ var ctx = document.getElementById('myChart1').getContext('2d');
 
         // Configuration options go here
         options: {
+            showTooltips: true,
             responsive: false,
             elements: {
                 line: {
@@ -123,6 +124,7 @@ var myLineChart2 = new Chart(ctx, {
     // Configuration options go here
     options: {
         responsive: false,
+        showTooltips: true,
         elements: {
             line: {
                 tension: 0
@@ -200,6 +202,7 @@ var ctx = document.getElementById('myChart3').getContext('2d');
         // Configuration options go here
         options: {
             responsive: false,
+            showTooltips: true,
             elements: {
                 line: {
                     tension: 0
