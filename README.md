@@ -1,5 +1,6 @@
 # Receive Side Telemetry Server 
 
+![first](https://github.com/mbh1620/Car-Telemetry-Receive-Server/blob/master/NodeServer/public/ECUData.jpeg)
 
 This is the repository which contains the code for the Node.js server to display the telemetrics received from the race car. This will be ran
 on a Raspberry Pi. This Raspberry Pi will also run a script to receive data from a RF module which updates a .csv file. 
