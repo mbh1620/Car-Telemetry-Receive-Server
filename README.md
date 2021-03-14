@@ -71,71 +71,15 @@ To install the Desktop Application go to releases and download 'TelemetryDesktop
 
 To install the IOS application, you will only be able to do this on an apple computer with Xcode. Install the 'TelemetryApp' folder, and open the xcode project. You then might have to change the developer signings. You can then plug in the Ipad using lighting cable and then configure the settings at the top to use the Ipad that is plugged in. 
 
-# Data
+# Data 
 
-The table below shows what data will be shown on the graphs.
+The data is sorted into the same order as the CANbus code sections:
 
-
-
-|   Sensors                     |   datatype    |   graph added  |
-|-------------------------------|---------------|----------------|
-|   accelerator pedal           |     int16     |<ul><li>   - [x] </li></ul>|
-|   front brake pedal           |               |<ul><li>   - [ ] </li></ul>|       
-|   rear brake pedal            |               |<ul><li>   - [ ] </li></ul>|
-|   steering                    |               |<ul><li>   - [ ] </li></ul>|       
-|                               |               |<ul><li>   - [ ] </li></ul>|       
-|   left torque demand          |               |<ul><li>   - [ ] </li></ul>|       
-|   right torque demand         |               |<ul><li>   - [ ] </li></ul>|
-|   accelerometer x             |               |<ul><li>   - [ ] </li></ul>|
-|   accelerometer y             |               |<ul><li>   - [ ] </li></ul>|
-|   accelerometer z             |               |<ul><li>   - [ ] </li></ul>|
-|                               |               |<ul><li>   - [ ] </li></ul>|
-|   gyro yaw                    |               |<ul><li>   - [ ] </li></ul>|
-|   gyro pitch                  |               |<ul><li>   - [ ] </li></ul>|
-|   gyro roll                   |               |<ul><li>   - [ ] </li></ul>|
-|                               |               |<ul><li>   - [ ] </li></ul>|
-|   ECU state                   |               |<ul><li>   - [ ] </li></ul>|
-|   vehicle dynamics duration   |               |<ul><li>   - [ ] </li></ul>|
-|   fault code                  |               |<ul><li>   - [ ] </li></ul>|
-|                               |               |                           |   
-| Acumulator Management System  |    datatype   |       graph added         |
-|-------------------------------|---------------|---------------------------|
-|   Brick Average Voltage       |               |                           |        
-|   Brick Voltage Range         |               |                           |
-|   Brick Average Temperature   |               |                           |
-|   Brick Temperature Range     |               |                           |
-|   Accumulator Current         |               |                           |
-|                               |               |                           |
-|   Inverter Data               |     datatype  |       graph added         |
-|-------------------------------|---------------|---------------------------|
-|   mode of operation           |
-|   power module error          |
-|   system error 2              |
-|   system error 1              |
-|   system warning              |
-|   status                      |
-|   max available torque        |
-|   ref torque                  |
-|   Absolute Phase Current      |
-|   Link Voltage DC             |
-|   Current Iq                  |
-|   Speed RPM                   |
-|   Theta                       |
-|   Current Id                  |
-|   Mechanical Power            |
-|   Motor Temp 1                |
-|   Motor Temp 2                |
-|   PCB Temp                    |
-|   DCB Temp 1                  |
-|   DCB Temp 2                  |
-|   DCB Temp 3                  |
-|   Heat Sink Temp              |
-|   Hall Sector                 |
-
-
-# Desktop Application
-
-To install the Desktop Application go to releases and download 'Telemetry.app'. Move to desktop and right click and open.
+- AMS [AMS Link](./AMS_data.md)
+- CNTRL 
+- ECU
+- INV
+- KIST
 
 
 
