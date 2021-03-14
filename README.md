@@ -75,10 +75,10 @@ To install the IOS application, you will only be able to do this on an apple com
 
 The data is sorted into the same order as the CANbus code sections:
 
-- AMS [AMS Link](./AMS_data.md)
-- CNTRL 
+- [AMS data structure](./dataStructure/AMS_data.md)
+- CNTRL
 - ECU
-- INV
+- [INV](./dataStructure/INV_data.md)
 - KIST
 
 
