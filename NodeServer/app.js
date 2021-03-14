@@ -100,8 +100,10 @@ app.get("/stop-data-session/:name", function(req,res){
     size = size.toFixed(3);
     var data = fs.readFileSync("./public/data.csv", 'utf8');
     var POSData = fs.readFileSync("./public/Position_data.csv", 'utf8');
+    var INVData = fs.readFileSync("./public/Inverter_data.csv", 'utf8');
     var returnOBJ = [];
     var POSreturnOBJ = [];
+    var INVreturnOBJ = [];
     var NewDataSession;
     csv({
         noheader:true,
@@ -119,24 +121,47 @@ app.get("/stop-data-session/:name", function(req,res){
         .then((POScsvRow)=>{
             POSreturnOBJ.push(POScsvRow);
             POSreturnOBJ[0].pop();
-            NewDataSession = {
-                name: name,
-                dateCreated: date,
-                PRIData: returnOBJ[0],
-                POSData: POSreturnOBJ[0],
-                size: size
-            }
-            console.log(NewDataSession);
-            DataSession.create(NewDataSession, function(err, newSession){
-                if(err){
-                    console.log(err);
-                } else {
-                    res.end();
-                }
+            csv({
+                noheader:true,
+                output:"csv",
+            })
+            .fromString(data)
+            .then((csvRow)=>{
+                returnOBJ.push(csvRow);
+                returnOBJ[0].pop();
+                csv({
+                    noheader:true,
+                    output:"csv",
+                })
+                .fromString(INVData)
+                .then((INVcsvRow)=>{
+                    INVreturnOBJ.push(INVcsvRow);
+                    INVreturnOBJ[0].pop();
+
+                    NewDataSession = {
+                        name: name,
+                        dateCreated: date,
+                        PRIData: returnOBJ[0],
+                        POSData: POSreturnOBJ[0],
+                        INVData: INVreturnOBJ[0],
+                        size: size
+                    }
+                    console.log(NewDataSession);
+                    DataSession.create(NewDataSession, function(err, newSession){
+                        if(err){
+                            console.log(err);
+                        } else {
+                            res.end();
+                        }
+                    
+                    })
+                })
             })
         })
     })
 })
+
+
 
 //Delete route for a session
 
@@ -200,7 +225,7 @@ io.on("connection", function(socket){
         console.log("User disconnected");
     })
 
-    socket.on("primary", function(){
+    socket.on("PRI", function(){
         socket.leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
         socket.join('Primary Room');
         console.log(socket.id + " joined Primary Room");
@@ -212,19 +237,19 @@ io.on("connection", function(socket){
         console.log(socket.id + " joined ECU Room");
     })
 
-    socket.on("Accum", function(){
+    socket.on("ACC", function(){
         socket.leave("Primary Room").leave("ECU Room").leave("Inverter Room").leave("Map Room");
         socket.join("Accumulator Room");
         console.log(socket.id + " joined Accumulator room");
     })
 
-    socket.on("Inverter", function(){
+    socket.on("INV", function(){
         socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Map Room");
         socket.join("Inverter Room");
         console.log(socket.id + " joined Inverter room");
     })
 
-    socket.on("map", function(){
+    socket.on("GPS", function(){
         socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room");
         socket.join("Map Room");
         console.log(socket.id + " joined Map Room");
@@ -286,15 +311,17 @@ tail_ECU.on("error", function(error) {
 });
 
 //Accumulator Room //On tail of Accumulator File emit to th 
-tail_Accum.on("line", function(data){
-    console.log(data);
+tail_Accum.on("line", function(data3){
+    console.log(data3);
     //substring data to split into all the different metrics
-    data = data.split(',');
-    data[0] = parseFloat(data[0]);
-    data[1] = parseFloat(data[1]);
-    data[2] = parseFloat(data[2]);
+    data3 = data3.split(',');
+    
+    for(var i = 0; i < data3.length; i++){
+        data3[i] = parseFloat(data3[i])
+    }
+
     console.log("file has updated");
-    io.to('Accumulator Room').emit('primary-data', {data:data});
+    io.to('Accumulator Room').emit('acc-data', {data:data3});
 });
 tail_Accum.on("error", function(error) {
     console.log('ERROR: ', error);
@@ -302,7 +329,7 @@ tail_Accum.on("error", function(error) {
 
 //Inverter Room
 
-tail_Accum.on("line", function(data){
+tail_Inverter.on("line", function(data){
     console.log(data);
     //substring data to split into all the different metrics
     data = data.split(',');
@@ -310,7 +337,7 @@ tail_Accum.on("line", function(data){
     data[1] = parseFloat(data[1]);
     data[2] = parseFloat(data[2]);
     console.log("file has updated");
-    io.to('Inverter Room').emit('primary-data', {data:data});
+    io.to('Inverter Room').emit('inv-data', {data:data});
 });
 tail_Accum.on("error", function(error) {
     console.log('ERROR: ', error);
@@ -322,6 +349,7 @@ tail_Position.on("line", function(data){
     console.log(data);
     //substring data to split into all the different metrics
     data = data.split(',');
+    //Convert string data into numbers
     data[0] = parseFloat(data[0]);
     data[1] = parseFloat(data[1]);
     data[2] = parseFloat(data[2]);

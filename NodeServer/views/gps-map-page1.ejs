@@ -45,7 +45,7 @@ var map = new mapboxgl.Map({
 //Join the map room
 var marker = new mapboxgl.Marker();
 var socket = io();
-    socket.emit("map");
+    socket.emit("GPS");
 
     socket.on('position-data', function (msg) {
         console.log(msg);

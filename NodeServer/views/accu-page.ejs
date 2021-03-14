@@ -28,21 +28,70 @@
         
         <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
         <div style="height:72.5%">
-            <div style="height:40%;width:100%;margin: 0 auto;">
-            <canvas style="background-color: black;height:100%;width:100%"
-                id="myChart1"></canvas>
+
+
+
+            <div class="width:100%">
+                <div class="jumbotron" style="height:400px;width:25%;display;float:left;display:inline-block;padding-top:30px"><h4>Brick 1</h4>
+                    <canvas style="background-color: transparent;height:60%;width:100%"
+                    id="myChart1"></canvas>
+                    <p>Average Brick Temperature (ºC): </p>
+                    <p>Temperature Range (ºC): </p>
+                    <p>Average Brick Voltage (V): </p>
+                    <p>Voltage Range (V): </p>
+                
+                </div>
+                <div class="jumbotron" style="height:400px;width:25%;display;float:left;display:inline-block;padding-top:30px"><h4>Brick 2</h4>
+                    <canvas style="background-color: transparent;height:60%;width:100%"
+                    id="myChart2"></canvas>
+                    <p>Average Brick Temperature (ºC): </p>
+                    <p>Temperature Range (ºC): </p>
+                    <p>Average Brick Voltage (V): </p>
+                    <p>Voltage Range (V): </p></div>
+                <div class="jumbotron" style="height:400px;width:25%;display;float:left;display:inline-block;padding-top:30px"><h4>Brick 3</h4>
+                    <canvas style="background-color: transparent;height:60%;width:100%"
+                    id="myChart3"></canvas>
+                    <p>Average Brick Temperature (ºC): </p>
+                    <p>Temperature Range (ºC): </p>
+                    <p>Average Brick Voltage (V): </p>
+                    <p>Voltage Range (V): </p></div>
+                <div class="jumbotron" style="height:400px;width:25%;display;float:left;display:inline-block;padding-top:30px"><h4>Brick 4</h4>
+                    <canvas style="background-color: transparent;height:60%;width:100%"
+                    id="myChart4"></canvas>
+                    <p>Average Brick Temperature (ºC): </p>
+                    <p>Temperature Range (ºC): </p>
+                    <p>Average Brick Voltage (V): </p>
+                    <p>Voltage Range (V): </p></div>
             </div>
-            <div style="height:40%;width:100%;margin: 0 auto">
-            <!-- <input type="range" id="slider2" orient="vertical"
-                style="display:inline-block;-webkit-appearance: slider-vertical;width:10px;height:25%"> -->
-            <canvas style="background-color: black;height:100%;width:100%"
-                id="myChart2"></canvas>
-            </div>
-            <!-- <input type="range" id="slider3" orient="vertical"
-                style="display:inline-block;-webkit-appearance: slider-vertical;width:10px;height:25%"> -->
-            <div style="height:40%;width:100%;margin: 0 auto;">
-            <canvas style="background-color: black;height:100%;width:100%"
-                id="myChart3"></canvas>
+            <div class="width:100%">
+                <div class="jumbotron" style="height:400px;width:25%;display;float:left;display:inline-block;padding-top:30px"><h4>Brick 5</h4>
+                    <canvas style="background-color: transparent;height:60%;width:100%"
+                    id="myChart5"></canvas>
+                    <p>Average Brick Temperature (ºC): </p>
+                    <p>Temperature Range (ºC): </p>
+                    <p>Average Brick Voltage (V): </p>
+                    <p>Voltage Range (V): </p></div>
+                <div class="jumbotron" style="height:400px;width:25%;display;float:left;display:inline-block;padding-top:30px"><h4>Brick 6</h4>
+                    <canvas style="background-color: transparent;height:60%;width:100%"
+                    id="myChart6"></canvas>
+                    <p>Average Brick Temperature (ºC): </p>
+                    <p>Temperature Range (ºC): </p>
+                    <p>Average Brick Voltage (V): </p>
+                    <p>Voltage Range (V): </p></div>
+                <div class="jumbotron" style="height:400px;width:25%;display;float:left;display:inline-block;padding-top:30px"><h4>Brick 7</h4>
+                    <canvas style="background-color: transparent;height:60%;width:100%"
+                    id="myChart7"></canvas>
+                    <p>Average Brick Temperature (ºC): </p>
+                    <p>Temperature Range (ºC): </p>
+                    <p>Average Brick Voltage (V): </p>
+                    <p>Voltage Range (V): </p></div>
+                <div class="jumbotron" style="height:400px;width:25%;display;float:left;display:inline-block;padding-top:30px"><h4>Brick 8</h4>
+                    <canvas style="background-color: transparent;height:60%;width:100%"
+                    id="myChart8"></canvas>
+                    <p>Average Brick Temperature (ºC): </p>
+                    <p>Temperature Range (ºC): </p>
+                    <p>Average Brick Voltage (V): </p>
+                    <p>Voltage Range (V): </p></div>
             </div>
         </div>
     </div>
@@ -51,7 +100,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="/scripts/ecu-charts.js" ></script>
+<script src="/scripts/Accum-Charts.js" ></script>
 <script src="/scripts/functions.js" ></script>
 
 <script>
@@ -68,14 +117,33 @@
         chart.update();
     }
 
+    function updateBarChart(data1, data2, barChart){
+
+        barChart.data.datasets[0].data = [data1, data2]
+        
+        barChart.update()
+    }
+
     var socket = io();
-    socket.emit("ECU");
-    socket.on('ecu-data', function (msg) {
+    socket.emit("ACC");
+    socket.on('acc-data', function (msg) {
         console.log(msg);
-        update(msg.data[0], msg.data[3], myLineChart1);
-        update(msg.data[1], msg.data[3], myLineChart2);
-        update(msg.data[2], msg.data[3], myLineChart3);
-        // update(msg.data[0], '14:05', myLineChart4);
+        //update brick1
+        updateBarChart(msg.data[0], msg.data[2], myBarChart1);
+        //update brick2
+        updateBarChart(msg.data[4], msg.data[6], myBarChart2);
+        //update brick3
+        updateBarChart(msg.data[8], msg.data[10], myBarChart3);
+        //update brick4
+        updateBarChart(msg.data[12], msg.data[14], myBarChart4);
+        //update brick5
+        updateBarChart(msg.data[16], msg.data[18], myBarChart5);
+        //update brick6
+        updateBarChart(msg.data[20], msg.data[22], myBarChart6);
+        //update brick7
+        updateBarChart(msg.data[24], msg.data[26], myBarChart7);
+        //update brick8
+        updateBarChart(msg.data[28], msg.data[30], myBarChart8);
     })
 
 

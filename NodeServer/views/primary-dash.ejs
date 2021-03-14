@@ -184,7 +184,7 @@
     }
 
     var socket = io();
-    socket.emit("primary");
+    socket.emit("PRI");
 
     socket.on('primary-data', function (msg) {
         console.log(msg);

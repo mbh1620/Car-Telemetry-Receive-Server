@@ -14,6 +14,7 @@ var dataSessionSchema = new mongoose.Schema({
     PRIData: Array,             //PRI --> primary data
     ECUData: Array,             //ECU --> ecu data
     ACCData: Array,             //ACC --> accumulator data
+    INVData: Array,             //INV --> inverter data --> refer to ../public/InverterDataLabels.csv to see labels for each value
     POSData: Array,             //POS --> position data
     size: Number
 })

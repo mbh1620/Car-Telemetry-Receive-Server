@@ -76,14 +76,23 @@
         chart.update();
     }
 
+    function update2(data, data2, label, chart) {
+        chart.data.datasets[0].data.push(data);
+        chart.data.datasets[0].data.shift();
+        chart.data.datasets[1].data.push(data2);
+        chart.data.datasets[1].data.shift();
+        chart.data.labels.push(label);
+        chart.data.labels.shift();
+        chart.update();
+    }
+
     var socket = io();
-    socket.emit("ECU");
-    socket.on('ecu-data', function (msg) {
+    socket.emit("INV");
+    socket.on('inv-data', function (msg) {
         console.log(msg);
-        update(msg.data[0], msg.data[3], myLineChart1);
-        update(msg.data[1], msg.data[3], myLineChart2);
-        update(msg.data[2], msg.data[3], myLineChart3);
-        // update(msg.data[0], '14:05', myLineChart4);
+        //maxTorque Left and Right
+        update2(msg.data[6], msg.data[29], msg.data[46], myLineChart1);
+        console.log(msg);
     })
 
 
