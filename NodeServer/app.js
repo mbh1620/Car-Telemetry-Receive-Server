@@ -101,9 +101,11 @@ app.get("/stop-data-session/:name", function(req,res){
     var data = fs.readFileSync("./public/data.csv", 'utf8');
     var POSData = fs.readFileSync("./public/Position_data.csv", 'utf8');
     var INVData = fs.readFileSync("./public/Inverter_data.csv", 'utf8');
+    var ECUData = fs.readFileSync("./public/ECU_data.csv", 'utf8');
     var returnOBJ = [];
     var POSreturnOBJ = [];
     var INVreturnOBJ = [];
+    var ECUreturnOBJ = [];
     var NewDataSession;
     csv({
         noheader:true,
@@ -125,10 +127,10 @@ app.get("/stop-data-session/:name", function(req,res){
                 noheader:true,
                 output:"csv",
             })
-            .fromString(data)
-            .then((csvRow)=>{
-                returnOBJ.push(csvRow);
-                returnOBJ[0].pop();
+            .fromString(ECUData)
+            .then((ECUcsvRow)=>{
+                ECUreturnOBJ.push(ECUcsvRow);
+                ECUreturnOBJ[0].pop();
                 csv({
                     noheader:true,
                     output:"csv",
@@ -153,7 +155,6 @@ app.get("/stop-data-session/:name", function(req,res){
                         } else {
                             res.end();
                         }
-                    
                     })
                 })
             })
@@ -170,7 +171,6 @@ app.post("/session/delete/:id", function(req, res){
         res.end();
     })
 })
-
 
 app.get("/config", function(req,res){
     res.render("config-page.ejs");
@@ -363,3 +363,5 @@ tail_Position.on("error", function(error) {
 http.listen("8080", function(){
     console.log("listening on port 8080");
 });
+
+module.exports = app; // for testing

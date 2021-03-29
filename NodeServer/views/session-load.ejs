@@ -30,8 +30,9 @@
         <em style="color:white;margin-left:50px">Date Created: <%= session.dateCreated %></em>
         </div>
         <button class="btn btn-md btn-success" onclick="window.location.href = '/session/POS/<%= session._id %>'">Map Data</button>
+        <button class="btn btn-md btn-primary" onclick="screenshot()">Screenshot</button>
         <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
-        <div style="height:72.5%">
+        <div id="canvas-div" style="height:72.5%">
             <div style="height:40%;width:100%;margin: 0 auto;">
             <canvas style="background-color: black;height:100%;width:100%"
                 id="myChart1"></canvas>
@@ -48,6 +49,7 @@
             <canvas style="background-color: black;height:100%;width:100%"
                 id="myChart3"></canvas>
             </div>
+            <a id="url" download style="display:none">
         </div>
         <input type="range" max="100" min="0">
     </div>
@@ -59,6 +61,14 @@
 <script src="/scripts/functions.js" ></script>
 
 <script>
+
+    function screenshot(){
+        //take screenshots of the graphs
+        console.log("hello");
+        var url = myLineChart2.toBase64Image()
+        document.getElementById("canvas-div").href=url;
+        document.getElementById('url').click();
+    }
 
     function buttonPressed() {
         update(10, '14:00');
