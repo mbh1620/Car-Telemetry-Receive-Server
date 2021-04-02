@@ -56,7 +56,7 @@ describe("Tests the /GET /start-data-session", () => {
                 expect(file('./public/ECU_data.csv')).to.exist;
                 expect(file('./public/Inverter_data.csv')).to.exist;
                 expect(file('./public/Position_data.csv')).to.exist;
-                //Check that the files contain ' ' (empty).
+                //Check that the files contain ' ' (empty)
                 expect(file('./public/data.csv')).to.equal(' ');
                 expect(file('./public/Accum_data.csv')).to.equal(' ');
                 expect(file('./public/ECU_data.csv')).to.equal(' ');
