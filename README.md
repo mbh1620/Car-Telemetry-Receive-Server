@@ -1,5 +1,5 @@
 # Receive Side Telemetry Server 
-
+[![Node.js CI](https://github.com/mbh1620/Car-Telemetry-Receive-Server/actions/workflows/test.yml/badge.svg)](https://github.com/mbh1620/Car-Telemetry-Receive-Server/actions/workflows/test.yml)
 
 ![first](https://github.com/mbh1620/Car-Telemetry-Receive-Server/blob/master/NodeServer/public/ECUData.jpeg)
 
