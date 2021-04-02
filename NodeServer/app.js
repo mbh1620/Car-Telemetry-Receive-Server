@@ -7,6 +7,7 @@ var fs = require('fs');
 var Tail = require('tail').Tail;
 var mongoose = require('mongoose');
 var csv = require('csvtojson');
+var dotenv = require('dotenv').config();
 
 
 //DataSession Model import
@@ -54,7 +55,7 @@ app.use("/", dataroutes);
 
 //DB connection 
 
-mongoose.connect("mongodb+srv://matthew01:haywood@cluster0.drwm0.mongodb.net/Electric-Car-Telemetry-DB?retryWrites=true&w=majority", { useUnifiedTopology:true, useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect("mongodb+srv://" + process.env.DB_USER + ":" + process.env.DB_PASS +"@cluster0.drwm0.mongodb.net/Electric-Car-Telemetry-DB?retryWrites=true&w=majority", { useUnifiedTopology:true, useNewUrlParser: true, useFindAndModify: false });
 
 //Index route
 app.get("/", function(req, res){
@@ -78,6 +79,7 @@ app.get("/start-data-session", function(req,res){
     //Will clear existing files
     reset_files();
     console.log("reset files");
+    res.end();
 })
 
 /**

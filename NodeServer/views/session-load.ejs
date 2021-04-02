@@ -66,7 +66,7 @@
         //take screenshots of the graphs
         console.log("hello");
         var url = myLineChart2.toBase64Image()
-        document.getElementById("canvas-div").href=url;
+        document.getElementById("url").href=url;
         document.getElementById('url').click();
     }
 
@@ -91,16 +91,5 @@
     //We need a function to scroll through data and to zoom in or out of data
 
 
-</script>
-<script>
-    var mymap = L.map('mapid').setView([52.0715, -1.0157], 14.3);
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: 'pk.eyJ1IjoibWJoMTYyMCIsImEiOiJjankwb244aWgwNHd1M2dsYWtkd2h2NWdwIn0.74tfwmTddrE7BpzyAA-0hw'
-    }).addTo(mymap);
 </script>
 </html>
