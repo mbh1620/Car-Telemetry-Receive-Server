@@ -45,7 +45,7 @@ describe("Tests the /GET /testing/stop", () => {
 })
 
 describe("Tests the /GET /start-data-session", () => {
-    it('This should test to see if the data.csv files exist and that they gets emptied', function (done) {
+    it('This should test to see if the data.csv files exist and that they are emptied', function (done) {
         chai.request(server)
             .get('/start-data-session')
             .end((err, res) => {
@@ -66,3 +66,6 @@ describe("Tests the /GET /start-data-session", () => {
             })
     })
 })
+
+
+//Add a couple of tests where the test data is supplied and then tested

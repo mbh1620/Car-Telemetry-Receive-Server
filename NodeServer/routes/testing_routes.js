@@ -6,7 +6,9 @@ var express = require('express');
 var router = require('express').Router();
 var {spawn} = require('child_process');
 var path = require('path');
+let {PythonShell} = require('python-shell');
 
+var pyshell;
 var testing_status = false;
 
 
@@ -52,7 +54,9 @@ router.post("/testing/start", function (req, res) {
     * @param '/testing/start' The url
     * @instance
     */
-    python = spawn('python', ['./test.py', process.cwd()]);
+    pyshell = new PythonShell('./test.py');
+
+    // python = spawn('python', ['-u', './test.py', process.cwd()]);
     testing_status = true;
     res.send("success");
 })
@@ -66,7 +70,9 @@ router.post("/testing/stop", function (req, res) {
     * @param '/testing/stop' The url
     * @instance
     */
-    python.kill();
+    
+    pyshell.kill();
+
     testing_status = false;
     res.send('success');
 })
