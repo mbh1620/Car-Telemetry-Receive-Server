@@ -55,10 +55,16 @@ while(True):
 	
 	f1 = open("./public/ECU_data.csv", "a")
 	csv_writer2 = writer(f1)
-	num5 = random.randrange(50,120)
-	num6 = random.randrange(50,120)
-	num7 = math.tan(x)
-	csv_writer2.writerow([num5,num6,num7,num4])
+
+	ecu_array = []
+
+	for i in range(0,14):
+		num = random.randrange(1,50)
+		ecu_array.append(num)
+
+	ecu_array.append(num4)
+
+	csv_writer2.writerow([i for i in ecu_array])
 	f1.close()
 
 	'''

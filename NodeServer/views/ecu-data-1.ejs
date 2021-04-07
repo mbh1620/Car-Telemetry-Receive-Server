@@ -46,7 +46,40 @@
             </div>
         </div>
     </div>
-<div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
+<div style="height:30px;margin-top:20px;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">
+<!-- Dropdown for adding certain signals onto graphs -->
+<label>ECU State: N/A</label>
+<label>Vehicle Dynamics Duration: N/A</label>
+<label>Fault Code: N/A</label>
+
+
+<label style="margin-left:20px">Add/Remove Data to the graphs: </label>
+<select name="data" id="waveform-selector">
+    <option value="0">accel_pedal</option>
+    <option value="1">front_brake_pedal</option>
+    <option value="2">rear_brake_pedal</option>
+    <option value="3">steering</option>
+    <option value="4">left_torque_demand</option>
+    <option value="5">right_torque_demand</option>
+    <option value="6">accelerometer_x</option>
+    <option value="7">accelerometer_y</option>
+    <option value="8">accelerometer_z</option>
+    <option value="9">gyro_yaw</option>
+    <option value="10">gyro_pitch</option>
+    <option value="11">gyro_roll</option>
+    <option value="12">ECU_state</option>
+    <option value="13">vehicle_dynamics_duration</option>
+    <option value="14">fault_code</option>
+  </select>
+  <select name="data" id="graph-selector">
+    <option value="1">Graph 1</option>
+    <option value="2">Graph 2</option>
+    <option value="3">Graph 3</option>
+  </select>
+  <input id="color-of-waveform" type="color">
+  <button class="btn btn-sm btn-primary" onclick="addWaveform()">Add</button>
+  <button class="btn btn-sm btn-danger" onclick="removeWaveform()">Remove</button>
+</div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="/socket.io/socket.io.js"></script>
@@ -55,6 +88,10 @@
 <script src="/scripts/functions.js" ></script>
 
 <script>
+
+    var graph1_waveforms = [];
+    var graph2_waveforms = [];
+    var graph3_waveforms = [];
 
     function buttonPressed() {
         update(10, '14:00');
@@ -71,14 +108,113 @@
     var socket = io();
     socket.emit("ECU");
     socket.on('ecu-data', function (msg) {
-        console.log(msg);
-        update(msg.data[0], msg.data[3], myLineChart1);
-        update(msg.data[1], msg.data[3], myLineChart2);
-        update(msg.data[2], msg.data[3], myLineChart3);
-        // update(msg.data[0], '14:05', myLineChart4);
+        update_charts(msg);
     })
 
+    function addWaveform(){
+        //get value of the waveform chooser
+        var waveform = $('#waveform-selector').val();
+        
+        //get value of the graph chooser
+        var graph = $('#graph-selector').val();
 
+        var colour = $('#color-of-waveform').val();
+
+        console.log(colour + "  colour")
+        //Check 
+        console.log(waveform);
+        console.log(graph);
+        //Add the waveform to a list of waveforms for that graph
+        var dataOBJ = {
+                label: 'test1',
+                borderColor: colour,
+                borderWidth: 0.8,
+                data: [, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
+                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
+                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
+                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
+                    , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
+                    , , , ,]
+            }
+        
+        if(graph == 1 && graph1_waveforms.indexOf(parseInt(waveform)) == -1){
+            graph1_waveforms.push(parseInt(waveform));
+            myLineChart1.data.datasets.push(dataOBJ);
+            myLineChart1.update()
+        } else if(graph == 2 && graph2_waveforms.indexOf(parseInt(waveform)) == -1){
+            graph2_waveforms.push(parseInt(waveform));
+            myLineChart2.data.datasets.push(dataOBJ);
+            myLineChart2.update()
+        } else if(graph == 3 && graph3_waveforms.indexOf(parseInt(waveform)) == -1){
+            graph3_waveforms.push(parseInt(waveform));
+            myLineChart3.data.datasets.push(dataOBJ);
+            myLineChart3.update()
+        }
+        
+        console.log(graph1_waveforms);
+        console.log(graph2_waveforms);
+        console.log(graph3_waveforms);
+    }
+
+    function removeWaveform(){
+        //Remove waveforms from a graph
+        //First check that there is the waveform in the graph
+        //get value of the waveform chooser
+        var waveform = $('#waveform-selector').val();
+        
+        //get value of the graph chooser
+        var graph = $('#graph-selector').val();
+
+        if(graph == 1 && graph1_waveforms.indexOf(parseInt(waveform)) != -1){
+            graph1_waveforms.splice(graph1_waveforms.indexOf(parseInt(waveform)), 1);
+            myLineChart1.data.datasets.splice(graph1_waveforms.indexOf(parseInt(waveform)))
+            myLineChart1.update()
+        } else if (graph == 2 && graph2_waveforms.indexOf(parseInt(waveform)) != -1){
+            graph2_waveforms.splice(graph2_waveforms.indexOf(parseInt(waveform)),1)
+            myLineChart2.data.datasets.splice(graph2_waveforms.indexOf(parseInt(waveform)))
+            myLineChart2.update()
+        } else if (graph == 3 && graph3_waveforms.indexOf(parseInt(waveform)) != -1){
+            graph3_waveforms.splice(graph3_waveforms.indexOf(parseInt(waveform)), 1)
+            myLineChart3.data.datasets.splice(graph3_waveforms.indexOf(parseInt(waveform)))
+            myLineChart3.update()
+        }
+        console.log(graph1_waveforms);
+        console.log(graph2_waveforms);
+        console.log(graph3_waveforms);
+
+    }
+
+    function update_charts(data){
+        //Check the arrays to see what waveforms are in the charts
+        
+        for(var i = 0; i < graph1_waveforms.length; i++){
+            myLineChart1.data.datasets[i].data.push(data.data[graph1_waveforms[i]])
+            myLineChart1.data.datasets[i].data.shift();
+            myLineChart1.update()
+            myLineChart1.data.labels.push(data[15]);
+            myLineChart1.data.labels.shift();
+            console.log("updating charts");
+        }
+        for(var i = 0; i < graph2_waveforms.length; i++){
+            myLineChart2.data.datasets[i].data.push(data.data[graph2_waveforms[i]])
+            myLineChart2.data.datasets[i].data.shift();
+            myLineChart2.update()
+            myLineChart2.data.labels.push(data.data[14]);
+            myLineChart2.data.labels.shift();
+        }
+        for(var i = 0; i < graph3_waveforms.length; i++){
+            myLineChart3.data.datasets[i].data.push(data.data[graph3_waveforms[i]])
+            myLineChart3.data.datasets[i].data.shift();
+            myLineChart3.update()
+            
+            console.log(data.data[3]);
+        }
+        myLineChart3.data.labels.push(data.data[14]);
+        myLineChart3.data.labels.shift();
+        myLineChart3.update()
+    }
 
 </script>
 <script>
