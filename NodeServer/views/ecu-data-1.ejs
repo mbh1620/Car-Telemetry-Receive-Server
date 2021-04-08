@@ -79,6 +79,7 @@
   <input id="color-of-waveform" type="color">
   <button class="btn btn-sm btn-primary" onclick="addWaveform()">Add</button>
   <button class="btn btn-sm btn-danger" onclick="removeWaveform()">Remove</button>
+  <button class="btn btn-sm btn-warning" onclick="clearGraph()">Clear</button>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -120,10 +121,6 @@
 
         var colour = $('#color-of-waveform').val();
 
-        console.log(colour + "  colour")
-        //Check 
-        console.log(waveform);
-        console.log(graph);
         //Add the waveform to a list of waveforms for that graph
         var dataOBJ = {
                 label: 'test1',
@@ -152,10 +149,6 @@
             myLineChart3.data.datasets.push(dataOBJ);
             myLineChart3.update()
         }
-        
-        console.log(graph1_waveforms);
-        console.log(graph2_waveforms);
-        console.log(graph3_waveforms);
     }
 
     function removeWaveform(){
@@ -180,10 +173,6 @@
             myLineChart3.data.datasets.splice(graph3_waveforms.indexOf(parseInt(waveform)))
             myLineChart3.update()
         }
-        console.log(graph1_waveforms);
-        console.log(graph2_waveforms);
-        console.log(graph3_waveforms);
-
     }
 
     function update_charts(data){
@@ -193,27 +182,39 @@
             myLineChart1.data.datasets[i].data.push(data.data[graph1_waveforms[i]])
             myLineChart1.data.datasets[i].data.shift();
             myLineChart1.update()
-            myLineChart1.data.labels.push(data[15]);
-            myLineChart1.data.labels.shift();
-            console.log("updating charts");
+            
         }
         for(var i = 0; i < graph2_waveforms.length; i++){
             myLineChart2.data.datasets[i].data.push(data.data[graph2_waveforms[i]])
             myLineChart2.data.datasets[i].data.shift();
             myLineChart2.update()
-            myLineChart2.data.labels.push(data.data[14]);
-            myLineChart2.data.labels.shift();
         }
         for(var i = 0; i < graph3_waveforms.length; i++){
             myLineChart3.data.datasets[i].data.push(data.data[graph3_waveforms[i]])
             myLineChart3.data.datasets[i].data.shift();
             myLineChart3.update()
-            
-            console.log(data.data[3]);
         }
         myLineChart3.data.labels.push(data.data[14]);
         myLineChart3.data.labels.shift();
         myLineChart3.update()
+    }
+
+    function clearGraph(){
+        var graph = $('#graph-selector').val();
+
+        if(graph == 1){
+            graph1_waveforms = [];
+            myLineChart1.data.datasets = [];
+            myLineChart1.update()
+        } else if (graph == 2){
+            graph2_waveforms = [];
+            myLineChart2.data.datasets = []
+            myLineChart2.update()
+        } else if (graph == 3){
+            graph3_waveforms = []
+            myLineChart3.data.datasets = []
+            myLineChart3.update()
+        }
     }
 
 </script>

@@ -189,6 +189,10 @@ app.get("/session", function(req,res){
 )
 })
 
+app.get("/session-saver", function(req,res){
+    res.render("session-saver.ejs");
+})
+
 //Route for displaying historical data
 app.get("/session/:data/:id", function(req,res){
     //Data can be PRI, ACC, ECU or POS
