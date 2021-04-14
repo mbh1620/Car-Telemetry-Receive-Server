@@ -1,0 +1,17 @@
+ECU Data Structure
+
+0 - accel_pedal
+1 - front_brake_pedal
+2 - rear_brake_pedal
+3 - steering
+4 - left_torque_demand
+5 - right_torque_demand
+6 - accelerometer_x
+7 - accelerometer_y
+8 - accelerometer_z
+9 - gyro_yaw
+10 - gyro_pitch
+11 - gyro_roll
+12 - ECU_state
+13 - vehicle_dynamics_duration
+14 - fault_code 

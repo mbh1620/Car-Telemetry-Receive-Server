@@ -1,0 +1,36 @@
+Kist data structure however might not be used as we are looking to replace the Kistner module
+
+0 - velX
+1 - velY 
+2 - vel 
+3 - angle
+4 - distance
+5 - pitch 
+6 - roll 
+7 - timestamp
+8 - radius
+9 - accX_hor
+10 - accY_hor
+11 - accZ_hor
+12 - accC_body
+13 - angleVelX_hor
+14 - angleVelY_hor
+15 - angleVelZ_hor
+16 - SensorID
+17 - Temperature
+18 - LampCurrent
+19 - FilterSetting
+20 - NumOfSat
+21 - STST
+22 - FilterOffOn
+23 - LampCurrentControl
+24 - TemperatureOK
+25 - HeadStatus
+26 - AngleSwitchedOff
+27 - Direction
+28 - SatFixed
+29 - AngVelCorrection
+30 - DirectionMotion
+31 - DirectionMounting
+32 - DirectionHeadIsValid
+33 - DirectionHead
