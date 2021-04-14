@@ -31,7 +31,7 @@ data vars  | csv index ranges
 AMS        |  [0] - [34]
 ECU        |  [35] - [49]
 INV        |  [50] - [96]
-POS        |
+POS        |  [97] - 
 
 '''
 
