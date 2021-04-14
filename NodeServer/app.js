@@ -38,9 +38,9 @@ fs.appendFileSync("./public/POS_Data.csv", " ")
 
 tail = new Tail("./public/data.csv");
 tail_ECU = new Tail("./public/ECU_Data.csv");
-tail_Accum = new Tail("./public/AMS_Data.csv");
-tail_Inverter = new Tail("./public/INV_Data.csv");
-tail_Position = new Tail("./public/POS_Data.csv");
+tail_AMS = new Tail("./public/AMS_Data.csv");
+tail_INV = new Tail("./public/INV_Data.csv");
+tail_POS = new Tail("./public/POS_Data.csv");
 
 var readbytes = 0;
 var bite_size = 256;
@@ -323,7 +323,7 @@ tail_ECU.on("error", function(error) {
 });
 
 //Accumulator Room //On tail of Accumulator File emit to th 
-tail_Accum.on("line", function(data3){
+tail_AMS.on("line", function(data3){
     //substring data to split into all the different metrics
     
     data3 = data3.split(',');
@@ -332,30 +332,30 @@ tail_Accum.on("line", function(data3){
     }
     io.to('Accumulator Room').emit('acc-data', {data:data3});
 });
-tail_Accum.on("error", function(error) {
+tail_AMS.on("error", function(error) {
     console.log('ERROR: ', error);
 });
 
 //Inverter Room
 
-tail_Inverter.on("line", function(data){
+tail_INV.on("line", function(data){
     //substring data to split into all the different metrics
     data = data.split(',');
     io.to('Inverter Room').emit('inv-data', {data:data});
 });
-tail_Accum.on("error", function(error) {
+tail_INV.on("error", function(error) {
     console.log('ERROR: ', error);
 });
 
 //Position Room
 
-tail_Position.on("line", function(data){
+tail_POS.on("line", function(data){
     //substring data to split into all the different metrics
     data = data.split(',');
     //Convert string data into numbers
     io.to('Map Room').emit('position-data', {data:data});
 });
-tail_Position.on("error", function(error) {
+tail_POS.on("error", function(error) {
     console.log('ERROR: ', error);
 });
 
