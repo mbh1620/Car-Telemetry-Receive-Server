@@ -52,16 +52,16 @@ describe("Tests the /GET /start-data-session", () => {
                 res.should.have.status(200);
                 //Check that the files exist. 
                 expect(file('./public/data.csv')).to.exist;
-                expect(file('./public/Accum_data.csv')).to.exist;
-                expect(file('./public/ECU_data.csv')).to.exist;
-                expect(file('./public/Inverter_data.csv')).to.exist;
-                expect(file('./public/Position_data.csv')).to.exist;
+                expect(file('./public/AMS_Data.csv')).to.exist;
+                expect(file('./public/ECU_Data.csv')).to.exist;
+                expect(file('./public/INV_Data.csv')).to.exist;
+                expect(file('./public/POS_Data.csv')).to.exist;
                 //Check that the files contain ' ' (empty)
                 expect(file('./public/data.csv')).to.equal(' ');
-                expect(file('./public/Accum_data.csv')).to.equal(' ');
-                expect(file('./public/ECU_data.csv')).to.equal(' ');
-                expect(file('./public/Inverter_data.csv')).to.equal(' ');
-                expect(file('./public/Position_data.csv')).to.equal(' ');
+                expect(file('./public/AMS_Data.csv')).to.equal(' ');
+                expect(file('./public/ECU_Data.csv')).to.equal(' ');
+                expect(file('./public/INV_data.csv')).to.equal(' ');
+                expect(file('./public/POS_data.csv')).to.equal(' ');
                 done();
             })
     })
