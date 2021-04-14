@@ -1,5 +1,3 @@
-ECU Data Structure
-
 0 - accel_pedal
 1 - front_brake_pedal
 2 - rear_brake_pedal
