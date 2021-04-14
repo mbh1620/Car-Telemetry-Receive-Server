@@ -60,8 +60,8 @@ describe("Tests the /GET /start-data-session", () => {
                 expect(file('./public/data.csv')).to.equal(' ');
                 expect(file('./public/AMS_Data.csv')).to.equal(' ');
                 expect(file('./public/ECU_Data.csv')).to.equal(' ');
-                expect(file('./public/INV_data.csv')).to.equal(' ');
-                expect(file('./public/POS_data.csv')).to.equal(' ');
+                expect(file('./public/INV_Data.csv')).to.equal(' ');
+                expect(file('./public/POS_Data.csv')).to.equal(' ');
                 done();
             })
     })
