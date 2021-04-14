@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 var dataSessionSchema = new mongoose.Schema({
     name: String,
     TrackName: String,
-    TrackStartLine: {Number, Number},
+    TrackStartLine: Array,
     dateCreated: Date,
     //Object for the data 
     PRIData: Array,             //PRI --> primary data

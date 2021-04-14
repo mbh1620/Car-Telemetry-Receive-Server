@@ -31,7 +31,7 @@
             <input class="" id="name-input" style="font-size: 18;font-family: helvetica;font-weight: 100;margin-top:40px" type="text" placeholder="Current Session Name">
             </br>
             <label style="color:white;font-size: 20;">Track Name: </label>
-            <input class="" id="name-input" style="font-size: 18;font-family: helvetica;font-weight: 100;margin-top:40px" type="text" placeholder="Track Name">
+            <input class="" id="track-name-input" style="font-size: 18;font-family: helvetica;font-weight: 100;margin-top:40px" type="text" placeholder="Track Name">
         </br>
             <label style="color:white;display:inline-block;margin-top:20px;font-size:20">Choose Startline for lap calulation:</label>
             <div id="mapid" style="height:50%;width:50%"></div>    
@@ -39,7 +39,10 @@
         </div>
     </div>
 <div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
-
+<form>
+    <input id="lat" hidden value="">
+    <input id="long" hidden value="">
+</form>
 </body>
 
 </html>
@@ -57,9 +60,13 @@
             alert("Please input a session name and try again!");
             return 0;
         }
+        var lat = $('#lat').val();
+        var long = $('#long').val();
+        var trackname = $('#track-name-input').val();
         $.ajax({
-            type:"GET",
-            url: "/stop-data-session/" + sessionName
+            type:"POST",
+            url: "/stop-data-session/",
+            data: {sessionName: sessionName,trackName: trackname,Lat: lat, Long:long}
         })
     }
 

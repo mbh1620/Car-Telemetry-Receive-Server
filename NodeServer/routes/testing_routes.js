@@ -11,6 +11,11 @@ let {PythonShell} = require('python-shell');
 var pyshell;
 var testing_status = false;
 
+router.use(function (req, res, next) {
+    res.locals.testing_status = testing_status;
+    next();
+});
+
 
 //================================================
 //              Testing Routes
@@ -42,7 +47,7 @@ router.get("/testing", function (req, res) {
     * @param '/testing' The url
     * @instance
     */
-    res.render("testing.ejs", { testing_status: testing_status });
+    res.render("testing.ejs");
 })
 
 router.post("/testing/start", function (req, res) {
@@ -54,7 +59,7 @@ router.post("/testing/start", function (req, res) {
     * @param '/testing/start' The url
     * @instance
     */
-    pyshell = new PythonShell('./test.py');
+    pyshell = new PythonShell('./python_scripts/test.py');
 
     // python = spawn('python', ['-u', './test.py', process.cwd()]);
     testing_status = true;

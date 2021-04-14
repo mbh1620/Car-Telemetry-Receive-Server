@@ -9,14 +9,14 @@ var mongoose = require('mongoose');
 var csv = require('csvtojson');
 var dotenv = require('dotenv').config();
 
-
 //DataSession Model import
 var DataSession = require("./models/dataSession");
 //Import custom routes 
 
 var testingroutes = require("./routes/testing_routes");
 var dataroutes = require("./routes/data_routes");
-
+app.use(express.json());
+app.use(express.urlencoded());
 /**
  * @file app.js - Used to start the server.
  */
@@ -31,17 +31,16 @@ app.use('/scripts', express.static(path.join(__dirname, './views/scripts')));
 app.use('/docs', express.static(path.join(__dirname, './out')));
 
 fs.appendFileSync("./public/data.csv", " ")
-fs.appendFileSync("./public/ECU_data.csv", " ")
-fs.appendFileSync("./public/Accum_data.csv", " ")
-fs.appendFileSync("./public/Inverter_data.csv", " ")
-fs.appendFileSync("./public/Position_data.csv", " ")
-
+fs.appendFileSync("./public/ECU_Data.csv", " ")
+fs.appendFileSync("./public/AMS_Data.csv", " ")
+fs.appendFileSync("./public/INV_Data.csv", " ")
+fs.appendFileSync("./public/POS_Data.csv", " ")
 
 tail = new Tail("./public/data.csv");
-tail_ECU = new Tail("./public/ECU_data.csv");
-tail_Accum = new Tail("./public/Accum_data.csv");
-tail_Inverter = new Tail("./public/Inverter_data.csv");
-tail_Position = new Tail("./public/Position_data.csv");
+tail_ECU = new Tail("./public/ECU_Data.csv");
+tail_Accum = new Tail("./public/AMS_Data.csv");
+tail_Inverter = new Tail("./public/INV_Data.csv");
+tail_Position = new Tail("./public/POS_Data.csv");
 
 var readbytes = 0;
 var bite_size = 256;
@@ -91,23 +90,29 @@ app.get("/start-data-session", function(req,res){
  * @function 
  */
 
-app.get("/stop-data-session/:name", function(req,res){
+app.post("/stop-data-session", function(req,res){
     //Code in here will be called after a session has taken place so that it packages all the current data into a 'dataSession' Schema 
     //and then push it to the mongoDB Atlas database.
 
     //First of all we will just create a basic schema for speed, acceleration and battery level, session name, date and also time label
-    var name = req.params.name;
+    var name = req.body.sessionName;
+    var trackName = req.body.trackName;
+    var lat = req.body.Lat;
+    var long = req.body.Long;
+    
     var date = new Date()
     var size = fs.statSync("./public/data.csv").size/10e6;
     size = size.toFixed(3);
     var data = fs.readFileSync("./public/data.csv", 'utf8');
-    var POSData = fs.readFileSync("./public/Position_data.csv", 'utf8');
-    var INVData = fs.readFileSync("./public/Inverter_data.csv", 'utf8');
-    var ECUData = fs.readFileSync("./public/ECU_data.csv", 'utf8');
+    var POSData = fs.readFileSync("./public/POS_Data.csv", 'utf8');
+    var INVData = fs.readFileSync("./public/INV_Data.csv", 'utf8');
+    var ECUData = fs.readFileSync("./public/ECU_Data.csv", 'utf8');
+    var AMSData = fs.readFileSync("./public/AMS_Data.csv", 'utf8');
     var returnOBJ = [];
     var POSreturnOBJ = [];
     var INVreturnOBJ = [];
     var ECUreturnOBJ = [];
+    var AMSreturnOBJ = [];
     var NewDataSession;
     csv({
         noheader:true,
@@ -144,13 +149,15 @@ app.get("/stop-data-session/:name", function(req,res){
 
                     NewDataSession = {
                         name: name,
+                        TrackName:trackName,
+                        TrackStartLine: [lat,long], 
                         dateCreated: date,
                         PRIData: returnOBJ[0],
                         POSData: POSreturnOBJ[0],
                         INVData: INVreturnOBJ[0],
                         size: size
                     }
-                    console.log(NewDataSession);
+                    // console.log(NewDataSession);
                     DataSession.create(NewDataSession, function(err, newSession){
                         if(err){
                             console.log(err);
@@ -189,6 +196,10 @@ app.get("/session", function(req,res){
 )
 })
 
+app.get("/data-link", function(req,res){
+    res.render("data-link.ejs");
+})
+
 app.get("/session-saver", function(req,res){
     res.render("session-saver.ejs");
 })
@@ -218,10 +229,10 @@ app.get("/session/:data/:id", function(req,res){
 
 function reset_files(){
     fs.writeFileSync("./public/data.csv", " ");
-    fs.writeFileSync("./public/ECU_data.csv", " ");
-    fs.writeFileSync("./public/Accum_data.csv", " ");
-    fs.writeFileSync("./public/Inverter_data.csv", " ");
-    fs.writeFileSync("./public/Position_data.csv", " ");
+    fs.writeFileSync("./public/ECU_Data.csv", " ");
+    fs.writeFileSync("./public/AMS_Data.csv", " ");
+    fs.writeFileSync("./public/INV_Data.csv", " ");
+    fs.writeFileSync("./public/POS_Data.csv", " ");
     console.log("started new data session");
 }
 
@@ -303,13 +314,8 @@ tail.on("error", function(error) {
 
 //ECU Room //On tail of ECU file emit to ECU room 
 tail_ECU.on("line", function(data2){
-    console.log(data2);
     //substring data to split into all the different metrics
     data2 = data2.split(',');
-    data2[0] = parseFloat(data2[0]);
-    data2[1] = parseFloat(data2[1]);
-    data2[2] = parseFloat(data2[2]);
-    console.log("file has updated");
     io.to('ECU Room').emit('ecu-data', {data:data2});
 });
 tail_ECU.on("error", function(error) {
@@ -318,15 +324,12 @@ tail_ECU.on("error", function(error) {
 
 //Accumulator Room //On tail of Accumulator File emit to th 
 tail_Accum.on("line", function(data3){
-    console.log(data3);
     //substring data to split into all the different metrics
-    data3 = data3.split(',');
     
+    data3 = data3.split(',');
     for(var i = 0; i < data3.length; i++){
         data3[i] = parseFloat(data3[i])
     }
-
-    console.log("file has updated");
     io.to('Accumulator Room').emit('acc-data', {data:data3});
 });
 tail_Accum.on("error", function(error) {
@@ -336,13 +339,8 @@ tail_Accum.on("error", function(error) {
 //Inverter Room
 
 tail_Inverter.on("line", function(data){
-    console.log(data);
     //substring data to split into all the different metrics
     data = data.split(',');
-    data[0] = parseFloat(data[0]);
-    data[1] = parseFloat(data[1]);
-    data[2] = parseFloat(data[2]);
-    console.log("file has updated");
     io.to('Inverter Room').emit('inv-data', {data:data});
 });
 tail_Accum.on("error", function(error) {
@@ -352,14 +350,9 @@ tail_Accum.on("error", function(error) {
 //Position Room
 
 tail_Position.on("line", function(data){
-    console.log(data);
     //substring data to split into all the different metrics
     data = data.split(',');
     //Convert string data into numbers
-    data[0] = parseFloat(data[0]);
-    data[1] = parseFloat(data[1]);
-    data[2] = parseFloat(data[2]);
-    console.log("file has updated");
     io.to('Map Room').emit('position-data', {data:data});
 });
 tail_Position.on("error", function(error) {
