@@ -21,6 +21,10 @@ data.
 
 ![photo3](https://github.com/mbh1620/Car-Telemetry-Receive-Server/blob/master/NodeServer/public/Car-telematics-diagram.png)
 
+The 'ford_telem_transmit.py' script is used to transmit data from the CANBus over an XBee transmitter back to the base station.
+
+This file needs improving to include more of the CANbus data available using the obd library. Also need to include data from GPS and MPU modules.
+
 # Update: DB and Historical Data viewing
 
 ![photo3](https://github.com/mbh1620/Car-Telemetry-Receive-Server/blob/master/NodeServer/public/track.png)
