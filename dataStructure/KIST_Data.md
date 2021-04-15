@@ -1,4 +1,4 @@
-Kist data structure however might not be used as we are looking to replace the Kistner module
+Kist data structure however might not be used as we are looking to replace the Kistler module
 
     0 - velX
     1 - velY 

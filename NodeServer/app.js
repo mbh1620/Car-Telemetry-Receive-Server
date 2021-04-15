@@ -8,6 +8,14 @@ var Tail = require('tail').Tail;
 var mongoose = require('mongoose');
 var csv = require('csvtojson');
 var dotenv = require('dotenv').config();
+let {PythonShell} = require('python-shell');
+
+var testing_status = false;
+
+app.use(function (req, res, next) {
+    res.locals.testing_status = testing_status;
+    next();
+});
 
 //DataSession Model import
 var DataSession = require("./models/dataSession");
@@ -155,6 +163,7 @@ app.post("/stop-data-session", function(req,res){
                         PRIData: returnOBJ[0],
                         POSData: POSreturnOBJ[0],
                         INVData: INVreturnOBJ[0],
+                        //ADD ECU DATA HERE!!
                         size: size
                     }
                     // console.log(NewDataSession);
@@ -221,6 +230,51 @@ app.get("/session/:data/:id", function(req,res){
     
 })
 
+app.post("/testing/start", function (req, res) {
+    /**
+    * Start the python script. The python script will start generating the data.
+    * @memberof TestingRoutes.PythonScripts
+    * @function
+    * @name post
+    * @param '/testing/start' The url
+    * @instance
+    */
+    if(testing_status === false){
+        pyshell = new PythonShell('./python_scripts/test.py');    
+    }
+    
+    pyshell.on('message', function(message){
+    io.to('Test Room').emit('log-data', {data:message});
+    })
+
+    pyshell.end(function(err) {
+        if(err){
+            console.log(err)
+            io.to('Test Room').emit('log-data', {data:err.traceback});
+        }
+    })
+
+    // python = spawn('python', ['-u', './test.py', process.cwd()]);
+    testing_status = true;
+    res.send("success");
+})
+
+app.post("/testing/stop", function (req, res) {
+    /**
+    * Stop the python script.
+    * @memberof TestingRoutes.PythonScripts
+    * @function
+    * @name post
+    * @param '/testing/stop' The url
+    * @instance
+    */
+    
+    pyshell.kill();
+    io.to('Test Room').emit('log-data', {data:"Script stopped"});
+    testing_status = false;
+    res.send('success');
+})
+
 /**
  * Used to clear the contents of the data.csv files
  * 
@@ -243,33 +297,39 @@ io.on("connection", function(socket){
     })
 
     socket.on("PRI", function(){
-        socket.leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
+        socket.leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room").leave("Test Room");
         socket.join('Primary Room');
         console.log(socket.id + " joined Primary Room");
     })
 
     socket.on("ECU", function(){
-        socket.leave("Primary Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
+        socket.leave("Primary Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room").leave("Test Room");
         socket.join("ECU Room");
         console.log(socket.id + " joined ECU Room");
     })
 
     socket.on("ACC", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Inverter Room").leave("Map Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Inverter Room").leave("Map Room").leave("Test Room");
         socket.join("Accumulator Room");
         console.log(socket.id + " joined Accumulator room");
     })
 
     socket.on("INV", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Map Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Map Room").leave("Test Room");
         socket.join("Inverter Room");
         console.log(socket.id + " joined Inverter room");
     })
 
     socket.on("GPS", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Test Room");
         socket.join("Map Room");
         console.log(socket.id + " joined Map Room");
+    })
+
+    socket.on("TEST", function(){
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
+        socket.join("Test Room");
+        console.log(socket.id + " joined Test Room");
     })
 
     socket.on("Start_data_session", function(){
@@ -295,13 +355,8 @@ io.on("connection", function(socket){
 */
 
 tail.on("line", function(data){
-    console.log(data);
     //substring data to split into all the different metrics
     data = data.split(',');
-    data[0] = parseFloat(data[0]);
-    data[1] = parseFloat(data[1]);
-    data[2] = parseFloat(data[2]);
-    console.log("file has updated");
     io.to('Primary Room').emit('primary-data', {data:data});
 });
 tail.on("error", function(error) {

@@ -40,7 +40,7 @@ POS        |  [97] -
 device = XBeeDevice("/dev/ttyUSB0", 115200) #COM port and Baud rate
 
 device.open() #Open connection with the Xbee
-
+print("Connected to the Xbee Successfully!")
 #Add a callback for when the XBee receives data
 def my_data_received_callback(xbee_message):
     address = xbee_message.remote_device.get_64bit_addr()

@@ -12,23 +12,47 @@
         <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;float:right;">
         <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;">Testing
         </h1>
+        <div class="jumbotron bg-dark" style="margin-top:30px;">
         <p style="color:white;font-size: 17;">To run the python testing script, press start and to stop it press the stop button. (Makesure testing is set to off when using real data)</p>
         
         <button onclick="start()">Start</button>
         <button onclick="stop()">Stop</button>
-        <h4 style="margin-top:40px">Testing: </h4>
+    </br>
+        <label style="margin-top:30px;color:white" for="cars">Choose a testing script:</label>
+
+        <select name="scripts" id="scripts">
+        <option value="">test.py</option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        <option value=""></option>
+        </select>
+            
+        <h4 style="margin-top:20px;color:white">Testing: </h4>
         <% if (testing_status == true){ %>
             <h4 id="status" style="color:green">Active</h4>
         <% } else { %>
             <h4 id="status" style="color:red">Not Active</h4>
-        <% } %> 
+        <% } %>
+        <h3 style="color:white;font-weight:100">Log</h3>
+        <div id="script-log" style="background-color: white; width:100%;height:200px;overflow:scroll;margin-top:20px;padding-top:20px;padding-bottom:20px">
 
+        </div>
+    </div>
     </div>
     </div>
     </div>
     </body>
 </html>
+<script src="/socket.io/socket.io.js"></script>
 <script>
+    var socket = io();
+    socket.emit("TEST");
+
+    socket.on('log-data', function (msg) { 
+        pushToLog(msg.data);
+    })
+
     function start(){
         $.ajax({
             method: 'POST',
@@ -47,5 +71,16 @@
         })
         $('#status').html('Not Active').attr('style', 'color:red');
     }
+
+    function pushToLog(message){
+        //Function used to update the script log
+        $('#script-log').append("<p style='margin-top;10px;margin-left:20px;margin-bottom:0px;font-family:helvetica'>" + message + "</p>");
+        updateScroll()
+    }
+
+    function updateScroll(){
+    var element = document.getElementById("script-log");
+    element.scrollTop = element.scrollHeight;
+}
 
 </script>

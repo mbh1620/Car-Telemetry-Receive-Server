@@ -11,6 +11,7 @@ if len(sys.argv) == 2:
 	cwd = sys.argv[1]
 	print(cwd)
 
+print("Testing Script started successfully")
 x = 0
 y = 0
 z = 0
@@ -26,7 +27,6 @@ while(True):
 	num3 = math.sin(x)
 	
 	num4 = str(datetime.datetime.now().time()).split('.')[0] + "." + str(datetime.datetime.now().time()).split('.')[1][0:3]
-	print(num4)
 	csv_writer.writerow([num1,num2,num3,num4])
 	f.close()
 
@@ -202,6 +202,8 @@ while(True):
 	csv_writer_accumulator.writerow([i for i in accumulator_array])
 	accumulator_file.close()
 
+	
+	sys.stdout.flush()
 
 	time.sleep(0.05) #This is the fastest I can run the base station
 	#time.sleep(0.25) #The Canbus test program delays by this much in each cycle

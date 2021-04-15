@@ -17,6 +17,10 @@ clients using socket.io and updates their graphs to the latest data.
 The test.py file is used to create random data and save to the data.csv file for testing the server against some randomly continuously updating 
 data.
 
+# Update: Car telematics viewing 
+
+![photo3](https://github.com/mbh1620/Car-Telemetry-Receive-Server/blob/master/NodeServer/public/Car-telematics-diagram.png)
+
 # Update: DB and Historical Data viewing
 
 ![photo3](https://github.com/mbh1620/Car-Telemetry-Receive-Server/blob/master/NodeServer/public/track.png)
