@@ -221,7 +221,7 @@ var ctx = document.getElementById('myChart3').getContext('2d');
                     },
                     scaleLabel: {
                         display: true, 
-                        labelString: 'Battery m/s'
+                        labelString: 'Battery V'
                     }
                 }]
             },

@@ -60,7 +60,12 @@
     <li class="nav-item">
       <a class="nav-link" href="/data-link">
         <i class="fas fa-broadcast-tower"></i>
-        <span>Data Link</span><span style="margin-left:10px;font-size:10" class="badge badge-pill badge-danger">Not Connected</span></a>
+        <span>Data Link</span>
+        <% if (xbee_connected == true){ %>
+          <span style="margin-left:10px;font-size:10" class="badge badge-pill badge-success">Connected</span>
+      <% } else { %>
+        <span style="margin-left:10px;font-size:10" class="badge badge-pill badge-danger">Not Connected</span>
+      <% } %> </a></a>
     </li>
 
     <!-- Nav Item - Utilities Collapse Menu -->

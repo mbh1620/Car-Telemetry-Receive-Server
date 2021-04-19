@@ -62,7 +62,7 @@ var ctx = document.getElementById('myChart1').getContext('2d');
                     },
                     scaleLabel: {
                         display: true, 
-                        labelString: 'Acceleration m/s^2'
+                        labelString: 'Unit Measurement'
                     }
                 }]
             },
@@ -129,7 +129,7 @@ var myLineChart2 = new Chart(ctx, {
                 },
                 scaleLabel: {
                     display: true, 
-                    labelString: 'Acceleration m/s^2'
+                    labelString: 'Unit Measurement'
                 }
             }]
         },
@@ -189,7 +189,7 @@ var ctx = document.getElementById('myChart3').getContext('2d');
                     },
                     scaleLabel: {
                         display: true, 
-                        labelString: 'Acceleration m/s^2'
+                        labelString: 'Unit Measurement'
                     }
                 }]
             },

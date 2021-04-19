@@ -11,9 +11,11 @@ var dotenv = require('dotenv').config();
 let {PythonShell} = require('python-shell');
 
 var testing_status = false;
+var xbee_connected = false;
 
 app.use(function (req, res, next) {
     res.locals.testing_status = testing_status;
+    res.locals.xbee_connected = xbee_connected; 
     next();
 });
 
@@ -239,7 +241,7 @@ app.post("/testing/start", function (req, res) {
     * @param '/testing/start' The url
     * @instance
     */
-    if(testing_status === false){
+    if(testing_status === false && xbee_connected === false){
         pyshell = new PythonShell('./python_scripts/test.py');    
     }
     
@@ -275,6 +277,36 @@ app.post("/testing/stop", function (req, res) {
     res.send('success');
 })
 
+app.post("/xbee/connect", function(req, res){
+    var baudRate;
+    var COMport;
+    var XbeeID;
+    
+    if(xbee_connected === false && testing_status === false){
+        pyshell = new PythonShell('./python_scripts/receive-telem.py');
+        xbee_connected = true;
+    }
+    pyshell.on('message', function(message){
+        io.to('Data-link Room').emit('log-data', {data:message});
+    })
+    pyshell.end(function(err) {
+        if(err){
+            console.log(err)
+            io.to('Data-link Room').emit('log-data', {data:String(err)});
+            xbee_connected = false;
+        }
+    })
+    res.send("success");
+})
+
+app.post("/xbee/disconnect", function(req,res){
+    pyshell.kill();
+    io.to('Data-link Room').emit('log-data', {data:"Xbee Disconnected"});
+    xbee_connected = false;
+    res.send('success');
+})
+
+
 /**
  * Used to clear the contents of the data.csv files
  * 
@@ -297,39 +329,45 @@ io.on("connection", function(socket){
     })
 
     socket.on("PRI", function(){
-        socket.leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room").leave("Test Room");
+        socket.leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room").leave("Test Room").leave("Data-link Room");
         socket.join('Primary Room');
         console.log(socket.id + " joined Primary Room");
     })
 
     socket.on("ECU", function(){
-        socket.leave("Primary Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room").leave("Test Room");
+        socket.leave("Primary Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room").leave("Test Room").leave("Data-link Room");
         socket.join("ECU Room");
         console.log(socket.id + " joined ECU Room");
     })
 
     socket.on("ACC", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Inverter Room").leave("Map Room").leave("Test Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Inverter Room").leave("Map Room").leave("Test Room").leave("Data-link Room");
         socket.join("Accumulator Room");
         console.log(socket.id + " joined Accumulator room");
     })
 
     socket.on("INV", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Map Room").leave("Test Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Map Room").leave("Test Room").leave("Data-link Room");
         socket.join("Inverter Room");
         console.log(socket.id + " joined Inverter room");
     })
 
     socket.on("GPS", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Test Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Test Room").leave("Data-link Room");
         socket.join("Map Room");
         console.log(socket.id + " joined Map Room");
     })
 
     socket.on("TEST", function(){
-        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room");
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room").leave("Data-link Room");
         socket.join("Test Room");
         console.log(socket.id + " joined Test Room");
+    })
+
+    socket.on("XBEE", function(){
+        socket.leave("Primary Room").leave("ECU Room").leave("Accumulator Room").leave("Inverter Room").leave("Map Room").leave("Test Room");
+        socket.join("Data-link Room");
+        console.log(socket.id + " joined Data-link Room");
     })
 
     socket.on("Start_data_session", function(){
