@@ -278,12 +278,12 @@ app.post("/testing/stop", function (req, res) {
 })
 
 app.post("/xbee/connect", function(req, res){
-    var baudRate;
-    var COMport;
+    var baudRate = req.body.baud_rate;
+    var COMport = req.body.com_port;
     var XbeeID;
     
     if(xbee_connected === false && testing_status === false){
-        xbeeShell = new PythonShell('./python_scripts/receive-telem.py');
+        xbeeShell = new PythonShell('./python_scripts/receive-telem.py', {args:[baudRate, COMport]});
         xbee_connected = true;
     }
     xbeeShell.on('message', function(message){
@@ -292,7 +292,7 @@ app.post("/xbee/connect", function(req, res){
     xbeeShell.end(function(err) {
         if(err){
             console.log(err)
-            io.to('Data-link Room').emit('log-data', {data:err.traceback});
+            io.to('Data-link Room').emit('log-data', {data:String(err)});
             xbee_connected = false;
         }
     })

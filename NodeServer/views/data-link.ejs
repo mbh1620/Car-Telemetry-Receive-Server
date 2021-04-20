@@ -32,11 +32,11 @@
             <button class="btn btn-md btn-primary" onclick="start()">Connect To Car</button>
             <button class="btn btn-md btn-danger" onclick="stop()">Disconnect From Car</button>
             <label style="color:white">Baud Rate</label>
-            <input class="form-control w-25" type="text" value="115200">
+            <input id="baud_rate" class="form-control w-25" type="text" value="115200">
             <label style="color:white">Car Xbee ID:</label>
             <input class="form-control w-25" type="text">
             <label style="color:white">COM port:</label>
-            <input class="form-control w-25" type="text" value="/dev/ttyUSB0">
+            <input id="COM_port" class="form-control w-25" type="text" value="/dev/ttyUSB0">
             <h3 style="color:white;font-weight:100;margin-top:30px">Log</h3>
         <div id="script-log" style="background-color: white; width:100%;height:200px;overflow:scroll;margin-top:20px;padding-top:20px;padding-bottom:20px">
 
@@ -60,9 +60,12 @@
     })
 
     function start(){
+        var baud_rate = $('#baud_rate').val();
+        var com_port = $('#COM_port').val();
         $.ajax({
             method: 'POST',
-            url: "./xbee/connect"
+            url: "./xbee/connect",
+            data: {baud_rate:baud_rate, com_port:com_port}
         })
     }
 

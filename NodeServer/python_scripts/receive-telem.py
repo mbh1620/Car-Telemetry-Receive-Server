@@ -18,6 +18,16 @@ from csv import writer
 import datetime
 import sys
 
+baud_rate = 115200
+COM_port = "/dev/ttyUSB0"
+
+if len(sys.argv) != 0:
+    baud_rate = sys.argv[0]
+    COM_port = sys.argv[1]
+    print(baud_rate)
+    print(COM_port)
+
+
 #Order of the CSV files and data variables
 
 '''
@@ -39,7 +49,7 @@ POS        |  [97] -
 
 print("connecting to Xbee device at /dev/ttyUSB0")
 
-device = XBeeDevice("/dev/ttyUSB0", 115200) #COM port and Baud rate
+device = XBeeDevice("/dev/ttyUSB0", baud_rate) #COM port and Baud rate
 
 device.open() #Open connection with the Xbee
 print("Connected to the Xbee Successfully!")
