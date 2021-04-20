@@ -37,6 +37,8 @@ POS        |  [97] -
 
 #XBee setup and config
 
+print("connecting to Xbee device at /dev/ttyUSB0")
+
 device = XBeeDevice("/dev/ttyUSB0", 115200) #COM port and Baud rate
 
 device.open() #Open connection with the Xbee
