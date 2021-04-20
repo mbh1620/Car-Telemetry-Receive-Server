@@ -49,11 +49,14 @@
             <canvas style="background-color: black;height:100%;width:100%"
                 id="myChart3"></canvas>
             </div>
-            <a id="url" download style="display:none">
+            <a id="url" download style="display:none"></a>
         </div>
         <input type="range" max="100" min="0">
     </div>
-<div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
+<button class="btn btn-primary btn-sm" onclick="RetreatGraph()">←</button>
+<input id="increment" type="number" value="10" increment="10" style="width:50px">
+<button class="btn btn-primary btn-sm" onclick="AdvanceGraph()">→</button>
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -61,6 +64,9 @@
 <script src="/scripts/functions.js" ></script>
 
 <script>
+    var data = <%- JSON.stringify(session)%>
+
+    
 
     function screenshot(){
         //take screenshots of the graphs
@@ -82,11 +88,58 @@
         chart.update();
     }
 
+    function updateBackwards(data, label, chart){
+        chart.data.datasets[0].data.unshift(data);
+        chart.data.datasets[0].data.pop();
+        chart.data.labels.unshift(label);
+        chart.data.labels.pop();
+        chart.update();
+    }
+
     <% for(var i = 0; i < 250; i++){ %>
         update('<%=session.PRIData[i][0]%>','<%=session.PRIData[i][3]%>', myLineChart1)
         update('<%=session.PRIData[i][1]%>','<%=session.PRIData[i][3]%>', myLineChart2)
         update('<%=session.PRIData[i][2]%>','<%=session.PRIData[i][3]%>', myLineChart3)
     <% } %>
+    
+    var x =0
+    var y =10
+    function AdvanceGraph(){
+            console.log(x);
+            console.log(y);
+            var inc = 10
+            for(var i = x; i < y; i++){
+                if( i+250 < data.PRIData.length){
+            update(data.PRIData[i+250][0],data.PRIData[i+250][3], myLineChart1)
+            update(data.PRIData[i+250][1],data.PRIData[i+250][3], myLineChart2)
+            update(data.PRIData[i+250][2],data.PRIData[i+250][3], myLineChart3)   
+            }}
+
+            if( x+250 < data.PRIData.length){
+            x+=inc
+            y+=inc
+            }
+        
+    }
+
+    function RetreatGraph(){
+        // console.log(x);
+        // console.log(y);
+        var inc = $('#increment').val();
+
+        for(var i = y; i > x; i--){
+            if(i > 0){
+                console.log(i);
+                updateBackwards(data.PRIData[i][0], data.PRIData[i][3], myLineChart1)
+                updateBackwards(data.PRIData[i][1], data.PRIData[i][3], myLineChart2)
+                updateBackwards(data.PRIData[i][2], data.PRIData[i][3], myLineChart3)
+            }
+        }
+        if(i >= 0){
+            x-=inc
+            y-=inc
+        }
+    }
 
     //We need a function to scroll through data and to zoom in or out of data
 
