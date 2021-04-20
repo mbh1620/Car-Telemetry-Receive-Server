@@ -100,7 +100,7 @@ def my_data_received_callback(xbee_message):
 device.add_data_received_callback(my_data_received_callback)
 
 while True:
-    time.sleep(0.01)
+    
 
 
 
