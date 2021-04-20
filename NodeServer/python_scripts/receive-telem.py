@@ -54,8 +54,8 @@ device = XBeeDevice("/dev/ttyUSB0", 115200) #COM port and Baud rate
 
 device.open() #Open connection with the Xbee
 
-device.execute_command("AP", 1.to_bytes())
-device.execute_command("BD", baud_rate.to_bytes())
+device.execute_command("AP", bytearray('\x01', 'utf8'))
+device.execute_command("BD", bytearray(baud_rate, 'utf8'))
 print("Connected to the Xbee Successfully!")
 #Add a callback for when the XBee receives data
 def my_data_received_callback(xbee_message):
