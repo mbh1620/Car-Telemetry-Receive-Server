@@ -39,7 +39,7 @@ POS        |  [97] -
 
 print("connecting to Xbee device at /dev/ttyUSB0")
 
-device = XBeeDevice("/dev/ttyUSB0", 115200) #COM port and Baud rate
+device = XBeeDevice("/dev/ttyUSB0", 230400) #COM port and Baud rate
 
 device.open() #Open connection with the Xbee
 print("Connected to the Xbee Successfully!")
