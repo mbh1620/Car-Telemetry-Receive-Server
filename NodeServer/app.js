@@ -283,13 +283,13 @@ app.post("/xbee/connect", function(req, res){
     var XbeeID;
     
     if(xbee_connected === false && testing_status === false){
-        pyshell = new PythonShell('./python_scripts/receive-telem.py');
+        xbeeShell = new PythonShell('./python_scripts/receive-telem.py');
         xbee_connected = true;
     }
-    pyshell.on('message', function(message){
+    xbeeShell.on('message', function(message){
         io.to('Data-link Room').emit('log-data', {data:message});
     })
-    pyshell.end(function(err) {
+    xbeeShell.end(function(err) {
         if(err){
             console.log(err)
             io.to('Data-link Room').emit('log-data', {data:String(err)});
@@ -300,7 +300,7 @@ app.post("/xbee/connect", function(req, res){
 })
 
 app.post("/xbee/disconnect", function(req,res){
-    pyshell.kill();
+    xbeeShell.kill();
     io.to('Data-link Room').emit('log-data', {data:"Xbee Disconnected"});
     xbee_connected = false;
     res.send('success');

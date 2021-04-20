@@ -9,6 +9,7 @@ var path = require('path');
 let {PythonShell} = require('python-shell');
 
 var pyshell;
+var xbeeShell;
 
 
 
