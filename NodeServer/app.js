@@ -292,7 +292,7 @@ app.post("/xbee/connect", function(req, res){
     xbeeShell.end(function(err) {
         if(err){
             console.log(err)
-            io.to('Data-link Room').emit('log-data', {data:String(err)});
+            io.to('Data-link Room').emit('log-data', {data:err.traceback});
             xbee_connected = false;
         }
     })
