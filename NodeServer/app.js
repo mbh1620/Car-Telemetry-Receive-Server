@@ -300,9 +300,11 @@ app.post("/xbee/connect", function(req, res){
 })
 
 app.post("/xbee/disconnect", function(req,res){
-    xbeeShell.kill();
-    io.to('Data-link Room').emit('log-data', {data:"Xbee Disconnected"});
-    xbee_connected = false;
+    if(xbee_connected === true){
+        xbeeShell.kill();
+        io.to('Data-link Room').emit('log-data', {data:"Xbee Disconnected"});
+        xbee_connected = false;
+    }
     res.send('success');
 })
 
