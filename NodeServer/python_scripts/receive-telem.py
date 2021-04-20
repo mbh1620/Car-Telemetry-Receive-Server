@@ -54,7 +54,7 @@ def my_data_received_callback(xbee_message):
 
     #Now save data into the files based on the ranges shown in the table above
     #AMS Data being saved into the AMS_Data.csv file
-    AMS_File = open("./public/AMS_Data.csv", "a")
+    AMS_File = open("../public/AMS_Data.csv", "a")
     AMS_CSV_Writer = writer(AMS_File)
     AMS_array = message[0:34]
     AMS_array.append(time) #Append the time stamp to the end of the array
@@ -63,7 +63,7 @@ def my_data_received_callback(xbee_message):
 
     #ECU Data being saved into the ECU_Data.csv file
 
-    ECU_File = open("./public/ECU_Data.csv", "a")
+    ECU_File = open("../public/ECU_Data.csv", "a")
     ECU_CSV_Writer = writer(ECU_File)
     ECU_array = message[35:49]
     ECU_array.append(time)
@@ -72,7 +72,7 @@ def my_data_received_callback(xbee_message):
 
     #INV data being saved into the INV_Data.csv file
 
-    INV_File = open("./public/INV_Data.csv", "a")
+    INV_File = open("../public/INV_Data.csv", "a")
     INV_CSV_Writer = writer(INV_File)
     INV_array = message[50:96]
     INV_array.append(time)
