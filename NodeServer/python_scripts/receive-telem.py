@@ -22,8 +22,8 @@ baud_rate = 115200
 COM_port = "/dev/ttyUSB0"
 
 if len(sys.argv) != 0:
-    baud_rate = sys.argv[0]
-    COM_port = sys.argv[1]
+    baud_rate = sys.argv[1]
+    COM_port = sys.argv[2]
     print(baud_rate)
     print(COM_port)
 
