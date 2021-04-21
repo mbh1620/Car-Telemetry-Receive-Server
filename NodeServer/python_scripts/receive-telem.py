@@ -21,7 +21,7 @@ import sys
 baud_rate = 115200
 COM_port = "/dev/ttyUSB0"
 
-if len(sys.argv) != 0:
+if sys.argv[1] != null and sys.argv[2] != null:
     baud_rate = sys.argv[1]
     COM_port = sys.argv[2]
     print(baud_rate)
@@ -52,7 +52,7 @@ print(COM_port)
 
 device = XBeeDevice("/dev/ttyUSB0", baud_rate) #COM port and Baud rate
 
-device.open() #Open connection with the Xbee
+#device.open() #Open connection with the Xbee
 
 device.execute_command("AP", bytearray('\x01', 'utf8'))
 device.set_parameter("BD", bytearray('\x07', 'utf8'))
@@ -100,7 +100,7 @@ def my_data_received_callback(xbee_message):
 device.add_data_received_callback(my_data_received_callback)
 
 while True:
-    time.sleep(0.001)
+    time.sleep(0.01)
 
 
 
