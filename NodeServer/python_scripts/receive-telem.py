@@ -21,7 +21,7 @@ import sys
 baud_rate = 115200
 COM_port = "/dev/ttyUSB0"
 
-if sys.argv[1] != null and sys.argv[2] != null:
+if sys.argv[1] != None and sys.argv[2] != None:
     baud_rate = sys.argv[1]
     COM_port = sys.argv[2]
     print(baud_rate)
