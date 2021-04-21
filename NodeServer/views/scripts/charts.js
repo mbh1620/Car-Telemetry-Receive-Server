@@ -12,7 +12,6 @@ as they are needed.
 //--------------------------------------------
 //                  Chart 1
 //--------------------------------------------
-
 var ctx = document.getElementById('myChart1').getContext('2d');
     var myLineChart1 = new Chart(ctx, {
         // The type of chart we want to create
