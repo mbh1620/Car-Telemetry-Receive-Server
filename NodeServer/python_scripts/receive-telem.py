@@ -52,7 +52,7 @@ print(COM_port)
 
 device = XBeeDevice("/dev/ttyUSB0", baud_rate) #COM port and Baud rate
 
-#device.open() #Open connection with the Xbee
+device.open() #Open connection with the Xbee
 
 device.execute_command("AP", bytearray('\x01', 'utf8'))
 device.set_parameter("BD", bytearray('\x07', 'utf8'))
