@@ -42,7 +42,6 @@ while True:
     AMS_File.close()
 
     #ECU Data being saved into the ECU_Data.csv file
-
     ECU_File = open("../public/ECU_Data.csv", "a")
     ECU_CSV_Writer = writer(ECU_File)
     ECU_array = message[35:49]
