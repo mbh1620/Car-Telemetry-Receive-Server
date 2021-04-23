@@ -9,7 +9,6 @@ script is used to receive serial data when the two
 xbee modules are in Transparent mode AP = 0
 
 '''
-
 import serial
 import time
 from csv import writer
