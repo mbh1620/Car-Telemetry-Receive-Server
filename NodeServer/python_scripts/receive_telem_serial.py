@@ -16,7 +16,7 @@ import datetime
 import sys
 import io
 
-BAUD_RATE = 9600
+BAUD_RATE = 115200
 COM_PORT = '/dev/ttyUSB0'
 
 ser = serial.Serial(COM_PORT, BAUD_RATE, timeout=1)
@@ -39,7 +39,7 @@ while True:
         #Now save data into files based on the ranges
         #AMS data being saved into the AMS_Data.csv file
 
-        AMS_File = open('home/pi/Desktop/Telem/Car-Telemetry-Receive-Server/NodeServer/public/AMS_Data.csv', 'a')
+        AMS_File = open('/home/pi/Desktop/Telem/Car-Telemetry-Receive-Server/NodeServer/public/AMS_Data.csv', 'a')
         AMS_CSV_Writer = writer(AMS_File)
         AMS_array = message[0:34]
         AMS_array.append(time) #append the time stamp to the end of the array
@@ -48,7 +48,7 @@ while True:
 
         #ECU data being saved into the ECU_Data.csv file
 
-        ECU_File = open('home/pi/Desktop/Telem/Car-Telemetry-Receive-Server/NodeServer/public/ECU_Data.csv', 'a')
+        ECU_File = open('/home/pi/Desktop/Telem/Car-Telemetry-Receive-Server/NodeServer/public/ECU_Data.csv', 'a')
         ECU_CSV_Writer = writer(ECU_File)
         ECU_array = message[35:49]
         ECU_array.append(time)
@@ -57,7 +57,7 @@ while True:
 
         #INV data being saved into the INV_Data.csv file
 
-        INV_File = open('home/pi/Desktop/Telem/Car-Telemetry-Receive-Server/NodeServer/public/INV_Data.csv', 'a')
+        INV_File = open('/home/pi/Desktop/Telem/Car-Telemetry-Receive-Server/NodeServer/public/INV_Data.csv', 'a')
         INV_CSV_Writer = writer(INV_File)
         INV_array = message[50:96]
         INV_array.append(time)
