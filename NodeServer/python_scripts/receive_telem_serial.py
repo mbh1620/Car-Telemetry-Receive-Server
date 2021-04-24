@@ -64,7 +64,7 @@ while True:
         INV_CSV_Writer.writerow([i for i in INV_array])
         INV_File.close()
 
-        #Need to add the POS and PRI data saving here! 
+        #Need to add the POS and PRI data saving here
         sys.stdout.flush()
 
 
