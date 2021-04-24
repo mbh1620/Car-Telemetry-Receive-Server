@@ -283,7 +283,7 @@ app.post("/xbee/connect", function(req, res){
     var XbeeID;
     
     if(xbee_connected === false && testing_status === false){
-        xbeeShell = new PythonShell('./python_scripts/receive-telem-serial.py', {args:[baudRate, COMport]});
+        xbeeShell = new PythonShell('./python_scripts/receive_telem_serial.py', {args:[baudRate, COMport]});
         xbee_connected = true;
     }
     xbeeShell.on('message', function(message){
