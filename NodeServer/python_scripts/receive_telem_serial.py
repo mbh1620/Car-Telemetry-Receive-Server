@@ -19,6 +19,11 @@ import io
 BAUD_RATE = 115200
 COM_PORT = '/dev/ttyUSB0'
 
+if sys.argv != None:
+    if len(sys.argv > 0):
+        BAUD_RATE = sys.argv[1]
+        COM_PORT = sys.argv[2]
+
 ser = serial.Serial(COM_PORT, BAUD_RATE, timeout=1)
 
 sio = io.TextIOWrapper(io.BufferedRWPair(ser,ser))
