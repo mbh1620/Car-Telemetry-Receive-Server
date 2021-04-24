@@ -24,7 +24,7 @@ if sys.argv != None:
         BAUD_RATE = sys.argv[1]
         COM_PORT = sys.argv[2]
 
-ser = serial.Serial(COM_PORT, BAUD_RATE, timeout=1)
+ser = serial.Serial(COM_PORT, BAUD_RATE, timeout=0.05)
 
 sio = io.TextIOWrapper(io.BufferedRWPair(ser,ser))
 
