@@ -1,0 +1,112 @@
+<!-- This file is the main window for viewing the graphs -->
+
+<%- include ('./partials/dashboard.ejs') %>
+
+
+<html>
+
+<head>
+    
+    <link rel="stylesheet" href="../../stylesheets/standard-style.css">
+
+</head>
+
+<body>
+    <div style="height:92.5vh;overflow: hidden;">
+        <div style="width:95%;height:auto;margin-bottom:20px;">
+        <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
+        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;margin-left:50px;margin-top:30px">Loaded ECU Data
+        </h1>
+        </br>
+        <em style="color:white;margin-left:50px">Session Name: <%= session.name %></em>
+        <em style="color:white;margin-left:50px">Date Created: <%= session.dateCreated %></em>
+        </div>
+        <button class="btn btn-md btn-success" onclick="window.location.href = '/session/PRI/<%= session._id %>'">Primary Data</button>
+        <button class="btn btn-md btn-success" onclick="window.location.href = '/session/POS/<%= session._id %>'">Map Data</button>
+        <button class="btn btn-md btn-primary" onclick="screenshot()">Screenshot</button>
+        <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
+        <div id="canvas-div" style="height:90%;overflow-x:scroll;">
+            <div style="height:30%;width:100%;margin: 0 auto;">
+            <canvas style="background-color: black;height:100%;width:10000px"
+                id="myChart1"></canvas>
+            </div>
+            <div style="height:30%;width:100%;margin: 0 auto">
+            <canvas style="background-color: black;height:100%;width:10000px"
+                id="myChart2"></canvas>
+            </div>
+            <div style="height:30%;width:100%;margin: 0 auto;">
+            <canvas style="background-color: black;height:100%;width:10000px"
+                id="myChart3"></canvas>
+            </div>
+            <a id="url" download style="display:none"></a>
+        </div>
+    </div>
+    <label style="margin-left:20px">Add/Remove Data to the graphs: </label>
+<select name="data" id="waveform-selector">
+    <option value="0">accel_pedal</option>
+    <option value="1">front_brake_pedal</option>
+    <option value="2">rear_brake_pedal</option>
+    <option value="3">steering</option>
+    <option value="4">left_torque_demand</option>
+    <option value="5">right_torque_demand</option>
+    <option value="6">accelerometer_x</option>
+    <option value="7">accelerometer_y</option>
+    <option value="8">accelerometer_z</option>
+    <option value="9">gyro_yaw</option>
+    <option value="10">gyro_pitch</option>
+    <option value="11">gyro_roll</option>
+    <option value="12">ECU_state</option>
+    <option value="13">vehicle_dynamics_duration</option>
+    <option value="14">fault_code</option>
+  </select>
+  <select name="data" id="graph-selector">
+    <option value="1">Graph 1</option>
+    <option value="2">Graph 2</option>
+    <option value="3">Graph 3</option>
+  </select>
+  <input id="color-of-waveform" type="color">
+  <button class="btn btn-sm btn-primary" onclick="addWaveform()">Add</button>
+  <button class="btn btn-sm btn-danger" onclick="removeWaveform()">Remove</button>
+  <button class="btn btn-sm btn-warning" onclick="clearGraph()">Clear</button>
+</div>
+</body>
+<script>
+var data = <%- JSON.stringify(session)%>
+console.log(data)
+// $('#myChart1').attr('width', data.ECUData.length * 10+ '%')
+// $('#myChart2').attr('width', data.ECUData.length * 10+ '%')
+// $('#myChart3').attr('width', data.ECUData.length * 10+ '%')
+</script>
+<script src="/public/packages/chart.js/dist/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/scripts/ECU-scroll-graphs.js" ></script>
+<script src="/scripts/functions.js" ></script>
+
+<script>
+    
+    function screenshot(){
+        //take screenshots of the graphs
+        console.log("hello");
+        var url = myLineChart2.toBase64Image()
+        document.getElementById("url").href=url;
+        document.getElementById('url').click();
+    }
+
+
+    function update(data, label, chart) {
+        chart.data.datasets[0].data.push(data);
+        chart.data.labels.push(label);
+    }
+
+    for(var i = 0; i < data.ECUData.length; i++){
+        update(data.ECUData[i][0],data.ECUData[i][14], myLineChart1)
+        update(data.ECUData[i][1],data.ECUData[i][14], myLineChart2)
+        update(data.ECUData[i][2],data.ECUData[i][14], myLineChart3)
+    }
+    myLineChart1.update();
+    myLineChart2.update();
+    myLineChart3.update();
+
+
+</script>
+</html>

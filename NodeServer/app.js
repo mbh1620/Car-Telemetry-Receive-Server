@@ -165,7 +165,7 @@ app.post("/stop-data-session", function(req,res){
                         PRIData: returnOBJ[0],
                         POSData: POSreturnOBJ[0],
                         INVData: INVreturnOBJ[0],
-                        //ADD ECU DATA HERE!!
+                        ECUData: ECUreturnOBJ[0],
                         size: size
                     }
                     // console.log(NewDataSession);
@@ -221,12 +221,17 @@ app.get("/session/:data/:id", function(req,res){
     //id is the id of the data session
     if(req.params.data == 'PRI'){
         DataSession.findById(req.params.id, function(err, foundSession){
-            res.render("session-load.ejs", {session: foundSession});
+            res.render("session-load-scroll.ejs", {session: foundSession});
         })
     }
     if(req.params.data == 'POS'){
         DataSession.findById(req.params.id, function(err, foundSession){
             res.render("session-load-map.ejs", {session: foundSession});
+        })
+    }
+    if(req.params.data == 'ECU'){
+        DataSession.findById(req.params.id, function(err, foundSession){
+            res.render("session-ECU-load.ejs", {session: foundSession});
         })
     }
     

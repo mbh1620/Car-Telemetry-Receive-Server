@@ -14,7 +14,7 @@
 
 
 <!-- This ul will need to be refactored into a new file at some point -->
-<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" style="height:1vh;float:left;" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion toggled" style="height:1vh;float:left;" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     
@@ -65,7 +65,7 @@
         <% if (xbee_connected == true){ %>
           <span style="margin-left:10px;font-size:10" class="badge badge-pill badge-success">Connected</span>
       <% } else { %>
-        <span style="margin-left:10px;font-size:10" class="badge badge-pill badge-danger">Not Connected</span>
+        <span style="font-size:8" class="badge badge-pill badge-danger">Disconnected</span>
       <% } %> </a></a>
     </li>
 

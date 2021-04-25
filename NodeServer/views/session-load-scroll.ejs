@@ -1,0 +1,89 @@
+<!-- This file is the main window for viewing the graphs -->
+
+<%- include ('./partials/dashboard.ejs') %>
+
+
+<html>
+
+<head>
+    
+    <link rel="stylesheet" href="../../stylesheets/standard-style.css">
+
+</head>
+
+<body>
+    <div style="height:92.5vh;overflow: hidden;">
+        <div style="width:95%;height:auto;margin-bottom:20px;">
+        <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
+        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;margin-left:50px;margin-top:30px">Loaded Primary Data
+        </h1>
+        </br>
+        <em style="color:white;margin-left:50px">Session Name: <%= session.name %></em>
+        <em style="color:white;margin-left:50px">Date Created: <%= session.dateCreated %></em>
+        </div>
+        <button class="btn btn-md btn-success" onclick="window.location.href = '/session/ECU/<%= session._id %>'">ECU Data</button>
+        <button class="btn btn-md btn-success" onclick="window.location.href = '/session/POS/<%= session._id %>'">Map Data</button>
+        <button class="btn btn-md btn-primary" onclick="screenshot()">Screenshot</button>
+        <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
+        <div id="canvas-div" style="height:90%;overflow-x:scroll;overflow-y: hidden;">
+            <div style="height:30%;width:100%;margin: 0 auto;">
+            <canvas style="background-color: black;height:100%;width:10000px"
+                id="myChart1"></canvas>
+            </div>
+            <div style="height:30%;width:100%;margin: 0 auto">
+            <canvas style="background-color: black;height:100%;width:10000px"
+                id="myChart2"></canvas>
+            </div>
+            <div style="height:30%;width:100%;margin: 0 auto;">
+            <canvas style="background-color: black;height:100%;width:10000px"
+                id="myChart3"></canvas>
+            </div>
+            <a id="url" download style="display:none"></a>
+        </div>
+    </div>
+</body>
+<script>
+var data = <%- JSON.stringify(session)%>
+// $('#myChart1').attr('width', data.PRIData.length * 10+ '%')
+// $('#myChart2').attr('width', data.PRIData.length * 10+ '%')
+// $('#myChart3').attr('width', data.PRIData.length * 10+ '%')
+</script>
+<script src="/public/packages/chart.js/dist/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/scripts/loaded-prim-data-scrollable.js" ></script>
+<script src="/scripts/functions.js" ></script>
+
+<script>
+    myLineChart1.render();
+    myLineChart2.render();
+    myLineChart3.render();
+    
+    function screenshot(){
+        //take screenshots of the graphs
+        console.log("hello");
+        var url = myLineChart2.toBase64Image()
+        document.getElementById("url").href=url;
+        document.getElementById('url').click();
+    }
+
+    function update(data, label, chart) {
+        chart.data.datasets[0].data.push(data);
+        chart.data.labels.push(label);
+    }
+
+    for(var i = 0; i < data.PRIData.length; i++){
+        update(data.PRIData[i][0],data.PRIData[i][3], myLineChart1)
+        update(data.PRIData[i][1],data.PRIData[i][3], myLineChart2)
+        update(data.PRIData[i][2],data.PRIData[i][3], myLineChart3)
+    }
+
+    myLineChart1.update();
+    myLineChart2.update();
+    myLineChart3.update();
+
+  
+    
+    //We need a function to scroll through data and to zoom in or out of data
+
+</script>
+</html>
