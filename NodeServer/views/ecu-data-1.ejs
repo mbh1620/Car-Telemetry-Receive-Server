@@ -108,6 +108,7 @@
 
     var socket = io();
     socket.emit("ECU");
+    
     socket.on('ecu-data', function (msg) {
         update_charts(msg);
     })

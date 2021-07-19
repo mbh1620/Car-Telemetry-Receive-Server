@@ -9,6 +9,23 @@ var mongoose = require('mongoose');
 var csv = require('csvtojson');
 var dotenv = require('dotenv').config();
 let {PythonShell} = require('python-shell');
+var AWS = require('aws-sdk');
+var kinesis = new AWS.Kinesis({region: 'eu-west-1'});
+
+//----------------------------------------------------------------------------
+//
+//                     TELEMETRY RECEIVE NODE.JS SERVER
+//
+//----------------------------------------------------------------------------
+
+// Matthew Haywood
+/*
+
+Server used to receive data from a RF module and then display in real time. This data will
+then be streamed to AWS DynamoDB using AWS Kinesis.
+
+*/
+
 
 var testing_status = false;
 var xbee_connected = false;
@@ -25,6 +42,8 @@ var DataSession = require("./models/dataSession");
 
 var testingroutes = require("./routes/testing_routes");
 var dataroutes = require("./routes/data_routes");
+const { config } = require('dotenv');
+const { Kinesis } = require('aws-sdk');
 app.use(express.json());
 app.use(express.urlencoded());
 /**
@@ -40,17 +59,19 @@ app.use('/modules', express.static(path.join(__dirname, '/node/modules')));
 app.use('/scripts', express.static(path.join(__dirname, './views/scripts')));
 app.use('/docs', express.static(path.join(__dirname, './out')));
 
+//Narrow down to just one data file
+
 fs.appendFileSync("./public/data.csv", " ")
-fs.appendFileSync("./public/ECU_Data.csv", " ")
-fs.appendFileSync("./public/AMS_Data.csv", " ")
-fs.appendFileSync("./public/INV_Data.csv", " ")
-fs.appendFileSync("./public/POS_Data.csv", " ")
+// fs.appendFileSync("./public/ECU_Data.csv", " ")
+// fs.appendFileSync("./public/AMS_Data.csv", " ")
+// fs.appendFileSync("./public/INV_Data.csv", " ")
+// fs.appendFileSync("./public/POS_Data.csv", " ")
 
 tail = new Tail("./public/data.csv");
-tail_ECU = new Tail("./public/ECU_Data.csv");
-tail_AMS = new Tail("./public/AMS_Data.csv");
-tail_INV = new Tail("./public/INV_Data.csv");
-tail_POS = new Tail("./public/POS_Data.csv");
+// tail_ECU = new Tail("./public/ECU_Data.csv");
+// tail_AMS = new Tail("./public/AMS_Data.csv");
+// tail_INV = new Tail("./public/INV_Data.csv");
+// tail_POS = new Tail("./public/POS_Data.csv");
 
 var readbytes = 0;
 var bite_size = 256;
@@ -114,15 +135,15 @@ app.post("/stop-data-session", function(req,res){
     var size = fs.statSync("./public/data.csv").size/10e6;
     size = size.toFixed(3);
     var data = fs.readFileSync("./public/data.csv", 'utf8');
-    var POSData = fs.readFileSync("./public/POS_Data.csv", 'utf8');
-    var INVData = fs.readFileSync("./public/INV_Data.csv", 'utf8');
-    var ECUData = fs.readFileSync("./public/ECU_Data.csv", 'utf8');
-    var AMSData = fs.readFileSync("./public/AMS_Data.csv", 'utf8');
+    // var POSData = fs.readFileSync("./public/POS_Data.csv", 'utf8');
+    // var INVData = fs.readFileSync("./public/INV_Data.csv", 'utf8');
+    // var ECUData = fs.readFileSync("./public/ECU_Data.csv", 'utf8');
+    // var AMSData = fs.readFileSync("./public/AMS_Data.csv", 'utf8');
     var returnOBJ = [];
-    var POSreturnOBJ = [];
-    var INVreturnOBJ = [];
-    var ECUreturnOBJ = [];
-    var AMSreturnOBJ = [];
+    // var POSreturnOBJ = [];
+    // var INVreturnOBJ = [];
+    // var ECUreturnOBJ = [];
+    // var AMSreturnOBJ = [];
     var NewDataSession;
     csv({
         noheader:true,
@@ -132,57 +153,69 @@ app.post("/stop-data-session", function(req,res){
     .then((csvRow)=>{
         returnOBJ.push(csvRow);
         returnOBJ[0].pop();
-        csv({
-            noheader:true,
-            output:"csv",
-        })
-        .fromString(POSData)
-        .then((POScsvRow)=>{
-            POSreturnOBJ.push(POScsvRow);
-            POSreturnOBJ[0].pop();
-            csv({
-                noheader:true,
-                output:"csv",
-            })
-            .fromString(ECUData)
-            .then((ECUcsvRow)=>{
-                ECUreturnOBJ.push(ECUcsvRow);
-                ECUreturnOBJ[0].pop();
-                csv({
-                    noheader:true,
-                    output:"csv",
-                })
-                .fromString(INVData)
-                .then((INVcsvRow)=>{
-                    INVreturnOBJ.push(INVcsvRow);
-                    INVreturnOBJ[0].pop();
 
-                    NewDataSession = {
-                        name: name,
-                        TrackName:trackName,
-                        TrackStartLine: [lat,long], 
-                        dateCreated: date,
-                        PRIData: returnOBJ[0],
-                        POSData: POSreturnOBJ[0],
-                        INVData: INVreturnOBJ[0],
-                        ECUData: ECUreturnOBJ[0],
-                        size: size
-                    }
+        NewDataSession = {
+        name: name,
+        TrackName:trackName,
+        TrackStartLine: [lat,long], 
+        dateCreated: date,
+        PRIData: returnOBJ[0],
+        POSData: POSreturnOBJ[0],
+        INVData: INVreturnOBJ[0],
+        ECUData: ECUreturnOBJ[0],
+        size: size
+        }
                     // console.log(NewDataSession);
-                    DataSession.create(NewDataSession, function(err, newSession){
-                        if(err){
-                            console.log(err);
-                        } else {
-                            res.end();
-                        }
-                    })
-                })
-            })
-        })
+        DataSession.create(NewDataSession, function(err, newSession){
+            if(err){
+                console.log(err);
+            } else {
+                res.end();
+            }
+        })          
     })
 })
 
+//Function to start kinesis stream
 
+function start_kinesis_stream(){
+
+}
+
+//Function to put new data into kinesis stream once Tail has detected it.
+//
+
+function put_Kinesis_data(data, data_ID){
+
+    //Code here to put data into the kinesis stream
+    var time = data[3]
+    var record = JSON.stringify({
+        time: data[3],
+        PRIData: data.slice(0,34),
+        ECUData: data.slice(7,22),
+        ACCData: data.slice(23,69),
+        INVData: data.slice(70, data.length),
+        POSData: data.slice(4,6)
+    })
+
+    var recordParams = {
+        Data: record, 
+        PartitionKey: time,
+        StreamName: 'ExampleTelemetryTest'
+    }
+
+    kinesis.putRecord(recordParams, function(err, data){
+        if(err){
+            console.log(err);
+            io.to('Test Room').emit('log-data', {data:String(err)});
+        } else {
+            //Kinesis stream
+            // io.to('Test Room').emit('log-data', {data:'Kinesis data ingestion successful'});
+            // console.log('Successfully sent data to kinesis');
+        }
+    })
+
+}
 
 //Delete route for a session
 
@@ -322,10 +355,6 @@ app.post("/xbee/disconnect", function(req,res){
 
 function reset_files(){
     fs.writeFileSync("./public/data.csv", " ");
-    fs.writeFileSync("./public/ECU_Data.csv", " ");
-    fs.writeFileSync("./public/AMS_Data.csv", " ");
-    fs.writeFileSync("./public/INV_Data.csv", " ");
-    fs.writeFileSync("./public/POS_Data.csv", " ");
     console.log("started new data session");
 }
 
@@ -383,79 +412,28 @@ io.on("connection", function(socket){
 
 })
 
-/* 
-
-    Make a route for each of the main sections such as:
-
-    Accumulator management system
-
-    Inverter Data 
-
-    ECU 
-
-    Kistner data
-
-    Then only emit the relevant data to the people on those routes.
-
-*/
-
 tail.on("line", function(data){
     //substring data to split into all the different metrics
     data = data.split(',');
-    io.to('Primary Room').emit('primary-data', {data:data});
-});
-tail.on("error", function(error) {
-    console.log('ERROR: ', error);
-});
 
-//-------------------------------------------------
-//                 Room emit events
-//-------------------------------------------------
+    //Function for splitting data into the different sections here
 
-//ECU Room //On tail of ECU file emit to ECU room 
-tail_ECU.on("line", function(data2){
-    //substring data to split into all the different metrics
-    data2 = data2.split(',');
+    data1 = data.slice(0,34);
+    data2 = data.slice(7,22);
+    data3 = data.slice(50,96);
+    data4 = data.slice(97,data.length);
+    data5 = data.slice(4,6);
+
+    io.to('Primary Room').emit('primary-data', {data:data1});
     io.to('ECU Room').emit('ecu-data', {data:data2});
-});
-tail_ECU.on("error", function(error) {
-    console.log('ERROR: ', error);
-});
-
-//Accumulator Room //On tail of Accumulator File emit to th 
-tail_AMS.on("line", function(data3){
-    //substring data to split into all the different metrics
-    
-    data3 = data3.split(',');
-    for(var i = 0; i < data3.length; i++){
-        data3[i] = parseFloat(data3[i])
-    }
     io.to('Accumulator Room').emit('acc-data', {data:data3});
-});
-tail_AMS.on("error", function(error) {
-    console.log('ERROR: ', error);
-});
-
-//Inverter Room
-
-tail_INV.on("line", function(data){
-    //substring data to split into all the different metrics
-    data = data.split(',');
-    io.to('Inverter Room').emit('inv-data', {data:data});
-});
-tail_INV.on("error", function(error) {
-    console.log('ERROR: ', error);
+    io.to('Inverter Room').emit('inv-data', {data:data4});
+    io.to('Map Room').emit('position-data', {data:data5});
+    
+    put_Kinesis_data(data)
 });
 
-//Position Room
-
-tail_POS.on("line", function(data){
-    //substring data to split into all the different metrics
-    data = data.split(',');
-    //Convert string data into numbers
-    io.to('Map Room').emit('position-data', {data:data});
-});
-tail_POS.on("error", function(error) {
+tail.on("error", function(error) {
     console.log('ERROR: ', error);
 });
 

@@ -46,17 +46,48 @@
             <h4>Stop Data Session:</h4> <button>Stop</button>
         </div>
     </div>
-    <div style="display:table-row">
-        <div class="headings" style="font-family:Helvetica, sans-serif; color:white;font-weight:100;margin-right:20px;display:table-cell;padding-left:30px;padding-top:30px">
-            <h2>Server Settings</h2>
-            <h4>Ip Address:</h4><input type="text" value="192.168.0.1">
-            <h4>Port</h4><input type="text" value="8080">
-            <h4>Reset Server</h4><button>Reset</button>
-        </div>
-    </div>
+    <h3>Configure Data Channels</h3>
+    <h5>preset: </h5>
+    <select name="presets" id="presets">
+        <option value="E-Race-telemetry">E-Race Telemetry</option>
+        <option value="drone-telemetry">Drone Telemetry</option>
+      </select>
+
+
+    <pre>
+    <textarea id="mybox" Rows="7" cols="50" style="overflow-x: scroll;height:500px">
+Channel     Data Section    Data Alias
+0 -         PRI             roll x
+1 -         PRI             roll y
+2 -         PRI             roll z
+3 -         
+4 - 
+5 - 
+6 -
+7 - 
+8 - 
+9 - 
+10 -
+11 - 
+12 -
+13
+14 
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+    </textarea>
+</pre>
     </div>
 
     </div>
     <div style="height:30px;margin-top:20px;text-align:center;font-size: 15;color:white;font-family: Arial, Helvetica, sans-serif;">Instructions are at <a style="color:blue" href="https://github.com/mbh1620/Car-Telemetry-Receive-Server">https://github.com/mbh1620/Car-Telemetry-Receive-Server</a></div>
-    </body>
+
+</body>
     </html>

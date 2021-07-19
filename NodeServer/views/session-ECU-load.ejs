@@ -73,9 +73,6 @@
 <script>
 var data = <%- JSON.stringify(session)%>
 console.log(data)
-// $('#myChart1').attr('width', data.ECUData.length * 10+ '%')
-// $('#myChart2').attr('width', data.ECUData.length * 10+ '%')
-// $('#myChart3').attr('width', data.ECUData.length * 10+ '%')
 </script>
 <script src="/public/packages/chart.js/dist/chart.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -83,29 +80,99 @@ console.log(data)
 <script src="/scripts/functions.js" ></script>
 
 <script>
-    
-    function screenshot(){
-        //take screenshots of the graphs
-        console.log("hello");
-        var url = myLineChart2.toBase64Image()
-        document.getElementById("url").href=url;
-        document.getElementById('url').click();
-    }
-
+    var graph1_waveforms = [];
+    var graph2_waveforms = [];
+    var graph3_waveforms = [];
 
     function update(data, label, chart) {
         chart.data.datasets[0].data.push(data);
         chart.data.labels.push(label);
     }
 
-    for(var i = 0; i < data.ECUData.length; i++){
-        update(data.ECUData[i][0],data.ECUData[i][14], myLineChart1)
-        update(data.ECUData[i][1],data.ECUData[i][14], myLineChart2)
-        update(data.ECUData[i][2],data.ECUData[i][14], myLineChart3)
+    function addWaveform(){
+        //Add Waveform to graph
+        var waveform = $('#waveform-selector').val();
+
+        var graph = $('#graph-selector').val();
+
+        var colour = $('#color-of-waveform').val();
+
+        var dataOBJ = {
+            label: 'test1',
+            borderColor: colour,
+            borderWidth: 0.8,
+            data: []
+        }
+
+        var data_labels = []
+        var empty_data = []
+
+        //now append the correct data to the dataOBJ
+        for(var i = 0; i < data.ECUData.length; i++){
+            dataOBJ.data.push(data.ECUData[i][waveform]);
+            data_labels.push(data.ECUData[i][data.ECUData[i].length-1]);
+            empty_data.push(' ')
+        }
+
+        myLineChart3.data.labels = data_labels;
+        myLineChart3.update();
+
+        if(graph == 1){
+            graph1_waveforms.push(parseInt(waveform))
+            myLineChart1.data.datasets.push(dataOBJ);
+            myLineChart1.update();
+        } else if (graph == 2){
+            graph2_waveforms.push(parseInt(waveform))
+            myLineChart2.data.datasets.push(dataOBJ);
+            myLineChart2.update();
+        } else if (graph == 3){
+            graph3_waveforms.push(parseInt(waveform))
+            myLineChart3.data.datasets.push(dataOBJ);
+            myLineChart3.update();
+        }
     }
-    myLineChart1.update();
-    myLineChart2.update();
-    myLineChart3.update();
+
+    function removeWaveform(){
+        //Remove waveforms from a graph
+        //First check that there is the waveform in the graph
+        //get value of the waveform chooser
+        var waveform = $('#waveform-selector').val();
+        
+        //get value of the graph chooser
+        var graph = $('#graph-selector').val();
+
+        if(graph == 1 && graph1_waveforms.indexOf(parseInt(waveform)) != -1){
+            graph1_waveforms.splice(graph1_waveforms.indexOf(parseInt(waveform)), 1);
+            myLineChart1.data.datasets.splice(graph1_waveforms.indexOf(parseInt(waveform)))
+            myLineChart1.update()
+        } else if (graph == 2 && graph2_waveforms.indexOf(parseInt(waveform)) != -1){
+            graph2_waveforms.splice(graph2_waveforms.indexOf(parseInt(waveform)),1)
+            myLineChart2.data.datasets.splice(graph2_waveforms.indexOf(parseInt(waveform)))
+            myLineChart2.update()
+        } else if (graph == 3 && graph3_waveforms.indexOf(parseInt(waveform)) != -1){
+            graph3_waveforms.splice(graph3_waveforms.indexOf(parseInt(waveform)), 1)
+            myLineChart3.data.datasets.splice(graph3_waveforms.indexOf(parseInt(waveform)))
+            myLineChart3.update()
+        }
+    }
+
+    function clearGraph(){
+        var graph = $('#graph-selector').val();
+
+        if(graph == 1){
+            graph1_waveforms = [];
+            myLineChart1.data.datasets = [];
+            myLineChart1.update()
+        } else if (graph == 2){
+            graph2_waveforms = [];
+            myLineChart2.data.datasets = []
+            myLineChart2.update()
+        } else if (graph == 3){
+            graph3_waveforms = []
+            myLineChart3.data.datasets = []
+            myLineChart3.update()
+        }
+    }
 
 
 </script>
