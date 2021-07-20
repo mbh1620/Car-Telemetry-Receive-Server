@@ -18,12 +18,13 @@
         <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;margin-left:50px;margin-top:30px">Loaded Primary Data
         </h1>
         </br>
-        <em style="color:white;margin-left:50px">Session Name: <%= session.name %></em>
+        <em style="color:white;margin-left:50px">Session Name: <%= tableName %></em>
         <em style="color:white;margin-left:50px">Date Created: <%= session.dateCreated %></em>
         </div>
         <button class="btn btn-md btn-success" onclick="window.location.href = '/session/ECU/<%= session._id %>'">ECU Data</button>
         <button class="btn btn-md btn-success" onclick="window.location.href = '/session/POS/<%= session._id %>'">Map Data</button>
         <button class="btn btn-md btn-primary" onclick="screenshot()">Screenshot</button>
+        <button class="btn btn-md btn-warning" onclick="window.location.href = '/session/S3/<%= session.TableName %>'">Export to S3 Bucket</button>
         <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
         <div id="canvas-div" style="height:90%;overflow-x:scroll;overflow-y: hidden;">
             <div style="height:30%;width:100%;margin: 0 auto;">
@@ -44,9 +45,7 @@
 </body>
 <script>
 var data = <%- JSON.stringify(session)%>
-// $('#myChart1').attr('width', data.PRIData.length * 10+ '%')
-// $('#myChart2').attr('width', data.PRIData.length * 10+ '%')
-// $('#myChart3').attr('width', data.PRIData.length * 10+ '%')
+console.log(data)
 </script>
 <script src="/public/packages/chart.js/dist/chart.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -70,11 +69,14 @@ var data = <%- JSON.stringify(session)%>
         chart.data.datasets[0].data.push(data);
         chart.data.labels.push(label);
     }
-
-    for(var i = 0; i < data.PRIData.length; i++){
-        update(data.PRIData[i][0],data.PRIData[i][3], myLineChart1)
-        update(data.PRIData[i][1],data.PRIData[i][3], myLineChart2)
-        update(data.PRIData[i][2],data.PRIData[i][3], myLineChart3)
+    
+    for(var i = 0; i < data.Items.length; i++){
+        if (data.Items[i].PRIData != undefined){
+            update(data.Items[i].PRIData[0],data.Items[i].partitionKey, myLineChart1)
+            update(data.Items[i].PRIData[1],data.Items[i].partitionKey, myLineChart2)
+            update(data.Items[i].PRIData[2],data.Items[i].partitionKey, myLineChart3)
+        }
+       
     }
 
     myLineChart1.update();

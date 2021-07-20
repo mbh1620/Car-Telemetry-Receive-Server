@@ -10,7 +10,11 @@ var csv = require('csvtojson');
 var dotenv = require('dotenv').config();
 let {PythonShell} = require('python-shell');
 var AWS = require('aws-sdk');
+AWS.config.update({
+    region: 'eu-west-1'
+})
 var kinesis = new AWS.Kinesis({region: 'eu-west-1'});
+var dynamodb = new AWS.DynamoDB({region: 'eu-west-1'});
 
 //----------------------------------------------------------------------------
 //
@@ -62,16 +66,8 @@ app.use('/docs', express.static(path.join(__dirname, './out')));
 //Narrow down to just one data file
 
 fs.appendFileSync("./public/data.csv", " ")
-// fs.appendFileSync("./public/ECU_Data.csv", " ")
-// fs.appendFileSync("./public/AMS_Data.csv", " ")
-// fs.appendFileSync("./public/INV_Data.csv", " ")
-// fs.appendFileSync("./public/POS_Data.csv", " ")
-
 tail = new Tail("./public/data.csv");
-// tail_ECU = new Tail("./public/ECU_Data.csv");
-// tail_AMS = new Tail("./public/AMS_Data.csv");
-// tail_INV = new Tail("./public/INV_Data.csv");
-// tail_POS = new Tail("./public/POS_Data.csv");
+
 
 var readbytes = 0;
 var bite_size = 256;
@@ -135,15 +131,8 @@ app.post("/stop-data-session", function(req,res){
     var size = fs.statSync("./public/data.csv").size/10e6;
     size = size.toFixed(3);
     var data = fs.readFileSync("./public/data.csv", 'utf8');
-    // var POSData = fs.readFileSync("./public/POS_Data.csv", 'utf8');
-    // var INVData = fs.readFileSync("./public/INV_Data.csv", 'utf8');
-    // var ECUData = fs.readFileSync("./public/ECU_Data.csv", 'utf8');
-    // var AMSData = fs.readFileSync("./public/AMS_Data.csv", 'utf8');
+    
     var returnOBJ = [];
-    // var POSreturnOBJ = [];
-    // var INVreturnOBJ = [];
-    // var ECUreturnOBJ = [];
-    // var AMSreturnOBJ = [];
     var NewDataSession;
     csv({
         noheader:true,
@@ -233,11 +222,44 @@ app.get("/instructions", function(req,res){
     res.render("instructions.ejs");
 })
 
+// app.get("/session", function(req,res){
+//     DataSession.find({}, "name dateCreated size",function(err, allSessions){ //Finds all dataSession records without returning data which slows down the program
+//         res.render("session.ejs", {sessions: allSessions});
+//     }
+// )
+// })
+
 app.get("/session", function(req,res){
-    DataSession.find({}, "name dateCreated size",function(err, allSessions){ //Finds all dataSession records without returning data which slows down the program
-        res.render("session.ejs", {sessions: allSessions});
+    dynamodb.listTables( function(err, data){
+        if(err){
+            console.log(err);
+        } else {
+            // console.log(data);
+            res.render("session.ejs", {sessions: data})
+        }
+    })
+})
+
+//Load DynamoDB table
+app.get("/session/:data/:TableName", function(req, res){
+    var docClient = new AWS.DynamoDB.DocumentClient()
+
+    var params = {
+        TableName:req.params.TableName,
+
     }
-)
+    console.log('Scanning Data');
+    docClient.scan(params, onScan);
+    function onScan(err, data){
+        if(err){
+            console.log("Unable to scan the table", JSON.stringify(err, null, 2))
+        } else {
+            res.render('session-load-scroll.ejs', {session:data, tableName:req.params.TableName})
+            console.log(data)
+        }
+    }
+
+
 })
 
 app.get("/data-link", function(req,res){
