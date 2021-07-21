@@ -24,7 +24,7 @@
         <button class="btn btn-md btn-success" onclick="window.location.href = '/session/ECU/<%= session._id %>'">ECU Data</button>
         <button class="btn btn-md btn-success" onclick="window.location.href = '/session/POS/<%= session._id %>'">Map Data</button>
         <button class="btn btn-md btn-primary" onclick="screenshot()">Screenshot</button>
-        <button class="btn btn-md btn-warning" onclick="window.location.href = '/session/S3/<%= session.TableName %>'">Export to S3 Bucket</button>
+        <button class="btn btn-md btn-warning" onclick="window.location.href = '/export'">Export to S3 Bucket</button>
         <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
         <div id="canvas-div" style="height:90%;overflow-x:scroll;overflow-y: hidden;">
             <div style="height:30%;width:100%;margin: 0 auto;">

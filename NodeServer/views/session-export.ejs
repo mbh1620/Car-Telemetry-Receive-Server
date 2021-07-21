@@ -1,0 +1,75 @@
+
+<!-- This file is the main window for viewing the graphs -->
+<%- include ('./partials/dashboard.ejs') %>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+    <!-- <script src="scripts/sketch.js" type="text/javascript"></script> -->
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <link rel="stylesheet" href="./stylesheets/standard-style.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+</head>
+
+<body>
+    <div style="height:92.5vh;overflow: hidden;">
+        <div style="width:95%;height:auto;margin-bottom:20px;">
+        <img src="/public/uon.png" style="height:auto;width:200px;display:block-inline;margin-top:20px;float:right;">
+        <h1 style="font-family: helvetica; font-weight:100;display:inline-block;color:white;margin-left:50px;margin-top:30px">Export DynamoDB to S3 Bucket
+        </h1>
+        </div>
+        <div class="jumbotron bg-dark w-50" style="margin:0 auto">
+        <div>
+        <label style="color:white" for="s3-bucket-name">S3 Bucket Name</label>
+        <select id="S3-buckets">
+            <% for(var i = 0; i < s3data.Buckets.length; i++) { %>
+            <option value="<%= s3data.Buckets[i].Name%>"><%= s3data.Buckets[i].Name%></option>
+            <% } %>
+
+        </select>
+    </div>
+    <div>
+        <label style="color:white" for="dynamodb-table">Table Name</label>
+        <select id="dyna-tables"><% for(var i = 0; i < tabledata.TableNames.length; i++) { %>
+            <option value="<%= tabledata.TableNames[i]%>"><%= tabledata.TableNames[i]%></option>
+            <% } %></select>
+        <label for='userid' style="color:white;display:block">UserId</label>
+        <input id="userid" type="text">
+    </div>
+    <button class="btn btn-md btn-warning" onclick="export_data()">Export</button>
+</div>
+        <!-- https://stackoverflow.com/questions/45149062/chart-js-how-to-show-cursor-pointer-for-labels-legends-in-line-chart USE this for cursor -->
+        <div style="height:72.5%">
+            
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/scripts/ecu-charts.js" ></script>
+<script src="/scripts/functions.js" ></script>
+<script>
+    function export_data(){
+        //get s3 bucket
+        var s3_bucket = $('#S3-buckets').val();
+        //get table
+        var table = $('#dyna-tables').val();
+        console.log("exporting")
+        console.log(table)
+        console.log('to')
+        console.log(s3_bucket)
+        //send request to...
+        $.get('/session/dyna-s3/' + userID + '/' + table + '/' + s3_bucket)
+            
+        
+    }
+    
+</script>
+</html>

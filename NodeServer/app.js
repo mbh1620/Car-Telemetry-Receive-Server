@@ -15,6 +15,7 @@ AWS.config.update({
 })
 var kinesis = new AWS.Kinesis({region: 'eu-west-1'});
 var dynamodb = new AWS.DynamoDB({region: 'eu-west-1'});
+var S3 = new AWS.S3({region: 'eu-west-1'});
 
 //----------------------------------------------------------------------------
 //
@@ -234,8 +235,10 @@ app.get("/session", function(req,res){
         if(err){
             console.log(err);
         } else {
-            // console.log(data);
-            res.render("session.ejs", {sessions: data})
+            console.log(data);
+            names = data.TableNames;
+            res.render('session.ejs', {sessions:names})
+            
         }
     })
 })
@@ -260,6 +263,36 @@ app.get("/session/:data/:TableName", function(req, res){
     }
 
 
+})
+
+app.get("/export", function(req,res){
+    dynamodb.listTables(function(err, tabledata){
+        if(err){
+            console.log(err)
+        } else {
+            console.log(tabledata)
+            S3.listBuckets(function(err, bucketdata){
+                console.log(bucketdata)
+                res.render('session-export.ejs', {tabledata:tabledata, s3data: bucketdata});
+            })
+        }
+    })
+})
+
+//Route for exporting dynamoDB table to S3 Bucket
+app.get("/session/dyna-s3/:userId/:TableName/:S3_bucket", function(req,res){
+    var params = {
+        S3Bucket: req.params.S3_bucket,
+        TableArn: 'arn:aws:dynamodb:eu-west-1:' + req.params.userId + ':table/'+ req.params.TableName
+    }
+
+    dynamodb.exportTableToPointInTime(params, function(err,data){
+        if(err) console.log(err, err.stack);
+        else {
+            console.log(data);
+            res.send(success);
+        }
+    })
 })
 
 app.get("/data-link", function(req,res){
