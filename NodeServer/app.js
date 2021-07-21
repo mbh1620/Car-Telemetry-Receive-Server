@@ -16,6 +16,7 @@ AWS.config.update({
 var kinesis = new AWS.Kinesis({region: 'eu-west-1'});
 var dynamodb = new AWS.DynamoDB({region: 'eu-west-1'});
 var S3 = new AWS.S3({region: 'eu-west-1'});
+var lambda = new AWS.Lambda({region:'eu-west-1'});
 
 //----------------------------------------------------------------------------
 //
@@ -30,6 +31,8 @@ Server used to receive data from a RF module and then display in real time. This
 then be streamed to AWS DynamoDB using AWS Kinesis.
 
 */
+
+var dynamoDBName;
 
 
 var testing_status = false;
@@ -334,10 +337,41 @@ app.post("/testing/start", function (req, res) {
     * @param '/testing/start' The url
     * @instance
     */
+    console.log(req.body)
+
+    if(req.body.kinesis_stream == 'true'){
+        io.to('Test Room').emit('log-data', {data:'Sending data to Kinesis Stream'})
+    }
+    if(req.body.name != ''){
+        //set up a new dynamoDB table
+        io.to('Test Room').emit('log-data', {data:'Setting up new dynamoDB table'});
+        var params = {
+            TableName: req.body.name,
+            KeySchema: [
+                {AttributeName: "partitionKey", KeyType: "HASH"},
+            ],
+            AttributeDefinitions: [
+                { AttributeName: "partitionKey", AttributeType: "N"},
+            ],
+            ProvisionedThroughput: {
+                ReadCapacityUnits: 10,
+                WriteCapacityUnits: 10
+            }
+        }
+        dynamodb.createTable(params, function(err, data){
+            if(err){
+                console.log('unable to create table', JSON.stringify(err, null,2))
+            } else {
+                console.log("Created table", JSON.stringify(data, null, 2));
+            }
+        })
+
+    }
+    dynamoDBName = req.body.dbname;
     if(testing_status === false && xbee_connected === false){
         pyshell = new PythonShell('./python_scripts/test.py');    
     }
-    
+
     pyshell.on('message', function(message){
     io.to('Test Room').emit('log-data', {data:message});
     })

@@ -14,10 +14,22 @@
         </h1>
         <div class="jumbotron bg-dark" style="margin-top:30px;">
         <p style="color:white;font-size: 17;">To run the python testing script, press start and to stop it press the stop button. (Makesure testing is set to off when connecting to data-link)</p>
-        
-        <button onclick="start()">Start</button>
-        <button onclick="stop()">Stop</button>
+    
     </br>
+
+        <label style="margin-top:30px;color:white" for="question">Stream To Kinesis?</label>
+        <input id="stream-yes" type="checkbox" value="yes" checked>
+    </br>
+        <label style="margin-top:30px;color:white" for="stream">Create or choose a DynamoDB Table:</label>
+        <select id="table-name-select" onchange="check()">
+            <% for(var i = 0; i < tables.TableNames.length; i++){ %>
+                <option value="<%=tables.TableNames[i]%>"><%=tables.TableNames[i]%></option>
+            <% } %>
+            <option value="create-new">[Create New Table]</option>
+        </select>
+        <input id='new-table-name' class="form-control w-25" type="text" hidden placeholder="New Table Name">
+</br>
+
         <label style="margin-top:30px;color:white" for="cars">Choose a testing script:</label>
 
         <select name="scripts" id="scripts">
@@ -27,6 +39,9 @@
         <option value=""></option>
         <option value=""></option>
         </select>
+    </br>
+        <button class="btn btn-primary" onclick="start()">Start</button>
+        <button class="btn btn-primary" onclick="stop()">Stop</button>
             
         <h4 style="margin-top:20px;color:white">Testing: </h4>
         <% if (testing_status == true){ %>
@@ -53,10 +68,45 @@
         pushToLog(msg.data);
     })
 
+    function check(){
+        //Check value of select
+        if($('#table-name-select').val() == 'create-new'){
+            
+            $('#new-table-name').removeAttr('hidden');
+        } else {
+            console.log('hello')
+            $('#new-table-name').attr('hidden', true);
+        }
+    }
+
     function start(){
+        var kinesis_stream;
+        var name = null;
+        var dbname = null;
+
+        if($('#table-name-select').val() == 'create-new'){
+            name = $('#new-table-name').val();
+            dbname = name;
+        } else {
+            dbname = $('#table-name-select').val();
+        }
+
+        if($('#stream-yes').is(":checked")){
+            kinesis_stream = true;
+        } else {
+            kinesis_stream = false;
+        }
+        console.log(kinesis_stream);
+
+        var data = {
+            kinesis_stream:kinesis_stream,
+            name:name,
+            dbname:dbname
+        }
         $.ajax({
             method: 'POST',
-            url: "./testing/start"
+            url: "./testing/start",
+            data: data
         })
 
         $('#status').html('Active').attr('style', 'color:green');

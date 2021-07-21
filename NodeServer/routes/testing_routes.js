@@ -8,6 +8,12 @@ var {spawn} = require('child_process');
 var path = require('path');
 let {PythonShell} = require('python-shell');
 
+var AWS = require('aws-sdk');
+AWS.config.update({
+    region: 'eu-west-1'
+})
+var dynamodb = new AWS.DynamoDB({region: 'eu-west-1'});
+
 var pyshell;
 var xbeeShell;
 
@@ -43,7 +49,15 @@ router.get("/testing", function (req, res) {
     * @param '/testing' The url
     * @instance
     */
-    res.render("testing.ejs");
+   //Add code here to display kinesis streams
+    dynamodb.listTables(function(err,data){
+        if(err){
+            console.log(err)
+        } else {
+            console.log(data)
+            res.render("testing.ejs", {tables: data})
+        }
+    })
 })
 
 //================================================
