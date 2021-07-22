@@ -11,12 +11,14 @@ var dotenv = require('dotenv').config();
 let {PythonShell} = require('python-shell');
 var AWS = require('aws-sdk');
 AWS.config.update({
-    region: 'eu-west-1'
+    region: process.env.REGION
 })
-var kinesis = new AWS.Kinesis({region: 'eu-west-1'});
-var dynamodb = new AWS.DynamoDB({region: 'eu-west-1'});
-var S3 = new AWS.S3({region: 'eu-west-1'});
-var lambda = new AWS.Lambda({region:'eu-west-1'});
+var kinesis = new AWS.Kinesis({region: process.env.REGION});
+var dynamodb = new AWS.DynamoDB({region: process.env.REGION});
+var S3 = new AWS.S3({region: process.env.REGION});
+var lambda = new AWS.Lambda({region:process.env.REGION});
+
+
 
 //----------------------------------------------------------------------------
 //
@@ -33,7 +35,6 @@ then be streamed to AWS DynamoDB using AWS Kinesis.
 */
 
 var dynamoDBName;
-
 
 var testing_status = false;
 var xbee_connected = false;
@@ -252,7 +253,6 @@ app.get("/session/:data/:TableName", function(req, res){
 
     var params = {
         TableName:req.params.TableName,
-
     }
     console.log('Scanning Data');
     docClient.scan(params, onScan);
@@ -337,12 +337,12 @@ app.post("/testing/start", function (req, res) {
     * @param '/testing/start' The url
     * @instance
     */
-    console.log(req.body)
 
     if(req.body.kinesis_stream == 'true'){
         io.to('Test Room').emit('log-data', {data:'Sending data to Kinesis Stream'})
     }
-    if(req.body.name != ''){
+
+    if(req.body.name != '' && req.body.name != null){
         //set up a new dynamoDB table
         io.to('Test Room').emit('log-data', {data:'Setting up new dynamoDB table'});
         var params = {
@@ -351,7 +351,7 @@ app.post("/testing/start", function (req, res) {
                 {AttributeName: "partitionKey", KeyType: "HASH"},
             ],
             AttributeDefinitions: [
-                { AttributeName: "partitionKey", AttributeType: "N"},
+                { AttributeName: "partitionKey", AttributeType: "S"},
             ],
             ProvisionedThroughput: {
                 ReadCapacityUnits: 10,
@@ -368,6 +368,28 @@ app.post("/testing/start", function (req, res) {
 
     }
     dynamoDBName = req.body.dbname;
+
+    //Set lambda functions env to pass to correct dynamoDB
+
+    var params = { 
+        FunctionName: 'kinesis-dynamoDB',
+        Environment: {
+            Variables: {
+                DYNAMODBTABLE: dynamoDBName
+            }
+        }
+    }
+
+    lambda.updateFunctionConfiguration(params, function(err, data){
+        if(err){
+            console.log(err);
+        } else {
+            console.log(data);
+            io.to('Test Room').emit('log-data', {data:'Set LAMBDA function env to: ' + dynamoDBName});
+        }
+    })
+
+
     if(testing_status === false && xbee_connected === false){
         pyshell = new PythonShell('./python_scripts/test.py');    
     }
