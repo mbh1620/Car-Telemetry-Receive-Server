@@ -39,21 +39,63 @@ var dynamoDBName;
 var testing_status = false;
 var xbee_connected = false;
 
+var channel_configuration = [{
+}]
+
+
+
+
+function populate_channels_from_csv(file){
+var csv_file = fs.readFileSync("./public/channel_config.csv", 'utf-8');
+var obj = []
+csv({
+    noheader:true,
+    output:"csv",
+})
+.fromString(csv_file)
+.then((csvRow)=>{
+    // console.log(csvRow)
+    obj.push(csvRow)
+    for(var i = 0; i < obj[0].length; i++){
+        channel_configuration.push({
+            channel:obj[0][i][0],
+            DataSection:obj[0][i][1],
+            DataAlias:obj[0][i][2],
+            DataType:obj[0][i][3]
+        })
+    }
+    console.log(channel_configuration)
+})
+}
+
+populate_channels_from_csv("./public/channel_config.csv");
+
+// function populate_channels(){
+//     for(var i = 0; i < 96; i++){
+//         channel_configuration.push({
+//             channel:i,
+//             DataSection:'PRI',
+//             DataAlias:'Random',
+//             DataType: 'Float'
+//         })
+//     }
+// }
+// populate_channels();
+
+
 app.use(function (req, res, next) {
     res.locals.testing_status = testing_status;
     res.locals.xbee_connected = xbee_connected; 
     next();
 });
 
-//DataSession Model import
-var DataSession = require("./models/dataSession");
 //Import custom routes 
-
 var testingroutes = require("./routes/testing_routes");
 var dataroutes = require("./routes/data_routes");
 var pageroutes = require("./routes/page_routes")
 const { config } = require('dotenv');
 const { Kinesis } = require('aws-sdk');
+const { interfaces } = require('mocha');
 app.use(express.json());
 app.use(express.urlencoded());
 /**
@@ -518,3 +560,4 @@ http.listen("8080", function(){
 });
 
 module.exports = app; // for testing
+exports.channel_configuration = channel_configuration;

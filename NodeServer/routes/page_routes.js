@@ -3,6 +3,7 @@
 //================================================
 
 var router = require('express').Router();
+var channel_configuration = require('../app.js');
 
 //================================================
 //             Config Page GET Route
@@ -13,7 +14,8 @@ GET route for displaying config-page.ejs
 */
 
 router.get("/config", function(req,res){
-    res.render("config-page.ejs");
+    console.log(channel_configuration);
+    res.render("config-page.ejs", {channel_config: channel_configuration.channel_configuration});
 })
 
 //================================================

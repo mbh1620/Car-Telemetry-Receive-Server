@@ -54,35 +54,13 @@
     </select>
 
     <pre>
-    <textarea id="mybox" Rows="7" cols="50" style="overflow-x: scroll;height:500px">
-Channel     Data Section    Data Alias
-0 -         PRI             roll x
-1 -         PRI             roll y
-2 -         PRI             roll z
-3 -         
-4 - 
-5 - 
-6 -
-7 - 
-8 - 
-9 - 
-10 -
-11 - 
-12 -
-13
-14 
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
+    <textarea id="mybox" Rows="7" cols="80" style="overflow-x: scroll;height:500px">
+Channel     Data Section    Data Alias                DataType
+<% for(var i = 0; i < channel_config.length; i++){ %>
+<% var x = ' ' %><% if(i<=11){%><%= x %><%}%><%= channel_config[i].channel %>            <%= channel_config[i].DataSection %>            <%= channel_config[i].DataAlias%>         <%= channel_config[i].DataType %><%}%>
     </textarea>
 </pre>
+<button class="btn btn-primary">Update</button>
     </div>
 
     </div>
@@ -90,3 +68,23 @@ Channel     Data Section    Data Alias
 
 </body>
     </html>
+
+    <script>
+        $('#mybox').focus(function(e) { 
+            $(this).keydown(function(e){
+                if(e.originalEvent.key == "Tab"){
+                    e.preventDefault();
+                    var start = this.selectionStart;
+    var end = this.selectionEnd;
+
+    // set textarea value to: text before caret + tab + text after caret
+    this.value = this.value.substring(0, start) +
+      "\t" + this.value.substring(end);
+
+    // put caret at right position again
+    this.selectionStart =
+      this.selectionEnd = start + 1;
+                }
+            });
+        });
+    </script>
