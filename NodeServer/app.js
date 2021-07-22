@@ -18,8 +18,6 @@ var dynamodb = new AWS.DynamoDB({region: process.env.REGION});
 var S3 = new AWS.S3({region: process.env.REGION});
 var lambda = new AWS.Lambda({region:process.env.REGION});
 
-
-
 //----------------------------------------------------------------------------
 //
 //                     TELEMETRY RECEIVE NODE.JS SERVER
@@ -72,7 +70,6 @@ app.use('/docs', express.static(path.join(__dirname, './out')));
 
 fs.appendFileSync("./public/data.csv", " ")
 tail = new Tail("./public/data.csv");
-
 
 var readbytes = 0;
 var bite_size = 256;
@@ -216,6 +213,20 @@ function put_Kinesis_data(data, data_ID){
 app.post("/session/delete/:id", function(req, res){
     DataSession.findByIdAndDelete(req.params.id, function(err){
         res.end();
+    })
+})
+
+app.post("/table/delete", function(req,res){
+    console.log(req.body)
+    params = {
+        TableName: req.body.name
+    }
+    dynamodb.deleteTable(params, function(err, data){
+        if(err){
+            console.log(err)
+        } else {
+            console.log(data)
+        }
     })
 })
 
