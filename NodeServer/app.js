@@ -9,6 +9,8 @@ var mongoose = require('mongoose');
 var csv = require('csvtojson');
 var dotenv = require('dotenv').config();
 let {PythonShell} = require('python-shell');
+
+//AWS Includes
 var AWS = require('aws-sdk');
 AWS.config.update({
     region: process.env.REGION
@@ -49,6 +51,7 @@ var DataSession = require("./models/dataSession");
 
 var testingroutes = require("./routes/testing_routes");
 var dataroutes = require("./routes/data_routes");
+var pageroutes = require("./routes/page_routes")
 const { config } = require('dotenv');
 const { Kinesis } = require('aws-sdk');
 app.use(express.json());
@@ -80,15 +83,11 @@ var python;
 
 app.use("/", testingroutes);
 app.use("/", dataroutes);
-
-//DB connection 
-
-mongoose.connect("mongodb+srv://" + process.env.DB_USER + ":" + process.env.DB_PASS +"@cluster0.drwm0.mongodb.net/Electric-Car-Telemetry-DB?retryWrites=true&w=majority", { useUnifiedTopology:true, useNewUrlParser: true, useFindAndModify: false });
+app.use("/", pageroutes);
 
 //Index route
 app.get("/", function(req, res){
     res.redirect("/primary");
-    // res.render("menu.ejs");
 })
 
 /**
@@ -230,21 +229,6 @@ app.post("/table/delete", function(req,res){
     })
 })
 
-app.get("/config", function(req,res){
-    res.render("config-page.ejs");
-})
-
-app.get("/instructions", function(req,res){
-    res.render("instructions.ejs");
-})
-
-// app.get("/session", function(req,res){
-//     DataSession.find({}, "name dateCreated size",function(err, allSessions){ //Finds all dataSession records without returning data which slows down the program
-//         res.render("session.ejs", {sessions: allSessions});
-//     }
-// )
-// })
-
 app.get("/session", function(req,res){
     dynamodb.listTables( function(err, data){
         if(err){
@@ -307,36 +291,6 @@ app.get("/session/dyna-s3/:userId/:TableName/:S3_bucket", function(req,res){
             res.send(success);
         }
     })
-})
-
-app.get("/data-link", function(req,res){
-    res.render("data-link.ejs");
-})
-
-app.get("/session-saver", function(req,res){
-    res.render("session-saver.ejs");
-})
-
-//Route for displaying historical data
-app.get("/session/:data/:id", function(req,res){
-    //Data can be PRI, ACC, ECU or POS
-    //id is the id of the data session
-    if(req.params.data == 'PRI'){
-        DataSession.findById(req.params.id, function(err, foundSession){
-            res.render("session-load-scroll.ejs", {session: foundSession});
-        })
-    }
-    if(req.params.data == 'POS'){
-        DataSession.findById(req.params.id, function(err, foundSession){
-            res.render("session-load-map.ejs", {session: foundSession});
-        })
-    }
-    if(req.params.data == 'ECU'){
-        DataSession.findById(req.params.id, function(err, foundSession){
-            res.render("session-ECU-load.ejs", {session: foundSession});
-        })
-    }
-    
 })
 
 app.post("/testing/start", function (req, res) {
