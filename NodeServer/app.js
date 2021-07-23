@@ -10,7 +10,7 @@ var csv = require('csvtojson');
 var dotenv = require('dotenv').config();
 let {PythonShell} = require('python-shell');
 
-//AWS Includes
+
 var AWS = require('aws-sdk');
 AWS.config.update({
     region: process.env.REGION
@@ -35,15 +35,9 @@ then be streamed to AWS DynamoDB using AWS Kinesis.
 */
 
 var dynamoDBName;
-
 var testing_status = false;
 var xbee_connected = false;
-
-var channel_configuration = [{
-}]
-
-
-
+var channel_configuration = [{}]
 
 function populate_channels_from_csv(file){
 var csv_file = fs.readFileSync("./public/channel_config.csv", 'utf-8');
@@ -69,19 +63,6 @@ csv({
 }
 
 populate_channels_from_csv("./public/channel_config.csv");
-
-// function populate_channels(){
-//     for(var i = 0; i < 96; i++){
-//         channel_configuration.push({
-//             channel:i,
-//             DataSection:'PRI',
-//             DataAlias:'Random',
-//             DataType: 'Float'
-//         })
-//     }
-// }
-// populate_channels();
-
 
 app.use(function (req, res, next) {
     res.locals.testing_status = testing_status;
@@ -111,15 +92,8 @@ app.use('/modules', express.static(path.join(__dirname, '/node/modules')));
 app.use('/scripts', express.static(path.join(__dirname, './views/scripts')));
 app.use('/docs', express.static(path.join(__dirname, './out')));
 
-//Narrow down to just one data file
-
 fs.appendFileSync("./public/data.csv", " ")
 tail = new Tail("./public/data.csv");
-
-var readbytes = 0;
-var bite_size = 256;
-var file;
-var python;
 
 // would be nice to have a user interface similar to this https://www.pinterest.com.au/pin/395402042262052760/?d=t&mt=login
 
