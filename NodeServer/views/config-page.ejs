@@ -46,8 +46,8 @@
             <h4>Stop Data Session:</h4> <button>Stop</button>
         </div>
     </div>
-    <h3>Configure Data Channels</h3>
-    <h5>preset: </h5>
+    <h3 style="font-family:Helvetica, sans-serif; color:white;font-weight:100;">Configure Data Channels</h3>
+    <h5 style="font-family:Helvetica, sans-serif; color:white;font-weight:100;">presets: </h5>
     <select name="presets" id="presets">
         <option value="E-Race-telemetry">E-Race Telemetry</option>
         <option value="drone-telemetry">Drone Telemetry</option>
@@ -55,9 +55,9 @@
 
     <pre>
     <textarea id="mybox" Rows="7" cols="80" style="overflow-x: scroll;height:500px">
-Channel     Data Section    Data Alias                DataType
+Channel     Data Section    DataType            Data Alias                
 <% for(var i = 0; i < channel_config.length; i++){ %>
-<% var x = ' ' %><% if(i<=11){%><%= x %><%}%><%= channel_config[i].channel %>            <%= channel_config[i].DataSection %>            <%= channel_config[i].DataAlias%>         <%= channel_config[i].DataType %><%}%>
+<% var x = ' ' %><% if(i<=11){%><%= x %><%}%><%= channel_config[i].channel %>            <%= channel_config[i].DataSection %>            <%= channel_config[i].DataType %>              <%= channel_config[i].DataAlias%>         <%}%>
     </textarea>
 </pre>
 <button class="btn btn-primary">Update</button>
