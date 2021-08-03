@@ -1,7 +1,7 @@
 from csv import writer
 import random 
 import time
-import datetime
+from datetime import datetime
 import math
 import sys
 
@@ -25,7 +25,9 @@ while(True):
 	num[1] = random.randrange(50,120)
 	num[2] = math.sin(x)
 	
-	num[3] = str(datetime.datetime.now().time()).split('.')[0] + "." + str(datetime.datetime.now().time()).split('.')[1][0:3]
+	num[3] = str(datetime.now().time()).split('.')[0] + "." + str(datetime.now().time()).split('.')[1][0:3]
+
+	
 	
 	#Simulate the position of the car to test the map view
 
@@ -163,6 +165,14 @@ while(True):
 		num[i] = random.randrange(45,50)
 
 	num[114] = num[3]
+	
+	#Date formatted correctly
+	#Should be in the form: YYYY-MM-DD-THH:MM-SS
+	today = datetime.now()
+	
+	extra = str(datetime.now().time()).split('.')[1][0:3]
+	num[115] = today.strftime('%y-%m-%d-T%H:%M:%S.'+ extra)
+
 
 	f =  open("./public/data.csv", "a")
 	
