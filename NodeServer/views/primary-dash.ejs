@@ -64,9 +64,9 @@
 
     socket.on('primary-data', function (msg) {
         console.log(msg);
-        update(msg.data[0], msg.data[3], myLineChart1);
-        update(msg.data[1], msg.data[3], myLineChart2);
-        update(msg.data[2], msg.data[3], myLineChart3);
+        update(msg.data[0], msg.time, myLineChart1);
+        update(msg.data[1], msg.time, myLineChart2);
+        update(msg.data[2], msg.time, myLineChart3);
         // update(msg.data[0], '14:05', myLineChart4);
     })
 

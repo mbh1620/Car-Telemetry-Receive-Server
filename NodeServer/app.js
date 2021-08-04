@@ -276,13 +276,16 @@ app.post("/testing/start", function (req, res) {
             TableName: req.body.name,
             KeySchema: [
                 {AttributeName: "partitionKey", KeyType: "HASH"},
+                {AttributeName: "ID", KeyType: "RANGE"}
+
             ],
             AttributeDefinitions: [
                 { AttributeName: "partitionKey", AttributeType: "S"},
+                { AttributeName: "ID", AttributeType: "S"},
             ],
             ProvisionedThroughput: {
-                ReadCapacityUnits: 10,
-                WriteCapacityUnits: 10
+                ReadCapacityUnits: 15,
+                WriteCapacityUnits: 15
             }
         }
         dynamodb.createTable(params, function(err, data){
@@ -461,12 +464,13 @@ tail.on("line", function(data){
     data3 = data.slice(50,96);
     data4 = data.slice(97,data.length);
     data5 = data.slice(4,6);
+    time1 = data[115]
 
-    io.to('Primary Room').emit('primary-data', {data:data1});
-    io.to('ECU Room').emit('ecu-data', {data:data2});
-    io.to('Accumulator Room').emit('acc-data', {data:data3});
-    io.to('Inverter Room').emit('inv-data', {data:data4});
-    io.to('Map Room').emit('position-data', {data:data5});
+    io.to('Primary Room').emit('primary-data', {data:data1, time:time1});
+    io.to('ECU Room').emit('ecu-data', {data:data2, time:time1});
+    io.to('Accumulator Room').emit('acc-data', {data:data3, time:time1});
+    io.to('Inverter Room').emit('inv-data', {data:data4, time:time1});
+    io.to('Map Room').emit('position-data', {data:data5, time:time1});
     
     put_Kinesis_data(data)
 });
