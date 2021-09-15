@@ -28,7 +28,7 @@ while(True):
 
     x = x + 0.1
     y += 1
-    f =  open("../public/data.csv", "a")
+    f =  open("./public/data.csv", "a")
 	
     csv_writer = writer(f)
     num1 = random.randrange(50,120)

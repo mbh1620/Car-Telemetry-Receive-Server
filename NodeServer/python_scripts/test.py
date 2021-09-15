@@ -4,6 +4,11 @@ import time
 from datetime import datetime
 import math
 import sys
+import boto3
+
+STREAM_NAME = "ExampleTelemetryTestNew"
+
+kinesis_client = boto3.client('kinesis', region_name='eu-west-1')
 
 cwd = ""
 
@@ -178,6 +183,10 @@ while(True):
 
 	time.sleep(0.05) #This is the fastest I can run the base station
 	#time.sleep(0.25) #The Canbus test program delays by this much in each cycle
+
+
+#Merge the kinesis code into this script
+
 
 
 
