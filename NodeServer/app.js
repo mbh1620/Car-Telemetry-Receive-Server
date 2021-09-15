@@ -524,10 +524,9 @@ tail.on("line", function(data){
     data3 = data.slice(50,96);
     data4 = data.slice(97,data.length);
     data5 = data.slice(4,6);
-    var d = new Date()
-    var time = d.getTime()
+    
+    var time = data[115]
     console.log(time)
-    console.log('TIMEEE')
 
     io.to('Primary Room').emit('primary-data', {data:data1, time:time});
     io.to('ECU Room').emit('ecu-data', {data:data2, time:time});
