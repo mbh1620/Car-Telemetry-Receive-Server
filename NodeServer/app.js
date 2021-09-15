@@ -35,11 +35,8 @@ then be streamed to AWS DynamoDB using AWS Kinesis.
 */
 
 var dynamoDBName;
-<<<<<<< HEAD
 var kinesisStreamName;
 
-=======
->>>>>>> 888880c1ea28327f8f692cfbf3f863c3dadc4452
 var testing_status = false;
 var xbee_connected = false;
 var channel_configuration = [{}]
@@ -158,13 +155,8 @@ function put_Kinesis_data(data, data_ID){
 
     var recordParams = {
         Data: record, 
-<<<<<<< HEAD
         PartitionKey: time,
         StreamName: kineisStreamName
-=======
-        PartitionKey: data[115],
-        StreamName: 'ExampleTelemetryTestNew'
->>>>>>> 888880c1ea28327f8f692cfbf3f863c3dadc4452
     }
 
     kinesis.putRecord(recordParams, function(err, data){
