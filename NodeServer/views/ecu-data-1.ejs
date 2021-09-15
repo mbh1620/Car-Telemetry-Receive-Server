@@ -80,6 +80,8 @@
   <button class="btn btn-sm btn-primary" onclick="addWaveform()">Add</button>
   <button class="btn btn-sm btn-danger" onclick="removeWaveform()">Remove</button>
   <button class="btn btn-sm btn-warning" onclick="clearGraph()">Clear</button>
+  <button class="btn btn-sm btn-warning" onclick="showFunction()">Custom Function</button>
+  <input id="math-function" class="form-control" style="width:500px;display:inline-block" type="text" placeholder="Try 'accel_pedal + front_brake_pedal'" hidden>
 </div>
 </body>
 <script src="/public/packages/chart.js/dist/Chart.js"></script>
@@ -195,7 +197,7 @@
             myLineChart3.data.datasets[i].data.shift();
             myLineChart3.update()
         }
-        myLineChart3.data.labels.push(data.data[14]);
+        myLineChart3.data.labels.push(data.time);
         myLineChart3.data.labels.shift();
         myLineChart3.update()
     }
@@ -281,6 +283,16 @@
                 default_view_elements[i].hide();
                 console.log("hidden");
             }
+        }
+    }
+    var flag = true
+    function showFunction(){
+        if(flag == true){
+            flag = false;
+            $('#math-function').attr('hidden', false)
+        } else {
+            $('#math-function').attr('hidden', true)
+            flag = true;
         }
     }
 

@@ -10,7 +10,7 @@ var csv = require('csvtojson');
 var dotenv = require('dotenv').config();
 let {PythonShell} = require('python-shell');
 
-//AWS Includes
+
 var AWS = require('aws-sdk');
 AWS.config.update({
     region: process.env.REGION
@@ -35,20 +35,19 @@ then be streamed to AWS DynamoDB using AWS Kinesis.
 */
 
 var dynamoDBName;
+<<<<<<< HEAD
 var kinesisStreamName;
 
+=======
+>>>>>>> 888880c1ea28327f8f692cfbf3f863c3dadc4452
 var testing_status = false;
 var xbee_connected = false;
-
-var channel_configuration = [{
-}]
-
-
-
+var channel_configuration = [{}]
 
 function populate_channels_from_csv(file){
 var csv_file = fs.readFileSync("./public/channel_config.csv", 'utf-8');
 var obj = []
+var keys = []
 csv({
     noheader:true,
     output:"csv",
@@ -58,12 +57,15 @@ csv({
     // console.log(csvRow)
     obj.push(csvRow)
     for(var i = 0; i < obj[0].length; i++){
-        channel_configuration.push({
-            channel:obj[0][i][0],
-            DataSection:obj[0][i][1],
-            DataAlias:obj[0][i][2],
-            DataType:obj[0][i][3]
-        })
+        if(obj[0][i][0] != ''){
+            channel_configuration.push({
+                channel:obj[0][i][0],
+                DataSection:obj[0][i][1],
+                DataAlias:obj[0][i][2],
+                DataType:obj[0][i][3]
+            })
+        }
+        keys.push(obj[0][i][2])
     }
     console.log(channel_configuration)
 })
@@ -84,6 +86,7 @@ var pageroutes = require("./routes/page_routes")
 const { config } = require('dotenv');
 const { Kinesis } = require('aws-sdk');
 const { interfaces } = require('mocha');
+const { keys } = require('highcharts');
 app.use(express.json());
 app.use(express.urlencoded());
 /**
@@ -99,15 +102,8 @@ app.use('/modules', express.static(path.join(__dirname, '/node/modules')));
 app.use('/scripts', express.static(path.join(__dirname, './views/scripts')));
 app.use('/docs', express.static(path.join(__dirname, './out')));
 
-//Narrow down to just one data file
-
 fs.appendFileSync("./public/data.csv", " ")
 tail = new Tail("./public/data.csv");
-
-var readbytes = 0;
-var bite_size = 256;
-var file;
-var python;
 
 // would be nice to have a user interface similar to this https://www.pinterest.com.au/pin/395402042262052760/?d=t&mt=login
 
@@ -139,63 +135,6 @@ app.get("/start-data-session", function(req,res){
     res.end();
 })
 
-/**
- * Route allowing to stop a data session. This route saves the contents of the data files to mongoDB object and then pushes them 
- * to the DB. 
- * 
- * @memberof Routes
- * @name get/stop-data-session
- * @function 
- */
-
-app.post("/stop-data-session", function(req,res){
-    //Code in here will be called after a session has taken place so that it packages all the current data into a 'dataSession' Schema 
-    //and then push it to the mongoDB Atlas database.
-
-    //First of all we will just create a basic schema for speed, acceleration and battery level, session name, date and also time label
-    var name = req.body.sessionName;
-    var trackName = req.body.trackName;
-    var lat = req.body.Lat;
-    var long = req.body.Long;
-    
-    var date = new Date()
-    var size = fs.statSync("./public/data.csv").size/10e6;
-    size = size.toFixed(3);
-    var data = fs.readFileSync("./public/data.csv", 'utf8');
-    
-    var returnOBJ = [];
-    var NewDataSession;
-    csv({
-        noheader:true,
-        output:"csv",
-    })
-    .fromString(data)
-    .then((csvRow)=>{
-        returnOBJ.push(csvRow);
-        returnOBJ[0].pop();
-
-        NewDataSession = {
-        name: name,
-        TrackName:trackName,
-        TrackStartLine: [lat,long], 
-        dateCreated: date,
-        PRIData: returnOBJ[0],
-        POSData: POSreturnOBJ[0],
-        INVData: INVreturnOBJ[0],
-        ECUData: ECUreturnOBJ[0],
-        size: size
-        }
-                    // console.log(NewDataSession);
-        DataSession.create(NewDataSession, function(err, newSession){
-            if(err){
-                console.log(err);
-            } else {
-                res.end();
-            }
-        })          
-    })
-})
-
 //Function to start kinesis stream
 
 function start_kinesis_stream(){
@@ -205,13 +144,12 @@ function start_kinesis_stream(){
 //Function to put new data into kinesis stream once Tail has detected it.
 //
 
-function put_Kinesis_data(data, data_ID){
+function put_Kinesis_data(data, data_ID){   
 
-    //Code here to put data into the kinesis stream
-    var time = data[3]
     var record = JSON.stringify({
         time: data[3],
-        PRIData: data.slice(0,34),
+        dateTime: data[115],
+        PRIData: data.slice(4,28),
         ECUData: data.slice(7,22),
         ACCData: data.slice(23,69),
         INVData: data.slice(70, data.length),
@@ -220,8 +158,13 @@ function put_Kinesis_data(data, data_ID){
 
     var recordParams = {
         Data: record, 
+<<<<<<< HEAD
         PartitionKey: time,
         StreamName: kineisStreamName
+=======
+        PartitionKey: data[115],
+        StreamName: 'ExampleTelemetryTestNew'
+>>>>>>> 888880c1ea28327f8f692cfbf3f863c3dadc4452
     }
 
     kinesis.putRecord(recordParams, function(err, data){
@@ -234,7 +177,6 @@ function put_Kinesis_data(data, data_ID){
             // console.log('Successfully sent data to kinesis');
         }
     })
-
 }
 
 //Setup AWS package
@@ -353,13 +295,16 @@ app.post("/testing/start", function (req, res) {
             TableName: req.body.name,
             KeySchema: [
                 {AttributeName: "partitionKey", KeyType: "HASH"},
+                {AttributeName: "ID", KeyType: "RANGE"}
+
             ],
             AttributeDefinitions: [
                 { AttributeName: "partitionKey", AttributeType: "S"},
+                { AttributeName: "ID", AttributeType: "S"},
             ],
             ProvisionedThroughput: {
-                ReadCapacityUnits: 10,
-                WriteCapacityUnits: 10
+                ReadCapacityUnits: 15,
+                WriteCapacityUnits: 15
             }
         }
         dynamodb.createTable(params, function(err, data){
@@ -538,12 +483,13 @@ tail.on("line", function(data){
     data3 = data.slice(50,96);
     data4 = data.slice(97,data.length);
     data5 = data.slice(4,6);
+    time1 = data[115]
 
-    io.to('Primary Room').emit('primary-data', {data:data1});
-    io.to('ECU Room').emit('ecu-data', {data:data2});
-    io.to('Accumulator Room').emit('acc-data', {data:data3});
-    io.to('Inverter Room').emit('inv-data', {data:data4});
-    io.to('Map Room').emit('position-data', {data:data5});
+    io.to('Primary Room').emit('primary-data', {data:data1, time:time1});
+    io.to('ECU Room').emit('ecu-data', {data:data2, time:time1});
+    io.to('Accumulator Room').emit('acc-data', {data:data3, time:time1});
+    io.to('Inverter Room').emit('inv-data', {data:data4, time:time1});
+    io.to('Map Room').emit('position-data', {data:data5, time:time1});
     
     put_Kinesis_data(data)
 });

@@ -1,7 +1,7 @@
 from csv import writer
 import random 
 import time
-import datetime
+from datetime import datetime
 import math
 import sys
 
@@ -25,7 +25,9 @@ while(True):
 	num[1] = random.randrange(50,120)
 	num[2] = math.sin(x)
 	
-	num[3] = str(datetime.datetime.now().time()).split('.')[0] + "." + str(datetime.datetime.now().time()).split('.')[1][0:3]
+	
+
+	
 	
 	#Simulate the position of the car to test the map view
 
@@ -40,13 +42,9 @@ while(True):
 	
 	num[4] = coordinates[z][0]
 	num[5] = coordinates[z][1]
-	num[6] = num[3]
 
 	for i in range(7,21):
 		num[i] = random.randrange(1,50)
-
-	num[21] = num[3]
-
 	'''
 	Inverter data
 
@@ -108,8 +106,6 @@ while(True):
 	for i in range(22,68):
 		num[i] = random.randrange(1,50)
 
-	num[68] = num[3]
-
 	'''
 	Brick 1
 	0 - brickVoltageAvg[0]
@@ -162,7 +158,14 @@ while(True):
 	for i in range(69,114):
 		num[i] = random.randrange(45,50)
 
-	num[114] = num[3]
+	#Date formatted correctly
+	#Should be in the form: YYYY-MM-DD-THH:MM-SS
+	today = datetime.now()
+	
+	extra = str(datetime.now().time()).split('.')[1][0:3]
+	num[115] = today.strftime('%y-%m-%d-T%H:%M:%S.'+ extra)
+	num[116] = str(datetime.now().time()).split('.')[0] + "." + str(datetime.now().time()).split('.')[1][0:3]
+
 
 	f =  open("./public/data.csv", "a")
 	

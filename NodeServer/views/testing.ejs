@@ -60,12 +60,23 @@
 </html>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+    if($('#table-name-select').val() == 'create-new'){
+            
+            $('#new-table-name').removeAttr('hidden');
+        } else {
+            console.log('hello')
+            $('#new-table-name').attr('hidden', true);
+        }
+
+
     var socket = io();
     socket.emit("TEST");
 
     socket.on('log-data', function (msg) { 
         pushToLog(msg.data);
     })
+
+    
 
     function check(){
         //Check value of select
