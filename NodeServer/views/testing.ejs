@@ -16,10 +16,9 @@
         <p style="color:white;font-size: 17;">To run the python testing script, press start and to stop it press the stop button. (Makesure testing is set to off when connecting to data-link)</p>
     
     </br>
-
-        <label style="margin-top:30px;color:white" for="question">Stream To Kinesis?</label>
-        <input id="stream-yes" type="checkbox" value="yes" checked>
+        <button class="btn btn-primary">Setup Cloud Formations Pipeline</button>
     </br>
+        <img src="./public/pipeline.png" style="width:40%; height:auto;"></br>
         <label style="margin-top:30px;color:white" for="stream">Create or choose a DynamoDB Table:</label>
         <select id="table-name-select" onchange="check()">
             <% for(var i = 0; i < tables.TableNames.length; i++){ %>

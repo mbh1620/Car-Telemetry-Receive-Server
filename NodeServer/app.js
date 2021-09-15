@@ -35,6 +35,7 @@ then be streamed to AWS DynamoDB using AWS Kinesis.
 */
 
 var dynamoDBName;
+var kinesisStreamName;
 
 var testing_status = false;
 var xbee_connected = false;
@@ -69,19 +70,6 @@ csv({
 }
 
 populate_channels_from_csv("./public/channel_config.csv");
-
-// function populate_channels(){
-//     for(var i = 0; i < 96; i++){
-//         channel_configuration.push({
-//             channel:i,
-//             DataSection:'PRI',
-//             DataAlias:'Random',
-//             DataType: 'Float'
-//         })
-//     }
-// }
-// populate_channels();
-
 
 app.use(function (req, res, next) {
     res.locals.testing_status = testing_status;
@@ -233,7 +221,7 @@ function put_Kinesis_data(data, data_ID){
     var recordParams = {
         Data: record, 
         PartitionKey: time,
-        StreamName: 'ExampleTelemetryTest'
+        StreamName: kineisStreamName
     }
 
     kinesis.putRecord(recordParams, function(err, data){
@@ -242,12 +230,21 @@ function put_Kinesis_data(data, data_ID){
             io.to('Test Room').emit('log-data', {data:String(err)});
         } else {
             //Kinesis stream
-            // io.to('Test Room').emit('log-data', {data:'Kinesis data ingestion successful'});
+            io.to('Test Room').emit('log-data', {data:'Kinesis data ingestion successful'});
             // console.log('Successfully sent data to kinesis');
         }
     })
 
 }
+
+//Setup AWS package
+
+//Kineis -> Kinesis Datafirehose -> S3 Bucket
+
+app.post("/aws/setup", function(req,res){
+    //Using cloud formations, Setup Kinesis stream -> kinesis datafirehose -> s3 
+    
+})
 
 //Delete route for a session
 
